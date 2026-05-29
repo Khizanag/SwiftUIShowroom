@@ -1,0 +1,1584 @@
+{
+  "category": "Navigation",
+  "key": "navigation",
+  "folder": "Navigation",
+  "components": [
+    {
+      "id": "navigation-stack",
+      "title": "NavigationStack",
+      "api": "NavigationStack",
+      "summary": "Push-based navigation container that displays a root view and a stack of value-driven destination views.",
+      "minOS": "iOS 16.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "summaryNotes": "",
+      "higNotes": "Use a single NavigationStack per column/tab. Drive destinations with value-based NavigationLink + navigationDestination, never with deprecated NavigationView. Keep the back affordance system-provided. On iOS 26 the bar adopts Liquid Glass automatically.",
+      "states": [
+        "default",
+        "empty",
+        "longContent",
+        "selected"
+      ],
+      "styles": [],
+      "properties": [
+        {
+          "name": "pathMode",
+          "swiftType": "enum (none | typedArray | navigationPath)",
+          "control": "segmented",
+          "options": [
+            "none",
+            "typedArray",
+            "navigationPath"
+          ],
+          "defaultValue": "typedArray",
+          "notes": "none = init(root:); typedArray = init(path: Binding<[Data]>); navigationPath = init(path: Binding<NavigationPath>) for heterogeneous deep links."
+        },
+        {
+          "name": "depth",
+          "swiftType": "Int",
+          "control": "stepper",
+          "options": [],
+          "defaultValue": "1",
+          "notes": "Number of pre-pushed destinations to demonstrate stack depth and back navigation. Range 0...6."
+        },
+        {
+          "name": "navigationTitle",
+          "swiftType": "String",
+          "control": "text",
+          "options": [],
+          "defaultValue": "Root",
+          "notes": "Applied to the root content via .navigationTitle(_:)."
+        },
+        {
+          "name": "titleDisplayMode",
+          "swiftType": "NavigationBarItem.TitleDisplayMode",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "inline",
+            "large"
+          ],
+          "defaultValue": "automatic",
+          "notes": "iOS/iPadOS/watchOS only via .navigationBarTitleDisplayMode(_:). Large is unavailable on macOS."
+        },
+        {
+          "name": "barHidden",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "Drives .toolbar(.hidden, for: .navigationBar) — hides the navigation bar."
+        },
+        {
+          "name": "barBackgroundVisibility",
+          "swiftType": "Visibility",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "visible",
+            "hidden"
+          ],
+          "defaultValue": "automatic",
+          "notes": ".toolbarBackgroundVisibility(_:for: .navigationBar). On iOS 26 controls the Liquid Glass bar background."
+        },
+        {
+          "name": "backButtonHidden",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "Applied to a pushed destination via .navigationBarBackButtonHidden(_:)."
+        },
+        {
+          "name": "scrollEdgeEffectStyle",
+          "swiftType": "ScrollEdgeEffectStyle?",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "hard",
+            "soft"
+          ],
+          "defaultValue": "automatic",
+          "notes": "MISSING (iOS 26): .scrollEdgeEffectStyle(_:for:) tunes how the Liquid Glass navigation bar reacts to scrolled-under content. Relevant to demonstrating the iOS 26 bar the higNotes already mention."
+        }
+      ],
+      "codeTemplate": "struct NavigationStackDemo: View {\n    @State private var path: [Int] = {placeholderInitialPath}\n\n    var body: some View {\n        NavigationStack(path: $path) {\n            List(0..<10, id: \\.self) { value in\n                NavigationLink(\"Row \\(value)\", value: value)\n            }\n            .navigationTitle(\"{navigationTitle}\")\n            .navigationBarTitleDisplayMode(.{titleDisplayMode})\n            .toolbar({barHidden} ? .hidden : .automatic, for: .navigationBar)\n            .toolbarBackgroundVisibility(.{barBackgroundVisibility}, for: .navigationBar)\n            .navigationDestination(for: Int.self) { value in\n                Text(\"Detail \\(value)\")\n                    .navigationBarBackButtonHidden({backButtonHidden})\n            }\n        }\n    }\n}"
+    },
+    {
+      "id": "navigation-path",
+      "title": "NavigationPath",
+      "api": "NavigationPath",
+      "summary": "Type-erased, heterogeneous navigation state container for programmatic, codable deep-link navigation.",
+      "minOS": "iOS 16.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "higNotes": "Use NavigationPath when a single stack pushes more than one value type or when you need state restoration. Persist via its CodableRepresentation when every element is Codable & Hashable.",
+      "states": [
+        "default",
+        "empty",
+        "longContent"
+      ],
+      "styles": [],
+      "properties": [
+        {
+          "name": "elementCount",
+          "swiftType": "Int",
+          "control": "stepper",
+          "options": [],
+          "defaultValue": "0",
+          "notes": "Demonstrates append/removeLast. Reflects path.count. Range 0...8."
+        },
+        {
+          "name": "mixedTypes",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "true",
+          "notes": "When true, appends both Int and String values to show heterogeneous routing."
+        },
+        {
+          "name": "codablePersistence",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "Encodes/decodes via path.codable (NavigationPath.CodableRepresentation) for state restoration."
+        }
+      ],
+      "codeTemplate": "struct NavigationPathDemo: View {\n    @State private var path = NavigationPath()\n\n    var body: some View {\n        NavigationStack(path: $path) {\n            List {\n                Button(\"Push Int\") { path.append({placeholderInt}) }\n                Button(\"Push String\") { path.append(\"{placeholderString}\") }\n                Button(\"Pop\") { if !path.isEmpty { path.removeLast() } }\n            }\n            .navigationDestination(for: Int.self) { Text(\"Int \\($0)\") }\n            .navigationDestination(for: String.self) { Text(\"String \\($0)\") }\n            .navigationTitle(\"Count \\(path.count)\")\n        }\n    }\n}"
+    },
+    {
+      "id": "navigation-destination",
+      "title": "navigationDestination",
+      "api": "View.navigationDestination(for:destination:)",
+      "summary": "Associates a data type or boolean/item trigger with a destination view inside a NavigationStack.",
+      "minOS": "iOS 16.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "higNotes": "Declare navigationDestination once per type, attached inside the stack's view hierarchy (not on the stack itself). Prefer for:destination: with value links over isPresented:/item: triggers for back-button correctness.",
+      "states": [
+        "default",
+        "selected",
+        "longContent"
+      ],
+      "styles": [],
+      "properties": [
+        {
+          "name": "triggerMode",
+          "swiftType": "enum (forType | isPresented | item)",
+          "control": "segmented",
+          "options": [
+            "forType",
+            "isPresented",
+            "item"
+          ],
+          "defaultValue": "forType",
+          "notes": "forType = navigationDestination(for:); isPresented = navigationDestination(isPresented:); item = navigationDestination(item:)."
+        },
+        {
+          "name": "isPresented",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "Only used when triggerMode is isPresented. Pushes a single destination."
+        },
+        {
+          "name": "itemBinding",
+          "swiftType": "Binding<Optional<D>>",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "AVAILABILITY: the navigationDestination(item:destination:) variant the triggerMode 'item' references is iOS 17.0+ / macOS 14.0+, NOT iOS 16. The for: and isPresented: variants are iOS 16+. The component minOS of iOS 16 is fine for the component, but the 'item' trigger should be gated to iOS 17+."
+        }
+      ],
+      "codeTemplate": "struct NavigationDestinationDemo: View {\n    @State private var showDetail = {isPresented}\n\n    var body: some View {\n        NavigationStack {\n            List {\n                NavigationLink(\"Value link\", value: 42)\n                Button(\"Boolean push\") { showDetail = true }\n            }\n            .navigationDestination(for: Int.self) { Text(\"Detail for \\($0)\") }\n            .navigationDestination(isPresented: $showDetail) { Text(\"Boolean-driven detail\") }\n        }\n    }\n}"
+    },
+    {
+      "id": "navigation-link",
+      "title": "NavigationLink",
+      "api": "NavigationLink",
+      "summary": "A control that triggers a push by presenting a value (stack-driven) or, legacy, a destination view directly.",
+      "minOS": "iOS 13.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "higNotes": "Prefer the value-based initializer (init(_:value:)) with a matching navigationDestination. The destination-view initializer is legacy and discouraged inside NavigationStack. Inside a List with selection, NavigationLink also drives NavigationSplitView column selection.",
+      "states": [
+        "default",
+        "disabled",
+        "selected",
+        "longContent"
+      ],
+      "styles": [],
+      "properties": [
+        {
+          "name": "linkMode",
+          "swiftType": "enum (value | destination)",
+          "control": "segmented",
+          "options": [
+            "value",
+            "destination"
+          ],
+          "defaultValue": "value",
+          "notes": "value = init(_:value:) (recommended); destination = init(destination:) (legacy direct view)."
+        },
+        {
+          "name": "label",
+          "swiftType": "String",
+          "control": "text",
+          "options": [],
+          "defaultValue": "Open detail",
+          "notes": "Visible link text."
+        },
+        {
+          "name": "useCustomLabel",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "When true, uses a Label with systemImage instead of plain text."
+        },
+        {
+          "name": "systemImage",
+          "swiftType": "String",
+          "control": "text",
+          "options": [],
+          "defaultValue": "chevron.right",
+          "notes": "SF Symbol name for the custom label variant."
+        },
+        {
+          "name": "isDisabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "Applied via .disabled(_:)."
+        }
+      ],
+      "codeTemplate": "struct NavigationLinkDemo: View {\n    var body: some View {\n        NavigationStack {\n            List {\n                NavigationLink(value: \"detail\") {\n                    Label(\"{label}\", systemImage: \"{systemImage}\")\n                }\n                .disabled({isDisabled})\n            }\n            .navigationDestination(for: String.self) { Text(\"Detail: \\($0)\") }\n            .navigationTitle(\"Links\")\n        }\n    }\n}"
+    },
+    {
+      "id": "navigation-split-view",
+      "title": "NavigationSplitView",
+      "api": "NavigationSplitView",
+      "summary": "Two- or three-column container where leading-column selections drive subsequent columns; collapses to a stack in compact widths.",
+      "minOS": "iOS 16.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "higNotes": "Use as the root view on iPad/Mac for list-detail apps. Bind List selection to coordinate columns. Use columnVisibility for programmatic control and preferredCompactColumn to pick the column shown when collapsed. Remove the default sidebarToggle with .toolbar(removing:) only when justified.",
+      "states": [
+        "default",
+        "empty",
+        "selected",
+        "longContent"
+      ],
+      "styles": [
+        "automatic",
+        "balanced",
+        "prominentDetail"
+      ],
+      "properties": [
+        {
+          "name": "columnCount",
+          "swiftType": "enum (two | three)",
+          "control": "segmented",
+          "options": [
+            "two",
+            "three"
+          ],
+          "defaultValue": "two",
+          "notes": "two = init(sidebar:detail:); three = init(sidebar:content:detail:)."
+        },
+        {
+          "name": "style",
+          "swiftType": "NavigationSplitViewStyle",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "balanced",
+            "prominentDetail"
+          ],
+          "defaultValue": "automatic",
+          "notes": ".navigationSplitViewStyle(_:). balanced gives equal prominence; prominentDetail keeps detail full width when sidebar shows."
+        },
+        {
+          "name": "columnVisibility",
+          "swiftType": "NavigationSplitViewVisibility",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "all",
+            "doubleColumn",
+            "detailOnly"
+          ],
+          "defaultValue": "automatic",
+          "notes": "Binding passed to init(columnVisibility:...). Ignored when collapsed to a stack."
+        },
+        {
+          "name": "preferredCompactColumn",
+          "swiftType": "NavigationSplitViewColumn",
+          "control": "picker",
+          "options": [
+            "sidebar",
+            "content",
+            "detail"
+          ],
+          "defaultValue": "detail",
+          "notes": "Binding passed to init(preferredCompactColumn:...). Picks the top column when collapsed (iPhone/Slide Over)."
+        },
+        {
+          "name": "sidebarColumnWidth",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "250",
+          "notes": ".navigationSplitViewColumnWidth(_:) on the sidebar. Range 180...420."
+        },
+        {
+          "name": "sidebarTitle",
+          "swiftType": "String",
+          "control": "text",
+          "options": [],
+          "defaultValue": "Categories",
+          "notes": "navigationTitle on the sidebar List."
+        }
+      ],
+      "codeTemplate": "struct NavigationSplitViewDemo: View {\n    @State private var columnVisibility = NavigationSplitViewVisibility.{columnVisibility}\n    @State private var preferredColumn = NavigationSplitViewColumn.{preferredCompactColumn}\n    @State private var selection: Int?\n\n    var body: some View {\n        NavigationSplitView(columnVisibility: $columnVisibility, preferredCompactColumn: $preferredColumn) {\n            List(0..<8, id: \\.self, selection: $selection) { Text(\"Item \\($0)\") }\n                .navigationSplitViewColumnWidth({sidebarColumnWidth})\n                .navigationTitle(\"{sidebarTitle}\")\n        } detail: {\n            if let selection { Text(\"Detail \\(selection)\") } else { Text(\"Select an item\") }\n        }\n        .navigationSplitViewStyle(.{style})\n    }\n}"
+    },
+    {
+      "id": "navigation-split-view-three-column",
+      "title": "NavigationSplitView (three-column)",
+      "api": "NavigationSplitView",
+      "summary": "Three-column sidebar/content/detail layout where each selection cascades to the next column.",
+      "minOS": "iOS 16.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS"
+      ],
+      "higNotes": "Use the three-column form for hierarchical apps (e.g. account > mailbox > message). Sidebar single-selection drives content; content selection drives detail. Provide placeholder views for empty content and detail columns.",
+      "states": [
+        "default",
+        "empty",
+        "selected",
+        "longContent"
+      ],
+      "styles": [
+        "automatic",
+        "balanced",
+        "prominentDetail"
+      ],
+      "properties": [
+        {
+          "name": "style",
+          "swiftType": "NavigationSplitViewStyle",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "balanced",
+            "prominentDetail"
+          ],
+          "defaultValue": "prominentDetail",
+          "notes": ".navigationSplitViewStyle(_:)."
+        },
+        {
+          "name": "columnVisibility",
+          "swiftType": "NavigationSplitViewVisibility",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "all",
+            "doubleColumn",
+            "detailOnly"
+          ],
+          "defaultValue": "all",
+          "notes": "Three-column visibility control. all shows every column; doubleColumn hides the sidebar."
+        },
+        {
+          "name": "contentColumnWidthMin",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "200",
+          "notes": "min of .navigationSplitViewColumnWidth(min:ideal:max:) on content. Range 150...320."
+        }
+      ],
+      "codeTemplate": "struct ThreeColumnSplitDemo: View {\n    @State private var columnVisibility = NavigationSplitViewVisibility.{columnVisibility}\n    @State private var department: Int?\n    @State private var employee: Int?\n\n    var body: some View {\n        NavigationSplitView(columnVisibility: $columnVisibility) {\n            List(0..<4, id: \\.self, selection: $department) { Text(\"Department \\($0)\") }\n                .navigationTitle(\"Departments\")\n        } content: {\n            List(0..<6, id: \\.self, selection: $employee) { Text(\"Employee \\($0)\") }\n                .navigationSplitViewColumnWidth(min: {contentColumnWidthMin}, ideal: 250)\n                .navigationTitle(\"Employees\")\n        } detail: {\n            if let employee { Text(\"Details for \\(employee)\") } else { Text(\"Select an employee\") }\n        }\n        .navigationSplitViewStyle(.{style})\n    }\n}"
+    },
+    {
+      "id": "tab-view",
+      "title": "TabView",
+      "api": "TabView",
+      "summary": "Top-level container switching between child views via a tab bar; on iOS 26 supports Liquid Glass bar and minimize-on-scroll.",
+      "minOS": "iOS 13.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "higNotes": "Use the iOS 18+ Tab/TabSection value API over the legacy .tabItem modifier. Limit to 5 primary tabs on iPhone; overflow goes to More. Assign a .search role Tab on iOS 26 for the dedicated search experience. Use sidebarAdaptable on iPad/Mac for sidebar-promotable hierarchies.",
+      "states": [
+        "default",
+        "selected",
+        "disabled",
+        "longContent"
+      ],
+      "styles": [
+        "automatic",
+        "sidebarAdaptable",
+        "tabBarOnly",
+        "page",
+        "page(indexDisplayMode:)",
+        "grouped(macOS)",
+        "grouped"
+      ],
+      "properties": [
+        {
+          "name": "tabCount",
+          "swiftType": "Int",
+          "control": "stepper",
+          "options": [],
+          "defaultValue": "3",
+          "notes": "Number of Tab items. Range 2...6."
+        },
+        {
+          "name": "style",
+          "swiftType": "TabViewStyle",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "sidebarAdaptable",
+            "tabBarOnly",
+            "page",
+            "pageNoIndicator",
+            "grouped"
+          ],
+          "defaultValue": "automatic",
+          "notes": ".tabViewStyle(_:). page = .page; pageNoIndicator = .page(indexDisplayMode: .never); grouped is macOS-only; sidebarAdaptable is iOS18+."
+        },
+        {
+          "name": "programmaticSelection",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "true",
+          "notes": "When true uses init(selection:) with value-bearing Tab items."
+        },
+        {
+          "name": "selectedTab",
+          "swiftType": "Int",
+          "control": "picker",
+          "options": [
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5"
+          ],
+          "defaultValue": "0",
+          "notes": "Drives the selection binding."
+        },
+        {
+          "name": "showBadges",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "Adds .badge(_:) to tabs (iOS only)."
+        },
+        {
+          "name": "tabBarMinimizeBehavior",
+          "swiftType": "TabBarMinimizeBehavior",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "onScrollDown",
+            "onScrollUp",
+            "never"
+          ],
+          "defaultValue": "automatic",
+          "notes": "iOS 26+. .tabBarMinimizeBehavior(_:) collapses the Liquid Glass tab bar while scrolling."
+        },
+        {
+          "name": "useSearchRole",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "iOS 26+. Adds a Tab(role: .search) for the bottom-anchored search tab."
+        },
+        {
+          "name": "defaultAdaptableTabBarPlacement",
+          "swiftType": "AdaptableTabBarPlacement",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "sidebar",
+            "tabBar"
+          ],
+          "defaultValue": "automatic",
+          "notes": "MISSING: .defaultAdaptableTabBarPlacement(_:) picks whether a .sidebarAdaptable TabView starts as a sidebar or tab bar on iPad/Mac. Complements the existing sidebarAdaptable style option."
+        }
+      ],
+      "codeTemplate": "struct TabViewDemo: View {\n    @State private var selection = {selectedTab}\n\n    var body: some View {\n        TabView(selection: $selection) {\n            Tab(\"Home\", systemImage: \"house\", value: 0) { Text(\"Home\") }\n            Tab(\"Browse\", systemImage: \"square.grid.2x2\", value: 1) { Text(\"Browse\") }\n                .badge({showBadges} ? 3 : 0)\n            Tab(\"Profile\", systemImage: \"person.crop.circle\", value: 2) { Text(\"Profile\") }\n            Tab(role: .search) { Text(\"Search\") }\n        }\n        .tabViewStyle(.{style})\n        .tabBarMinimizeBehavior(.{tabBarMinimizeBehavior})\n    }\n}"
+    },
+    {
+      "id": "tab",
+      "title": "Tab",
+      "api": "Tab",
+      "summary": "Declarative tab content item for TabView, carrying a label, optional value, and an optional system role.",
+      "minOS": "iOS 18.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "visionOS",
+        "watchOS"
+      ],
+      "higNotes": "Prefer Tab over .tabItem. Use a stable value for selection. Use role: .search for the standardized search tab (iOS 18+, prominent on iOS 26). Provide a clear SF Symbol and concise title.",
+      "states": [
+        "default",
+        "selected",
+        "disabled"
+      ],
+      "styles": [],
+      "properties": [
+        {
+          "name": "title",
+          "swiftType": "String",
+          "control": "text",
+          "options": [],
+          "defaultValue": "Home",
+          "notes": "Tab label text."
+        },
+        {
+          "name": "systemImage",
+          "swiftType": "String",
+          "control": "text",
+          "options": [],
+          "defaultValue": "house",
+          "notes": "SF Symbol for the tab."
+        },
+        {
+          "name": "role",
+          "swiftType": "TabRole?",
+          "control": "picker",
+          "options": [
+            "none",
+            "search"
+          ],
+          "defaultValue": "none",
+          "notes": "TabRole.search gives the system search tab treatment."
+        },
+        {
+          "name": "badge",
+          "swiftType": "Int",
+          "control": "stepper",
+          "options": [],
+          "defaultValue": "0",
+          "notes": ".badge(_:); 0 hides the badge. Range 0...99."
+        },
+        {
+          "name": "customizationID",
+          "swiftType": "String",
+          "control": "text",
+          "options": [],
+          "defaultValue": "com.app.home",
+          "notes": ".customizationID(_:) required for sidebarAdaptable customization persistence."
+        }
+      ],
+      "codeTemplate": "Tab(\"{title}\", systemImage: \"{systemImage}\", value: 0) {\n    Text(\"{title} content\")\n}\n.badge({badge})\n.customizationID(\"{customizationID}\")"
+    },
+    {
+      "id": "tab-section",
+      "title": "TabSection",
+      "api": "TabSection",
+      "summary": "Groups secondary tabs into a labeled section for the sidebarAdaptable TabView style.",
+      "minOS": "iOS 18.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "visionOS"
+      ],
+      "higNotes": "Use TabSection only with .tabViewStyle(.sidebarAdaptable). Sections render as sidebar groups on iPad/Mac and as flat secondary tabs on compact iOS (header omitted). Give each section a customizationID for reordering persistence.",
+      "states": [
+        "default",
+        "selected",
+        "longContent"
+      ],
+      "styles": [],
+      "properties": [
+        {
+          "name": "header",
+          "swiftType": "String",
+          "control": "text",
+          "options": [],
+          "defaultValue": "Library",
+          "notes": "Section header shown in the sidebar."
+        },
+        {
+          "name": "childCount",
+          "swiftType": "Int",
+          "control": "stepper",
+          "options": [],
+          "defaultValue": "3",
+          "notes": "Number of nested Tab items. Range 1...6."
+        },
+        {
+          "name": "customizationID",
+          "swiftType": "String",
+          "control": "text",
+          "options": [],
+          "defaultValue": "com.app.library",
+          "notes": ".customizationID(_:) on the section."
+        }
+      ],
+      "codeTemplate": "TabSection(\"{header}\") {\n    Tab(\"Recently Added\", systemImage: \"clock\", value: 10) { Text(\"Recent\") }\n    Tab(\"Artists\", systemImage: \"music.mic\", value: 11) { Text(\"Artists\") }\n}\n.customizationID(\"{customizationID}\")"
+    },
+    {
+      "id": "tab-view-bottom-accessory",
+      "title": "TabView bottom accessory",
+      "api": "View.tabViewBottomAccessory(content:)",
+      "summary": "Attaches a persistent accessory view (e.g. now-playing bar) above the Liquid Glass tab bar.",
+      "minOS": "iOS 26.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "visionOS"
+      ],
+      "higNotes": "Use for a single persistent transport/now-playing style control. Read TabViewBottomAccessoryPlacement from the environment to adapt layout when the tab bar minimizes. Keep the accessory compact and glass-compatible.",
+      "states": [
+        "default",
+        "longContent"
+      ],
+      "styles": [],
+      "properties": [
+        {
+          "name": "enabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "true",
+          "notes": "Toggles presence of the accessory."
+        },
+        {
+          "name": "label",
+          "swiftType": "String",
+          "control": "text",
+          "options": [],
+          "defaultValue": "Now Playing",
+          "notes": "Accessory primary text."
+        },
+        {
+          "name": "platformsCorrection",
+          "swiftType": "n/a",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "PLATFORM CORRECTION: draft lists platforms [iOS, iPadOS, macOS, visionOS]. tabViewBottomAccessory(content:) is iOS 26 / iPadOS 26 / Mac Catalyst 26 ONLY. Native macOS and visionOS are NOT supported. Change platforms to [iOS, iPadOS]."
+        }
+      ],
+      "codeTemplate": "TabView {\n    Tab(\"Home\", systemImage: \"house\") { Text(\"Home\") }\n    Tab(\"Library\", systemImage: \"books.vertical\") { Text(\"Library\") }\n}\n.tabViewBottomAccessory {\n    if {enabled} {\n        HStack { Image(systemName: \"play.fill\"); Text(\"{label}\") }\n    }\n}"
+    },
+    {
+      "id": "toolbar",
+      "title": "Toolbar",
+      "api": "View.toolbar(content:)",
+      "summary": "Populates navigation bar, bottom bar, and platform toolbars with placement-based items.",
+      "minOS": "iOS 14.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "higNotes": "Prefer semantic placements (.confirmationAction, .cancellationAction, .primaryAction, .topBarLeading/Trailing) over hardcoded positions. The system manages overflow into a menu when items do not fit. On iOS 26 toolbar items render on Liquid Glass; group related items and separate with ToolbarSpacer.",
+      "states": [
+        "default",
+        "disabled",
+        "longContent"
+      ],
+      "styles": [],
+      "properties": [
+        {
+          "name": "primaryPlacement",
+          "swiftType": "ToolbarItemPlacement",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "primaryAction",
+            "confirmationAction",
+            "cancellationAction",
+            "topBarLeading",
+            "topBarTrailing",
+            "bottomBar",
+            "principal",
+            "navigation",
+            "status",
+            "secondaryAction"
+          ],
+          "defaultValue": "primaryAction",
+          "notes": "Placement of the leading ToolbarItem. topBarLeading/topBarTrailing/bottomBar are iOS-family; principal places a custom title view."
+        },
+        {
+          "name": "itemCount",
+          "swiftType": "Int",
+          "control": "stepper",
+          "options": [],
+          "defaultValue": "2",
+          "notes": "Number of trailing action items. Range 1...5."
+        },
+        {
+          "name": "showPrincipal",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "Adds a ToolbarItem(placement: .principal) with a custom title view."
+        },
+        {
+          "name": "showBottomBar",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "Adds a .bottomBar ToolbarItemGroup (iOS/iPadOS)."
+        },
+        {
+          "name": "useGroup",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "true",
+          "notes": "Wraps trailing items in a ToolbarItemGroup vs separate ToolbarItems."
+        },
+        {
+          "name": "itemsDisabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "Disables the action items."
+        }
+      ],
+      "codeTemplate": "struct ToolbarDemo: View {\n    var body: some View {\n        NavigationStack {\n            Text(\"Content\")\n                .navigationTitle(\"Toolbar\")\n                .toolbar {\n                    ToolbarItem(placement: .{primaryPlacement}) {\n                        Button(\"Action\") {}.disabled({itemsDisabled})\n                    }\n                    ToolbarItemGroup(placement: .topBarTrailing) {\n                        Button { } label: { Image(systemName: \"square.and.arrow.up\") }\n                        Button { } label: { Image(systemName: \"ellipsis\") }\n                    }\n                }\n        }\n    }\n}"
+    },
+    {
+      "id": "toolbar-item",
+      "title": "ToolbarItem",
+      "api": "ToolbarItem",
+      "summary": "A single placed toolbar element, optionally identified for customization.",
+      "minOS": "iOS 14.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "higNotes": "Use one ToolbarItem per discrete action. Provide an id when supporting customizable toolbars (toolbar(id:)). Give image-only buttons an accessibility label.",
+      "states": [
+        "default",
+        "disabled"
+      ],
+      "styles": [],
+      "properties": [
+        {
+          "name": "placement",
+          "swiftType": "ToolbarItemPlacement",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "primaryAction",
+            "confirmationAction",
+            "cancellationAction",
+            "destructiveAction",
+            "topBarLeading",
+            "topBarTrailing",
+            "bottomBar",
+            "principal",
+            "navigation",
+            "status",
+            "keyboard"
+          ],
+          "defaultValue": "automatic",
+          "notes": "Where the item appears. keyboard places above the software keyboard (iOS)."
+        },
+        {
+          "name": "label",
+          "swiftType": "String",
+          "control": "text",
+          "options": [],
+          "defaultValue": "Done",
+          "notes": "Button title."
+        },
+        {
+          "name": "customizationID",
+          "swiftType": "String?",
+          "control": "text",
+          "options": [],
+          "defaultValue": "",
+          "notes": "Sets ToolbarItem(id:) for customizable toolbars; empty for non-customizable."
+        }
+      ],
+      "codeTemplate": "ToolbarItem(placement: .{placement}) {\n    Button(\"{label}\") {}\n}"
+    },
+    {
+      "id": "toolbar-item-group",
+      "title": "ToolbarItemGroup",
+      "api": "ToolbarItemGroup",
+      "summary": "Groups multiple controls under a single placement, so the system lays them out and overflows together.",
+      "minOS": "iOS 14.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "higNotes": "Group logically related actions. The system inserts a glass capsule background around the group on iOS 26. Items overflow into a menu together when space is tight.",
+      "states": [
+        "default",
+        "disabled"
+      ],
+      "styles": [],
+      "properties": [
+        {
+          "name": "placement",
+          "swiftType": "ToolbarItemPlacement",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "primaryAction",
+            "topBarLeading",
+            "topBarTrailing",
+            "bottomBar",
+            "navigation"
+          ],
+          "defaultValue": "topBarTrailing",
+          "notes": "Shared placement for the group."
+        },
+        {
+          "name": "itemCount",
+          "swiftType": "Int",
+          "control": "stepper",
+          "options": [],
+          "defaultValue": "3",
+          "notes": "Number of buttons in the group. Range 2...5."
+        }
+      ],
+      "codeTemplate": "ToolbarItemGroup(placement: .{placement}) {\n    Button { } label: { Image(systemName: \"bold\") }\n    Button { } label: { Image(systemName: \"italic\") }\n    Button { } label: { Image(systemName: \"underline\") }\n}"
+    },
+    {
+      "id": "toolbar-spacer",
+      "title": "ToolbarSpacer",
+      "api": "ToolbarSpacer",
+      "summary": "Inserts a fixed or flexible space between toolbar items, separating glass item groups on iOS 26.",
+      "minOS": "iOS 26.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS"
+      ],
+      "higNotes": "Use ToolbarSpacer(.fixed) to break two glass capsules apart and .flexible to push items to opposite ends. In customizable toolbars users can add/remove/duplicate spacers.",
+      "states": [
+        "default"
+      ],
+      "styles": [
+        "fixed",
+        "flexible"
+      ],
+      "properties": [
+        {
+          "name": "sizing",
+          "swiftType": "SpacerSizing",
+          "control": "segmented",
+          "options": [
+            "fixed",
+            "flexible"
+          ],
+          "defaultValue": "fixed",
+          "notes": ".fixed = standard gap separating glass groups; .flexible = expands to push items apart."
+        },
+        {
+          "name": "platformsNote",
+          "swiftType": "n/a",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "VERIFIED: ToolbarSpacer is iOS 26 / iPadOS 26 / Mac Catalyst 26 / macOS 26. Correctly excludes tvOS & watchOS. Draft platforms [iOS, iPadOS, macOS] are correct."
+        }
+      ],
+      "codeTemplate": "Text(\"Content\")\n    .toolbar {\n        ToolbarItem(placement: .topBarTrailing) { Button(\"Tag\") {} }\n        ToolbarSpacer(.{sizing})\n        ToolbarItem(placement: .topBarTrailing) { Button(\"More\") {} }\n    }"
+    },
+    {
+      "id": "navigation-title",
+      "title": "Navigation title",
+      "api": "View.navigationTitle(_:)",
+      "summary": "Sets the title for the enclosing navigation container, with iOS display modes and an optional editable/menu binding.",
+      "minOS": "iOS 14.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "higNotes": "Use a large title for top-level screens and inline for pushed/detail screens. On macOS the title appears in the window title bar. Pair with navigationSubtitle on macOS and an editable binding for document names.",
+      "states": [
+        "default",
+        "longContent"
+      ],
+      "styles": [],
+      "properties": [
+        {
+          "name": "title",
+          "swiftType": "String",
+          "control": "text",
+          "options": [],
+          "defaultValue": "Title",
+          "notes": "The navigation title text."
+        },
+        {
+          "name": "displayMode",
+          "swiftType": "NavigationBarItem.TitleDisplayMode",
+          "control": "segmented",
+          "options": [
+            "automatic",
+            "inline",
+            "large"
+          ],
+          "defaultValue": "automatic",
+          "notes": ".navigationBarTitleDisplayMode(_:). iOS/iPadOS/watchOS only; large unavailable on macOS."
+        },
+        {
+          "name": "subtitle",
+          "swiftType": "String",
+          "control": "text",
+          "options": [],
+          "defaultValue": "",
+          "notes": "macOS .navigationSubtitle(_:); empty omits it."
+        },
+        {
+          "name": "editable",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "When true uses navigationTitle($binding) for an inline-editable title (document-style)."
+        },
+        {
+          "name": "titleMenu",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "MISSING: .toolbarTitleMenu(content:) (iOS 16+) attaches a menu opened by tapping the title — a core navigation-title capability the draft omits."
+        }
+      ],
+      "codeTemplate": "Text(\"Content\")\n    .navigationTitle(\"{title}\")\n    .navigationBarTitleDisplayMode(.{displayMode})"
+    },
+    {
+      "id": "searchable",
+      "title": "searchable",
+      "api": "View.searchable(text:placement:prompt:)",
+      "summary": "Adds a system search field to a navigation container, with placement, prompt, suggestions, scopes, and tokens.",
+      "minOS": "iOS 15.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "higNotes": "Attach to the navigation container (stack or split view), not a child. Use .searchScopes for category filtering and search tokens for structured filters. On iOS 26 prefer a Tab(role: .search) for top-level search; the field adopts the Liquid Glass treatment. Use .searchSuggestions for completion.",
+      "states": [
+        "default",
+        "focused",
+        "empty",
+        "longContent"
+      ],
+      "styles": [],
+      "properties": [
+        {
+          "name": "placement",
+          "swiftType": "SearchFieldPlacement",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "toolbar",
+            "sidebar",
+            "navigationBarDrawerAlways",
+            "navigationBarDrawerAutomatic"
+          ],
+          "defaultValue": "automatic",
+          "notes": "navigationBarDrawer variants are iOS-only; sidebar targets the split-view sidebar."
+        },
+        {
+          "name": "prompt",
+          "swiftType": "String",
+          "control": "text",
+          "options": [],
+          "defaultValue": "Search",
+          "notes": "Localized placeholder prompt."
+        },
+        {
+          "name": "showSuggestions",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "Adds a .searchSuggestions { } block with completion rows."
+        },
+        {
+          "name": "showScopes",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "Adds .searchScopes(_:) { } with a segmented scope bar."
+        },
+        {
+          "name": "scopeActivation",
+          "swiftType": "SearchScopeActivation",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "onTextEntry",
+            "onSearchPresentation"
+          ],
+          "defaultValue": "automatic",
+          "notes": ".searchScopes(_:activation:) controls when the scope bar appears."
+        },
+        {
+          "name": "useTokens",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "Switches to searchable(text:tokens:placement:prompt:token:) for structured filter tokens."
+        },
+        {
+          "name": "isPresented",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "Uses searchable(text:isPresented:placement:prompt:) to programmatically present/dismiss the field (iOS 17+)."
+        }
+      ],
+      "codeTemplate": "struct SearchableDemo: View {\n    @State private var query = \"\"\n    @State private var scope = 0\n\n    var body: some View {\n        NavigationStack {\n            List(results, id: \\.self) { Text($0) }\n                .searchable(text: $query, placement: .{placement}, prompt: \"{prompt}\")\n                .searchScopes($scope) {\n                    Text(\"All\").tag(0)\n                    Text(\"Favorites\").tag(1)\n                }\n                .searchSuggestions {\n                    Text(\"Recent\").searchCompletion(\"recent\")\n                }\n        }\n    }\n\n    var results: [String] { [] }\n}"
+    },
+    {
+      "id": "search-token",
+      "title": "Search tokens",
+      "api": "View.searchable(text:tokens:placement:prompt:token:)",
+      "summary": "Renders structured, removable filter tokens inside the search field bound to an Identifiable collection.",
+      "minOS": "iOS 16.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "visionOS"
+      ],
+      "higNotes": "Use tokens to represent committed filters (people, tags, scopes) as chips the user can delete. Each token type must be Identifiable. Use the editableTokens variant when tokens carry user-editable text.",
+      "states": [
+        "default",
+        "focused",
+        "empty",
+        "selected"
+      ],
+      "styles": [],
+      "properties": [
+        {
+          "name": "tokenCount",
+          "swiftType": "Int",
+          "control": "stepper",
+          "options": [],
+          "defaultValue": "1",
+          "notes": "Number of active filter tokens to display. Range 0...4."
+        },
+        {
+          "name": "editable",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "Switches to searchable(text:editableTokens:...) for in-place token text editing."
+        },
+        {
+          "name": "prompt",
+          "swiftType": "String",
+          "control": "text",
+          "options": [],
+          "defaultValue": "Filter",
+          "notes": "Search field prompt."
+        }
+      ],
+      "codeTemplate": "struct SearchTokenDemo: View {\n    struct Tag: Identifiable, Hashable { let id = UUID(); let name: String }\n    @State private var query = \"\"\n    @State private var tokens: [Tag] = [Tag(name: \"swift\")]\n\n    var body: some View {\n        NavigationStack {\n            List { Text(\"Results\") }\n                .searchable(text: $query, tokens: $tokens, prompt: \"{prompt}\") { token in\n                    Text(token.name)\n                }\n        }\n    }\n}"
+    },
+    {
+      "id": "navigation-transition-zoom",
+      "title": "Zoom navigation transition",
+      "api": "View.navigationTransition(_:)",
+      "summary": "Animates a pushed view zooming from a matched source view, paired with matchedTransitionSource.",
+      "minOS": "iOS 18.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "higNotes": "Use .zoom for hero-style transitions from a cell/thumbnail to its detail. Mark the source with matchedTransitionSource(id:in:) using the same id and namespace passed to .zoom. Fall back to .automatic when no source exists.",
+      "states": [
+        "default",
+        "selected"
+      ],
+      "styles": [
+        "automatic",
+        "zoom"
+      ],
+      "properties": [
+        {
+          "name": "transition",
+          "swiftType": "NavigationTransition",
+          "control": "segmented",
+          "options": [
+            "automatic",
+            "zoom"
+          ],
+          "defaultValue": "zoom",
+          "notes": "automatic = system default push; zoom = hero zoom requiring a matched source."
+        },
+        {
+          "name": "sourceID",
+          "swiftType": "String",
+          "control": "text",
+          "options": [],
+          "defaultValue": "hero",
+          "notes": "Identifier shared between matchedTransitionSource(id:) and .zoom(sourceID:in:)."
+        }
+      ],
+      "codeTemplate": "struct ZoomTransitionDemo: View {\n    @Namespace private var namespace\n\n    var body: some View {\n        NavigationStack {\n            NavigationLink {\n                DetailView()\n                    .navigationTransition(.zoom(sourceID: \"{sourceID}\", in: namespace))\n            } label: {\n                Thumbnail()\n            }\n            .matchedTransitionSource(id: \"{sourceID}\", in: namespace)\n        }\n    }\n}"
+    },
+    {
+      "id": "navigation-bar-back-button",
+      "title": "Navigation back button & bar items",
+      "api": "View.navigationBarBackButtonHidden(_:) / toolbarRole(_:)",
+      "summary": "Controls back-button visibility, a custom back affordance, and the navigation bar's editor/browser role.",
+      "minOS": "iOS 14.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "higNotes": "Hide the default back button only when providing an equivalent gesture/control; the swipe-back gesture is disabled when the button is hidden unless re-enabled. Use .toolbarRole(.editor) on iPad to reclaim the back-button label space and center the title.",
+      "states": [
+        "default",
+        "disabled"
+      ],
+      "styles": [],
+      "properties": [
+        {
+          "name": "backButtonHidden",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": ".navigationBarBackButtonHidden(_:)."
+        },
+        {
+          "name": "toolbarRole",
+          "swiftType": "ToolbarRole",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "navigationStack",
+            "editor",
+            "browser"
+          ],
+          "defaultValue": "automatic",
+          "notes": ".toolbarRole(_:). editor centers the title and drops the back label on iPad."
+        },
+        {
+          "name": "customBackButton",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "When hidden, adds a custom .topBarLeading back ToolbarItem with dismiss action."
+        },
+        {
+          "name": "navigationLinkIndicatorVisibility",
+          "swiftType": "Visibility",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "visible",
+            "hidden"
+          ],
+          "defaultValue": "automatic",
+          "notes": "MISSING (iOS 26): environment value navigationLinkIndicatorVisibility / .navigationLinkIndicatorVisibility(_:) controls the disclosure chevron on NavigationLinks. A meaningful bar/link configuration knob."
+        }
+      ],
+      "codeTemplate": "struct BackButtonDemo: View {\n    @Environment(\\.dismiss) private var dismiss\n\n    var body: some View {\n        Text(\"Detail\")\n            .navigationBarBackButtonHidden({backButtonHidden})\n            .toolbarRole(.{toolbarRole})\n            .toolbar {\n                if {customBackButton} {\n                    ToolbarItem(placement: .topBarLeading) {\n                        Button { dismiss() } label: { Image(systemName: \"chevron.backward\") }\n                    }\n                }\n            }\n    }\n}"
+    },
+    {
+      "id": "tab-view-page-style",
+      "title": "TabView (page style)",
+      "api": "View.tabViewStyle(.page)",
+      "summary": "Horizontally paging TabView with a dot page indicator, commonly used for onboarding and galleries.",
+      "minOS": "iOS 14.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "watchOS"
+      ],
+      "higNotes": "Use the page style for swipeable sequential content, not primary app navigation. Control the index dots with indexDisplayMode. On watchOS this is the vertical paging style. Provide a way to reach each page non-gesturally for accessibility.",
+      "states": [
+        "default",
+        "selected",
+        "longContent"
+      ],
+      "styles": [
+        "page",
+        "page(indexDisplayMode: .always)",
+        "page(indexDisplayMode: .never)"
+      ],
+      "properties": [
+        {
+          "name": "pageCount",
+          "swiftType": "Int",
+          "control": "stepper",
+          "options": [],
+          "defaultValue": "3",
+          "notes": "Number of pages. Range 2...8."
+        },
+        {
+          "name": "indexDisplayMode",
+          "swiftType": "PageTabViewStyle.IndexDisplayMode",
+          "control": "segmented",
+          "options": [
+            "automatic",
+            "always",
+            "never"
+          ],
+          "defaultValue": "automatic",
+          "notes": ".page(indexDisplayMode:) controls the dot indicator."
+        },
+        {
+          "name": "backgroundDisplayMode",
+          "swiftType": "PageIndexViewStyle.BackgroundDisplayMode",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "interactive",
+            "always",
+            "never"
+          ],
+          "defaultValue": "automatic",
+          "notes": ".indexViewStyle(.page(backgroundDisplayMode:)) sets the index dots' backing."
+        }
+      ],
+      "codeTemplate": "struct PageTabViewDemo: View {\n    var body: some View {\n        TabView {\n            ForEach(0..<{pageCount}, id: \\.self) { index in\n                Text(\"Page \\(index)\")\n            }\n        }\n        .tabViewStyle(.page(indexDisplayMode: .{indexDisplayMode}))\n        .indexViewStyle(.page(backgroundDisplayMode: .{backgroundDisplayMode}))\n    }\n}"
+    },
+    {
+      "id": "toolbar-removing",
+      "title": "Toolbar removing default item",
+      "api": "View.toolbar(removing:)",
+      "summary": "Removes a system-provided default toolbar item, most commonly the NavigationSplitView sidebar toggle.",
+      "minOS": "iOS 17.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "visionOS",
+        "watchOS"
+      ],
+      "higNotes": "Use only to remove a default affordance you are deliberately replacing. The most common case is .toolbar(removing: .sidebarToggle) on a NavigationSplitView sidebar when you provide your own column control. Removing the sidebar toggle without a replacement strands users in a collapsed column.",
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "properties": [
+        {
+          "name": "defaultItemKind",
+          "swiftType": "ToolbarDefaultItemKind?",
+          "control": "picker",
+          "options": [
+            "sidebarToggle",
+            "title",
+            "none"
+          ],
+          "defaultValue": "sidebarToggle",
+          "notes": "ToolbarDefaultItemKind to remove. .sidebarToggle removes the NavigationSplitView column toggle; .title (iOS 26) removes the default title item; nil/none keeps all defaults."
+        }
+      ],
+      "codeTemplate": "NavigationSplitView {\n    List(0..<8, id: \\.self) { Text(\"Item \\($0)\") }\n        .toolbar(removing: .{defaultItemKind})\n        .navigationTitle(\"Sidebar\")\n} detail: {\n    Text(\"Detail\")\n}"
+    },
+    {
+      "id": "toolbar-title-menu",
+      "title": "Toolbar title menu",
+      "api": "View.toolbarTitleMenu(content:)",
+      "summary": "Attaches a menu to the navigation title, revealed by tapping the title in the navigation bar.",
+      "minOS": "iOS 16.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "visionOS",
+        "watchOS"
+      ],
+      "higNotes": "Use the title menu for actions that act on the content the title represents (rename, duplicate, move, print). On iOS/iPadOS the menu opens by tapping the navigation title. Pair with navigationDocument for document-based apps so the title shows the document proxy icon.",
+      "states": [
+        "default",
+        "disabled"
+      ],
+      "styles": [],
+      "properties": [
+        {
+          "name": "itemCount",
+          "swiftType": "Int",
+          "control": "stepper",
+          "options": [],
+          "defaultValue": "3",
+          "notes": "Number of menu actions. Range 1...6."
+        },
+        {
+          "name": "useDefaultMenu",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "When true, places a bare ToolbarTitleMenu() (system-populated) instead of custom content."
+        }
+      ],
+      "codeTemplate": "struct ToolbarTitleMenuDemo: View {\n    var body: some View {\n        NavigationStack {\n            Text(\"Content\")\n                .navigationTitle(\"Document\")\n                .toolbarTitleMenu {\n                    Button(\"Rename\") {}\n                    Button(\"Duplicate\") {}\n                    Button(\"Print\") {}\n                }\n        }\n    }\n}"
+    },
+    {
+      "id": "toolbar-customizable",
+      "title": "Customizable toolbar",
+      "api": "View.toolbar(id:content:)",
+      "summary": "A user-customizable toolbar whose items carry stable ids so people can add, remove, reorder, and duplicate them.",
+      "minOS": "iOS 16.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "visionOS"
+      ],
+      "higNotes": "Use toolbar(id:) with id-bearing ToolbarItems for toolbars users can personalize (primarily iPad and Mac). Set ToolbarCustomizationBehavior to pin essential items and ToolbarCustomizationOptions to allow spacer duplication. Non-customizable toolbars should use the plain toolbar(content:).",
+      "states": [
+        "default",
+        "disabled"
+      ],
+      "styles": [],
+      "properties": [
+        {
+          "name": "itemCount",
+          "swiftType": "Int",
+          "control": "stepper",
+          "options": [],
+          "defaultValue": "3",
+          "notes": "Number of id-bearing items. Range 1...6."
+        },
+        {
+          "name": "defaultVisibility",
+          "swiftType": "Visibility",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "visible",
+            "hidden"
+          ],
+          "defaultValue": "automatic",
+          "notes": "defaultCustomization(_:) controls whether an item appears by default before the user customizes."
+        },
+        {
+          "name": "pinnedBehavior",
+          "swiftType": "ToolbarCustomizationBehavior",
+          "control": "picker",
+          "options": [
+            "default",
+            "reorderable",
+            "disabled"
+          ],
+          "defaultValue": "default",
+          "notes": "customizationBehavior(_:) — disabled pins an item so users cannot remove or move it."
+        }
+      ],
+      "codeTemplate": "struct CustomizableToolbarDemo: View {\n    var body: some View {\n        NavigationStack {\n            Text(\"Content\")\n                .toolbar(id: \"main\") {\n                    ToolbarItem(id: \"tag\", placement: .secondaryAction) {\n                        Button { } label: { Label(\"Tag\", systemImage: \"tag\") }\n                    }\n                    ToolbarItem(id: \"share\", placement: .secondaryAction) {\n                        Button { } label: { Label(\"Share\", systemImage: \"square.and.arrow.up\") }\n                    }\n                }\n        }\n    }\n}"
+    },
+    {
+      "id": "navigation-subtitle",
+      "title": "Navigation subtitle",
+      "api": "View.navigationSubtitle(_:)",
+      "summary": "Adds a secondary subtitle line alongside the navigation title in the bar (iOS 26) or window title bar (macOS).",
+      "minOS": "iOS 26.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS"
+      ],
+      "higNotes": "Use a subtitle for short contextual status under the title (e.g. sync state, item count). On macOS the subtitle appears in the window title bar (available since macOS 11); on iOS/iPadOS it appears under the title only from iOS 26. Keep it short — it truncates aggressively. tvOS/watchOS unsupported.",
+      "states": [
+        "default",
+        "longContent",
+        "empty"
+      ],
+      "styles": [],
+      "properties": [
+        {
+          "name": "title",
+          "swiftType": "String",
+          "control": "text",
+          "options": [],
+          "defaultValue": "Inbox",
+          "notes": "The primary navigation title."
+        },
+        {
+          "name": "subtitle",
+          "swiftType": "String",
+          "control": "text",
+          "options": [],
+          "defaultValue": "Updated just now",
+          "notes": ".navigationSubtitle(_:) secondary line."
+        }
+      ],
+      "codeTemplate": "struct NavigationSubtitleDemo: View {\n    var body: some View {\n        NavigationStack {\n            List(0..<10, id: \\.self) { Text(\"Row \\($0)\") }\n                .navigationTitle(\"{title}\")\n                .navigationSubtitle(\"{subtitle}\")\n        }\n    }\n}"
+    },
+    {
+      "id": "tab-view-sidebar-adaptable",
+      "title": "TabView (sidebar adaptable)",
+      "api": "View.tabViewStyle(.sidebarAdaptable)",
+      "summary": "A TabView that renders as a tab bar in compact widths and promotes to a sidebar on iPad and Mac, with reorderable sections and customization.",
+      "minOS": "iOS 18.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "visionOS"
+      ],
+      "higNotes": "Use sidebarAdaptable for apps with many destinations that benefit from a sidebar on large screens. Group secondary destinations with TabSection. Enable user reordering with tabViewCustomization and a customizationID per Tab/TabSection. Provide sidebar header/footer via tabViewSidebarHeader/Footer.",
+      "states": [
+        "default",
+        "selected",
+        "longContent"
+      ],
+      "styles": [
+        "sidebarAdaptable"
+      ],
+      "properties": [
+        {
+          "name": "primaryTabCount",
+          "swiftType": "Int",
+          "control": "stepper",
+          "options": [],
+          "defaultValue": "2",
+          "notes": "Number of top-level tabs above the section. Range 1...4."
+        },
+        {
+          "name": "sectionChildCount",
+          "swiftType": "Int",
+          "control": "stepper",
+          "options": [],
+          "defaultValue": "3",
+          "notes": "Number of Tab items inside the TabSection. Range 1...6."
+        },
+        {
+          "name": "enableCustomization",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "true",
+          "notes": "Applies .tabViewCustomization(_:) so users can reorder/hide tabs (persisted via customizationID)."
+        },
+        {
+          "name": "showSidebarHeader",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "Adds .tabViewSidebarHeader { } content shown above the sidebar tabs."
+        }
+      ],
+      "codeTemplate": "struct SidebarAdaptableTabDemo: View {\n    @State private var customization = TabViewCustomization()\n\n    var body: some View {\n        TabView {\n            Tab(\"Home\", systemImage: \"house\") { Text(\"Home\") }\n                .customizationID(\"tab.home\")\n            Tab(\"Browse\", systemImage: \"square.grid.2x2\") { Text(\"Browse\") }\n                .customizationID(\"tab.browse\")\n            TabSection(\"Library\") {\n                Tab(\"Recent\", systemImage: \"clock\") { Text(\"Recent\") }\n                    .customizationID(\"tab.recent\")\n                Tab(\"Artists\", systemImage: \"music.mic\") { Text(\"Artists\") }\n                    .customizationID(\"tab.artists\")\n            }\n            .customizationID(\"section.library\")\n        }\n        .tabViewStyle(.sidebarAdaptable)\n        .tabViewCustomization($customization)\n    }\n}"
+    },
+    {
+      "id": "navigation-view",
+      "title": "NavigationView (deprecated)",
+      "api": "NavigationView",
+      "summary": "The legacy single- and multi-column navigation container, deprecated in favor of NavigationStack and NavigationSplitView.",
+      "minOS": "iOS 13.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "higNotes": "Deprecated since iOS 16. Do not use in new code; it does not adopt value-based navigation, NavigationPath, or programmatic deep links cleanly. Migrate to NavigationStack (single column) or NavigationSplitView (multi-column). Included here only to document the migration target.",
+      "states": [
+        "default",
+        "longContent"
+      ],
+      "styles": [
+        "automatic",
+        "stack",
+        "columns"
+      ],
+      "properties": [
+        {
+          "name": "style",
+          "swiftType": "NavigationViewStyle",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "stack",
+            "columns"
+          ],
+          "defaultValue": "automatic",
+          "notes": ".navigationViewStyle(_:) — all deprecated. stack forces single-column; columns forces multi-column on iPad/Mac."
+        }
+      ],
+      "codeTemplate": "NavigationView {\n    List(0..<10, id: \\.self) { value in\n        NavigationLink(\"Row \\(value)\") { Text(\"Detail \\(value)\") }\n    }\n    .navigationTitle(\"Legacy\")\n}\n.navigationViewStyle(.{style})"
+    }
+  ]
+}

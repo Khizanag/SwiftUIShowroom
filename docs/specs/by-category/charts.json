@@ -1,0 +1,1661 @@
+{
+  "category": "Charts",
+  "key": "charts",
+  "folder": "Charts",
+  "components": [
+    {
+      "id": "chart-container",
+      "title": "Chart",
+      "api": "Chart",
+      "summary": "The SwiftUI view that hosts marks and renders a data-driven chart, generating scales, axes, and legends automatically.",
+      "minOS": "iOS 16.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "summaryLong": "Root container. Everything in this category is configured by attaching chart* view modifiers to a Chart and by composing ChartContent marks inside its builder.",
+      "states": [
+        "default",
+        "empty",
+        "loading",
+        "longContent"
+      ],
+      "styles": [],
+      "higNotes": "Choose the chart type that matches the comparison the user must make: bars for category comparison, lines for trends over time, area for cumulative magnitude, sector for part-to-whole. Keep marks under ~7 series; rely on automatic scales/legends before customizing. Always supply accessible value labels via .value(_:).",
+      "properties": [
+        {
+          "name": "plotHeight",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "260",
+          "notes": "Drives .frame(height:) on the Chart for the showroom. Range 120...500."
+        },
+        {
+          "name": "showLegend",
+          "swiftType": "Visibility",
+          "control": "segmented",
+          "options": [
+            "automatic",
+            "visible",
+            "hidden"
+          ],
+          "defaultValue": "automatic",
+          "notes": "Maps to .chartLegend(_:). Legend appears only when marks are grouped via foregroundStyle(by:)."
+        },
+        {
+          "name": "legendPosition",
+          "swiftType": "AnnotationPosition",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "top",
+            "bottom",
+            "leading",
+            "trailing",
+            "topLeading",
+            "topTrailing",
+            "bottomLeading",
+            "bottomTrailing",
+            "overlay"
+          ],
+          "defaultValue": "automatic",
+          "notes": "Maps to .chartLegend(position:). tvOS/watchOS layout space is tight; prefer bottom."
+        },
+        {
+          "name": "xAxisVisible",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "true",
+          "notes": "false maps to .chartXAxis(.hidden)."
+        },
+        {
+          "name": "yAxisVisible",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "true",
+          "notes": "false maps to .chartYAxis(.hidden)."
+        },
+        {
+          "name": "plotBackground",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "options": [],
+          "defaultValue": "Color.clear",
+          "notes": "Maps to .chartPlotStyle { $0.background(...) }."
+        },
+        {
+          "name": "scrollableX",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "Enables .chartScrollableAxes(.horizontal) for long content; pair with .chartXVisibleDomain."
+        },
+        {
+          "name": "selectionEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "Enables .chartXSelection(value:) tap/drag selection with a scrolling RuleMark annotation."
+        }
+      ],
+      "codeTemplate": "Chart {\n    BarMark(\n        x: .value(\"Category\", item.category),\n        y: .value(\"Value\", item.value)\n    )\n}\n.frame(height: {plotHeight})\n.chartLegend({showLegend}, position: {legendPosition})\n.chartXAxis({xAxisVisible} ? .automatic : .hidden)\n.chartYAxis({yAxisVisible} ? .automatic : .hidden)\n.chartPlotStyle { plotArea in\n    plotArea.background({plotBackground})\n}\n.chartScrollableAxes({scrollableX} ? .horizontal : [])\n.chartXSelection(value: {selectionEnabled} ? $selectedX : .constant(nil))"
+    },
+    {
+      "id": "bar-mark",
+      "title": "BarMark",
+      "api": "BarMark",
+      "summary": "Represents data as rectangular bars; supports vertical, horizontal, 1D, interval (Gantt), and stacked layouts.",
+      "minOS": "iOS 16.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default",
+        "selected",
+        "empty",
+        "longContent"
+      ],
+      "styles": [
+        "solidForegroundStyle",
+        "gradientForegroundStyle",
+        "foregroundStyleByCategory"
+      ],
+      "higNotes": "Use bars to compare discrete categories or show binned distributions (histograms). Horizontal bars scale to many categories and label easily. Stack only when the parts sum to a meaningful whole; otherwise group side-by-side with position(by:).",
+      "properties": [
+        {
+          "name": "orientation",
+          "swiftType": "enum",
+          "control": "segmented",
+          "options": [
+            "vertical",
+            "horizontal"
+          ],
+          "defaultValue": "vertical",
+          "notes": "Vertical = category on x, value on y. Horizontal swaps the axes in the initializer."
+        },
+        {
+          "name": "stacking",
+          "swiftType": "MarkStackingMethod",
+          "control": "picker",
+          "options": [
+            "standard",
+            "normalized",
+            "center",
+            "unstacked"
+          ],
+          "defaultValue": "standard",
+          "notes": "normalized = 100% stacked; center = diverging; unstacked overlays. Passed as stacking: parameter."
+        },
+        {
+          "name": "barWidth",
+          "swiftType": "MarkDimension",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "ratio",
+            "fixed",
+            "inset"
+          ],
+          "defaultValue": "automatic",
+          "notes": "width: .ratio(0.6), .fixed(20), or .inset(4). Controls thickness."
+        },
+        {
+          "name": "cornerRadius",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "0",
+          "notes": "Maps to .cornerRadius(_:). Range 0...20. Rounds bar ends."
+        },
+        {
+          "name": "foregroundStyle",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "options": [],
+          "defaultValue": "Color.accentColor",
+          "notes": "Single-series color via .foregroundStyle(_:)."
+        },
+        {
+          "name": "groupByCategory",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "true adds .foregroundStyle(by:) + .position(by:) to color and offset bars per subcategory."
+        },
+        {
+          "name": "opacity",
+          "swiftType": "Double",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "1.0",
+          "notes": "Maps to .opacity(_:). Range 0...1."
+        },
+        {
+          "name": "annotationPosition",
+          "swiftType": "AnnotationPosition",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "overlay",
+            "top",
+            "bottom",
+            "leading",
+            "trailing"
+          ],
+          "defaultValue": "automatic",
+          "notes": "Drives .annotation(position:) to label each bar with its value."
+        }
+      ],
+      "codeTemplate": "BarMark(\n    x: .value(\"Category\", item.category),\n    y: .value(\"Value\", item.value),\n    width: {barWidth},\n    stacking: {stacking}\n)\n.cornerRadius({cornerRadius})\n.foregroundStyle({foregroundStyle})\n.opacity({opacity})\n.annotation(position: {annotationPosition}) {\n    Text(item.value, format: .number)\n        .font(.caption2)\n}"
+    },
+    {
+      "id": "line-mark",
+      "title": "LineMark",
+      "api": "LineMark",
+      "summary": "Connects data points with line segments to show trends; supports multiple series, interpolation, and symbols.",
+      "minOS": "iOS 16.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default",
+        "selected",
+        "empty",
+        "longContent"
+      ],
+      "styles": [
+        "solidForegroundStyle",
+        "foregroundStyleBySeries",
+        "dashedLineStyle"
+      ],
+      "higNotes": "Use lines for continuous trends over an ordered/temporal domain. Group multiple lines by series for comparison and color via foregroundStyle(by:). Add symbols only when individual points carry meaning or for accessibility differentiation.",
+      "properties": [
+        {
+          "name": "interpolationMethod",
+          "swiftType": "InterpolationMethod",
+          "control": "picker",
+          "options": [
+            "linear",
+            "monotone",
+            "cardinal",
+            "catmullRom",
+            "stepStart",
+            "stepCenter",
+            "stepEnd"
+          ],
+          "defaultValue": "linear",
+          "notes": "Maps to .interpolationMethod(_:). monotone/catmullRom smooth curves; step* for discrete jumps."
+        },
+        {
+          "name": "lineWidth",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "2",
+          "notes": "Set via .lineStyle(StrokeStyle(lineWidth:)). Range 0.5...10."
+        },
+        {
+          "name": "lineCap",
+          "swiftType": "CGLineCap",
+          "control": "segmented",
+          "options": [
+            "butt",
+            "round",
+            "square"
+          ],
+          "defaultValue": "round",
+          "notes": "StrokeStyle.lineCap."
+        },
+        {
+          "name": "dashed",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "true sets StrokeStyle(dash: [6, 4]) for a dashed line."
+        },
+        {
+          "name": "symbol",
+          "swiftType": "BasicChartSymbolShape",
+          "control": "picker",
+          "options": [
+            "none",
+            "circle",
+            "square",
+            "triangle",
+            "diamond",
+            "pentagon",
+            "plus",
+            "cross",
+            "asterisk"
+          ],
+          "defaultValue": "none",
+          "notes": "Maps to .symbol(_:). Marks each data point; aids accessibility/color-blind users."
+        },
+        {
+          "name": "foregroundStyle",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "options": [],
+          "defaultValue": "Color.accentColor",
+          "notes": "Single-series via .foregroundStyle(_:); use groupBySeries for multi."
+        },
+        {
+          "name": "groupBySeries",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "true adds .foregroundStyle(by:) to render one colored line per series category."
+        }
+      ],
+      "codeTemplate": "LineMark(\n    x: .value(\"Date\", item.date),\n    y: .value(\"Value\", item.value)\n)\n.interpolationMethod({interpolationMethod})\n.lineStyle(StrokeStyle(\n    lineWidth: {lineWidth},\n    lineCap: {lineCap},\n    dash: {dashed} ? [6, 4] : []\n))\n.symbol({symbol})\n.foregroundStyle({foregroundStyle})"
+    },
+    {
+      "id": "area-mark",
+      "title": "AreaMark",
+      "api": "AreaMark",
+      "summary": "Fills the region under a line or between two bounds; supports stacked, normalized, streamgraph, and range-area charts.",
+      "minOS": "iOS 16.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default",
+        "selected",
+        "empty",
+        "longContent"
+      ],
+      "styles": [
+        "solidForegroundStyle",
+        "gradientForegroundStyle",
+        "foregroundStyleByCategory"
+      ],
+      "higNotes": "Use area to emphasize cumulative magnitude or part-to-whole over a continuous domain. Use normalized for 100% composition, center for streamgraphs, and a yStart/yEnd range for min-max bands. Apply gradients sparingly so data remains legible.",
+      "properties": [
+        {
+          "name": "stacking",
+          "swiftType": "MarkStackingMethod",
+          "control": "picker",
+          "options": [
+            "standard",
+            "normalized",
+            "center",
+            "unstacked"
+          ],
+          "defaultValue": "standard",
+          "notes": "center yields a streamgraph; normalized yields a 100% area chart."
+        },
+        {
+          "name": "interpolationMethod",
+          "swiftType": "InterpolationMethod",
+          "control": "picker",
+          "options": [
+            "linear",
+            "monotone",
+            "cardinal",
+            "catmullRom",
+            "stepStart",
+            "stepCenter",
+            "stepEnd"
+          ],
+          "defaultValue": "linear",
+          "notes": "Smooths or steps the fill boundary."
+        },
+        {
+          "name": "rangeMode",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "true uses the yStart/yEnd initializer to draw a min-max band instead of fill-to-baseline."
+        },
+        {
+          "name": "useGradient",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "true applies a LinearGradient foregroundStyle fading to clear at the bottom."
+        },
+        {
+          "name": "foregroundStyle",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "options": [],
+          "defaultValue": "Color.accentColor",
+          "notes": "Base fill color."
+        },
+        {
+          "name": "opacity",
+          "swiftType": "Double",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "0.7",
+          "notes": "Range 0...1; areas often read better translucent."
+        },
+        {
+          "name": "groupByCategory",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "true adds .foregroundStyle(by:) for stacked multi-series areas."
+        }
+      ],
+      "codeTemplate": "AreaMark(\n    x: .value(\"Date\", item.date),\n    y: .value(\"Value\", item.value),\n    stacking: {stacking}\n)\n.interpolationMethod({interpolationMethod})\n.foregroundStyle({useGradient} ? AnyShapeStyle(LinearGradient(colors: [{foregroundStyle}, .clear], startPoint: .top, endPoint: .bottom)) : AnyShapeStyle({foregroundStyle}))\n.opacity({opacity})"
+    },
+    {
+      "id": "point-mark",
+      "title": "PointMark",
+      "api": "PointMark",
+      "summary": "Plots individual data points as symbols for scatter plots and bubble charts.",
+      "minOS": "iOS 16.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default",
+        "selected",
+        "empty",
+        "longContent"
+      ],
+      "styles": [
+        "solidForegroundStyle",
+        "foregroundStyleByCategory",
+        "symbolByCategory"
+      ],
+      "higNotes": "Use points for scatter plots showing correlation between two quantitative variables. Encode a third dimension via symbolSize (bubble) or foregroundStyle(by:). Differentiate categories with both color and symbol shape for color-blind accessibility.",
+      "properties": [
+        {
+          "name": "symbol",
+          "swiftType": "BasicChartSymbolShape",
+          "control": "picker",
+          "options": [
+            "circle",
+            "square",
+            "triangle",
+            "diamond",
+            "pentagon",
+            "plus",
+            "cross",
+            "asterisk"
+          ],
+          "defaultValue": "circle",
+          "notes": "Maps to .symbol(_:)."
+        },
+        {
+          "name": "symbolSize",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "60",
+          "notes": "Maps to .symbolSize(_:) in points². Range 10...300. Drive by a data value for bubble charts."
+        },
+        {
+          "name": "foregroundStyle",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "options": [],
+          "defaultValue": "Color.accentColor",
+          "notes": "Point fill color."
+        },
+        {
+          "name": "opacity",
+          "swiftType": "Double",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "0.8",
+          "notes": "Range 0...1; lowering opacity reveals overlapping points."
+        },
+        {
+          "name": "groupByCategory",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "true adds .foregroundStyle(by:) and .symbol(by:) for categorical scatter."
+        }
+      ],
+      "codeTemplate": "PointMark(\n    x: .value(\"X\", item.x),\n    y: .value(\"Y\", item.y)\n)\n.symbol({symbol})\n.symbolSize({symbolSize})\n.foregroundStyle({foregroundStyle})\n.opacity({opacity})"
+    },
+    {
+      "id": "rule-mark",
+      "title": "RuleMark",
+      "api": "RuleMark",
+      "summary": "Draws a horizontal or vertical reference line, threshold, or interval span across the plot.",
+      "minOS": "iOS 16.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default",
+        "longContent"
+      ],
+      "styles": [
+        "solidForegroundStyle",
+        "dashedLineStyle"
+      ],
+      "higNotes": "Use rules for thresholds, averages, goals, or to mark a selected x position. Style them subtly (thin, often dashed, muted color) so they support rather than dominate the primary marks. Label them with .annotation for context.",
+      "properties": [
+        {
+          "name": "orientation",
+          "swiftType": "enum",
+          "control": "segmented",
+          "options": [
+            "horizontal",
+            "vertical"
+          ],
+          "defaultValue": "horizontal",
+          "notes": "horizontal uses y: (threshold); vertical uses x: (marker). Interval variants use xStart/xEnd or yStart/yEnd."
+        },
+        {
+          "name": "lineWidth",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "1",
+          "notes": "StrokeStyle(lineWidth:). Range 0.5...6."
+        },
+        {
+          "name": "dashed",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "true",
+          "notes": "true sets dash: [4, 4]; thresholds read best dashed."
+        },
+        {
+          "name": "foregroundStyle",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "options": [],
+          "defaultValue": "Color.red",
+          "notes": "Reference-line color."
+        },
+        {
+          "name": "annotationPosition",
+          "swiftType": "AnnotationPosition",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "top",
+            "topLeading",
+            "topTrailing",
+            "leading",
+            "trailing"
+          ],
+          "defaultValue": "top",
+          "notes": "Drives .annotation(position:) for the label."
+        }
+      ],
+      "codeTemplate": "RuleMark(\n    y: .value(\"Threshold\", threshold)\n)\n.lineStyle(StrokeStyle(lineWidth: {lineWidth}, dash: {dashed} ? [4, 4] : []))\n.foregroundStyle({foregroundStyle})\n.annotation(position: {annotationPosition}, alignment: .leading) {\n    Text(\"Goal\")\n        .font(.caption2)\n        .foregroundStyle({foregroundStyle})\n}"
+    },
+    {
+      "id": "rectangle-mark",
+      "title": "RectangleMark",
+      "api": "RectangleMark",
+      "summary": "Fills rectangular cells defined by intervals on both axes; ideal for heat maps and matrix charts.",
+      "minOS": "iOS 16.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default",
+        "selected",
+        "empty",
+        "longContent"
+      ],
+      "styles": [
+        "foregroundStyleByValue",
+        "gradientScale"
+      ],
+      "higNotes": "Use rectangles for heat maps that encode a quantitative value as color across two categorical axes. Pair with .chartForegroundStyleScale and a continuous color gradient, and always show a legend so the color-to-value mapping is clear.",
+      "properties": [
+        {
+          "name": "valueColor",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "options": [],
+          "defaultValue": "Color.accentColor",
+          "notes": "Base hue; intensity comes from foregroundStyle(by:) + chartForegroundStyleScale gradient."
+        },
+        {
+          "name": "useContinuousScale",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "true",
+          "notes": "true encodes value as a continuous color via .foregroundStyle(by: .value(...)) with a gradient scale."
+        },
+        {
+          "name": "cellWidth",
+          "swiftType": "MarkDimension",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "ratio",
+            "fixed",
+            "inset"
+          ],
+          "defaultValue": "ratio",
+          "notes": "width: controls horizontal cell size; .inset adds spacing between cells."
+        },
+        {
+          "name": "cellHeight",
+          "swiftType": "MarkDimension",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "ratio",
+            "fixed",
+            "inset"
+          ],
+          "defaultValue": "ratio",
+          "notes": "height: controls vertical cell size."
+        },
+        {
+          "name": "opacity",
+          "swiftType": "Double",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "1.0",
+          "notes": "Range 0...1."
+        }
+      ],
+      "codeTemplate": "RectangleMark(\n    x: .value(\"Column\", item.column),\n    y: .value(\"Row\", item.row),\n    width: {cellWidth},\n    height: {cellHeight}\n)\n.foregroundStyle(by: .value(\"Value\", item.value))\n.opacity({opacity})\n// Pair with:\n// .chartForegroundStyleScale(range: Gradient(colors: [.white, {valueColor}]))"
+    },
+    {
+      "id": "sector-mark",
+      "title": "SectorMark",
+      "api": "SectorMark",
+      "summary": "Renders a pie or donut sector sized by angular proportion of a total; donut when innerRadius > 0.",
+      "minOS": "iOS 17.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default",
+        "selected",
+        "empty",
+        "longContent"
+      ],
+      "styles": [
+        "pie",
+        "donut",
+        "foregroundStyleByCategory"
+      ],
+      "higNotes": "Limit to 5-7 sectors and group the remainder into 'Other'. Require positive values. A small angularInset and cornerRadius improve readability without distorting proportions. Prefer horizontal bars when precise comparison matters.",
+      "properties": [
+        {
+          "name": "innerRadiusRatio",
+          "swiftType": "Double",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "0.618",
+          "notes": "innerRadius: .ratio(_). 0 = pie, >0 = donut. Range 0...0.9."
+        },
+        {
+          "name": "outerRadiusInset",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "0",
+          "notes": "outerRadius: .inset(_). Range 0...40."
+        },
+        {
+          "name": "angularInset",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "1",
+          "notes": "Gap between sectors. Range 0...8. Improves contrast/accessibility."
+        },
+        {
+          "name": "cornerRadius",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "4",
+          "notes": "Maps to .cornerRadius(_:). Range 0...12. Keep small to avoid distortion."
+        },
+        {
+          "name": "groupByCategory",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "true",
+          "notes": "true adds .foregroundStyle(by:) so each category gets a distinct color + legend."
+        }
+      ],
+      "codeTemplate": "SectorMark(\n    angle: .value(\"Value\", item.value),\n    innerRadius: .ratio({innerRadiusRatio}),\n    outerRadius: .inset({outerRadiusInset}),\n    angularInset: {angularInset}\n)\n.cornerRadius({cornerRadius})\n.foregroundStyle(by: .value(\"Category\", item.name))"
+    },
+    {
+      "id": "bar-plot",
+      "title": "BarPlot (vectorized)",
+      "api": "BarPlot",
+      "summary": "Vectorized bar content that plots an entire data collection with one plot for high-performance large datasets.",
+      "minOS": "iOS 18.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default",
+        "empty",
+        "longContent"
+      ],
+      "styles": [
+        "solidForegroundStyle",
+        "foregroundStyleByKeyPath"
+      ],
+      "higNotes": "Use vectorized plots when rendering large collections; they are far more performant than per-element ForEach of BarMark. Apply KeyPath-based modifiers before simple-value modifiers, as the API requires.",
+      "properties": [
+        {
+          "name": "xKeyPath",
+          "swiftType": "KeyPath",
+          "control": "menu",
+          "options": [],
+          "defaultValue": "\\.category",
+          "notes": "x: .value(\"X\", \\.keyPath). KeyPath into the element type."
+        },
+        {
+          "name": "yKeyPath",
+          "swiftType": "KeyPath",
+          "control": "menu",
+          "options": [],
+          "defaultValue": "\\.value",
+          "notes": "y: .value(\"Y\", \\.keyPath)."
+        },
+        {
+          "name": "foregroundStyle",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "options": [],
+          "defaultValue": "Color.accentColor",
+          "notes": "Simple-value modifier; apply after KeyPath modifiers."
+        },
+        {
+          "name": "groupByKeyPath",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "true uses .foregroundStyle(by: .value(\"Group\", \\.group)) for categorical coloring."
+        }
+      ],
+      "codeTemplate": "Chart {\n    BarPlot(\n        data,\n        x: .value(\"Category\", {xKeyPath}),\n        y: .value(\"Value\", {yKeyPath})\n    )\n    .foregroundStyle({foregroundStyle})\n}"
+    },
+    {
+      "id": "line-plot",
+      "title": "LinePlot (vectorized / function)",
+      "api": "LinePlot",
+      "summary": "Vectorized line content for whole collections and for plotting mathematical, parametric, or piecewise functions.",
+      "minOS": "iOS 18.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default",
+        "empty",
+        "longContent"
+      ],
+      "styles": [
+        "solidForegroundStyle",
+        "foregroundStyleByKeyPath",
+        "dashedLineStyle"
+      ],
+      "higNotes": "Prefer LinePlot for large series and for analytic functions (y = f(x), parametric x/y over t). Combine multiple function plots with distinct foregroundStyle(by:) and set explicit chartXScale/chartYScale domains to frame the curve.",
+      "properties": [
+        {
+          "name": "mode",
+          "swiftType": "enum",
+          "control": "segmented",
+          "options": [
+            "collection",
+            "function",
+            "parametric"
+          ],
+          "defaultValue": "function",
+          "notes": "collection plots data; function plots y=f(x); parametric plots (x,y) over t with a domain."
+        },
+        {
+          "name": "lineWidth",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "3",
+          "notes": ".lineStyle(StrokeStyle(lineWidth:)). Range 0.5...10."
+        },
+        {
+          "name": "lineCap",
+          "swiftType": "CGLineCap",
+          "control": "segmented",
+          "options": [
+            "butt",
+            "round",
+            "square"
+          ],
+          "defaultValue": "round",
+          "notes": "StrokeStyle.lineCap."
+        },
+        {
+          "name": "foregroundStyle",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "options": [],
+          "defaultValue": "Color.accentColor",
+          "notes": "Curve color."
+        },
+        {
+          "name": "opacity",
+          "swiftType": "Double",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "0.9",
+          "notes": "Range 0...1."
+        }
+      ],
+      "codeTemplate": "Chart {\n    LinePlot(x: \"x\", y: \"y\") { x in\n        x * x\n    }\n    .lineStyle(StrokeStyle(lineWidth: {lineWidth}, lineCap: {lineCap}))\n    .foregroundStyle({foregroundStyle})\n    .opacity({opacity})\n}\n.chartXScale(domain: -10 ... 10)\n.chartYScale(domain: -10 ... 10)"
+    },
+    {
+      "id": "area-plot",
+      "title": "AreaPlot (vectorized / function)",
+      "api": "AreaPlot",
+      "summary": "Vectorized area content for whole collections and for filling under a plotted function.",
+      "minOS": "iOS 18.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default",
+        "empty",
+        "longContent"
+      ],
+      "styles": [
+        "solidForegroundStyle",
+        "gradientForegroundStyle",
+        "foregroundStyleByKeyPath"
+      ],
+      "higNotes": "Use AreaPlot to shade the region under an analytic function or to render large area series efficiently. Use the yStart/yEnd function form for filled bands between two curves.",
+      "properties": [
+        {
+          "name": "mode",
+          "swiftType": "enum",
+          "control": "segmented",
+          "options": [
+            "collection",
+            "function",
+            "band"
+          ],
+          "defaultValue": "function",
+          "notes": "band uses yStart/yEnd closures to fill between two functions."
+        },
+        {
+          "name": "foregroundStyle",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "options": [],
+          "defaultValue": "Color.accentColor",
+          "notes": "Fill color."
+        },
+        {
+          "name": "useGradient",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "true",
+          "notes": "true applies a LinearGradient fading to clear."
+        },
+        {
+          "name": "opacity",
+          "swiftType": "Double",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "0.6",
+          "notes": "Range 0...1."
+        }
+      ],
+      "codeTemplate": "Chart {\n    AreaPlot(x: \"x\", y: \"y\") { x in\n        sin(x)\n    }\n    .foregroundStyle({useGradient} ? AnyShapeStyle(LinearGradient(colors: [{foregroundStyle}, .clear], startPoint: .top, endPoint: .bottom)) : AnyShapeStyle({foregroundStyle}))\n    .opacity({opacity})\n}\n.chartXScale(domain: -10 ... 10)\n.chartYScale(domain: -2 ... 2)"
+    },
+    {
+      "id": "point-plot",
+      "title": "PointPlot (vectorized)",
+      "api": "PointPlot",
+      "summary": "Vectorized point content for plotting large scatter collections with one performant plot.",
+      "minOS": "iOS 18.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default",
+        "empty",
+        "longContent"
+      ],
+      "styles": [
+        "solidForegroundStyle",
+        "foregroundStyleByKeyPath",
+        "symbolByKeyPath"
+      ],
+      "higNotes": "Use PointPlot for dense scatter plots over large datasets. Encode extra dimensions with symbolSize (by KeyPath) and foregroundStyle(by:) and keep opacity below 1 to reveal density.",
+      "properties": [
+        {
+          "name": "xKeyPath",
+          "swiftType": "KeyPath",
+          "control": "menu",
+          "options": [],
+          "defaultValue": "\\.x",
+          "notes": "x: .value(\"X\", \\.keyPath)."
+        },
+        {
+          "name": "yKeyPath",
+          "swiftType": "KeyPath",
+          "control": "menu",
+          "options": [],
+          "defaultValue": "\\.y",
+          "notes": "y: .value(\"Y\", \\.keyPath)."
+        },
+        {
+          "name": "symbolSize",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "40",
+          "notes": ".symbolSize(_:) in points². Range 10...200."
+        },
+        {
+          "name": "foregroundStyle",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "options": [],
+          "defaultValue": "Color.accentColor",
+          "notes": "Point color."
+        },
+        {
+          "name": "opacity",
+          "swiftType": "Double",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "0.7",
+          "notes": "Range 0...1."
+        }
+      ],
+      "codeTemplate": "Chart {\n    PointPlot(\n        data,\n        x: .value(\"X\", {xKeyPath}),\n        y: .value(\"Y\", {yKeyPath})\n    )\n    .symbolSize({symbolSize})\n    .foregroundStyle({foregroundStyle})\n    .opacity({opacity})\n}"
+    },
+    {
+      "id": "sector-plot",
+      "title": "SectorPlot (vectorized)",
+      "api": "SectorPlot",
+      "summary": "Vectorized sector content that renders an entire pie or donut from a collection with one plot.",
+      "minOS": "iOS 18.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default",
+        "empty",
+        "longContent"
+      ],
+      "styles": [
+        "pie",
+        "donut",
+        "foregroundStyleByKeyPath"
+      ],
+      "higNotes": "Same composition rules as SectorMark (5-7 slices, positive values, small inset). Use the vectorized form when the slice collection is large or data-driven.",
+      "properties": [
+        {
+          "name": "angleKeyPath",
+          "swiftType": "KeyPath",
+          "control": "menu",
+          "options": [],
+          "defaultValue": "\\.value",
+          "notes": "angle: .value(\"Value\", \\.keyPath)."
+        },
+        {
+          "name": "innerRadiusRatio",
+          "swiftType": "Double",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "0.5",
+          "notes": "innerRadius: .ratio(_). Range 0...0.9."
+        },
+        {
+          "name": "angularInset",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "1.5",
+          "notes": "Range 0...8."
+        },
+        {
+          "name": "foregroundStyleKeyPath",
+          "swiftType": "KeyPath",
+          "control": "menu",
+          "options": [],
+          "defaultValue": "\\.name",
+          "notes": ".foregroundStyle(by: .value(\"Category\", \\.keyPath))."
+        }
+      ],
+      "codeTemplate": "Chart {\n    SectorPlot(\n        data,\n        angle: .value(\"Value\", {angleKeyPath}),\n        innerRadius: .ratio({innerRadiusRatio}),\n        angularInset: {angularInset}\n    )\n    .foregroundStyle(by: .value(\"Category\", {foregroundStyleKeyPath}))\n}"
+    },
+    {
+      "id": "rule-rectangle-plot",
+      "title": "RulePlot & RectanglePlot (vectorized)",
+      "api": "RulePlot",
+      "summary": "Vectorized rule and rectangle content for plotting collections of reference lines or rectangular cells with one plot each.",
+      "minOS": "iOS 18.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default",
+        "empty",
+        "longContent"
+      ],
+      "styles": [
+        "solidForegroundStyle",
+        "foregroundStyleByKeyPath"
+      ],
+      "higNotes": "Use the vectorized RulePlot/RectanglePlot for data-driven collections of reference lines or heat-map cells where a per-element ForEach of RuleMark/RectangleMark would be expensive.",
+      "properties": [
+        {
+          "name": "markType",
+          "swiftType": "enum",
+          "control": "segmented",
+          "options": [
+            "rule",
+            "rectangle"
+          ],
+          "defaultValue": "rule",
+          "notes": "Switches between RulePlot and RectanglePlot template output."
+        },
+        {
+          "name": "foregroundStyle",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "options": [],
+          "defaultValue": "Color.secondary",
+          "notes": "Mark color."
+        },
+        {
+          "name": "lineWidth",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "1",
+          "notes": "Rule stroke width. Range 0.5...6."
+        },
+        {
+          "name": "opacity",
+          "swiftType": "Double",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "0.8",
+          "notes": "Range 0...1."
+        }
+      ],
+      "codeTemplate": "Chart {\n    RulePlot(\n        data,\n        x: .value(\"X\", \\.x)\n    )\n    .lineStyle(StrokeStyle(lineWidth: {lineWidth}))\n    .foregroundStyle({foregroundStyle})\n    .opacity({opacity})\n}"
+    },
+    {
+      "id": "chart3d",
+      "title": "Chart3D",
+      "api": "Chart3D",
+      "summary": "A three-dimensional chart container for spatial visualizations such as surface plots and 3D scatter.",
+      "minOS": "iOS 26.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS"
+      ],
+      "states": [
+        "default",
+        "empty",
+        "focused"
+      ],
+      "styles": [
+        "surfacePlot",
+        "point3D"
+      ],
+      "higNotes": "New in OS 26. Use 3D charts only when the third spatial dimension genuinely aids comprehension (e.g. terrain, multivariate surfaces). Provide pose/camera controls and clear axis labels. Not available on tvOS or watchOS.",
+      "properties": [
+        {
+          "name": "cameraProjection",
+          "swiftType": "Chart3DCameraProjection",
+          "control": "segmented",
+          "options": [
+            "automatic",
+            "perspective",
+            "orthographic"
+          ],
+          "defaultValue": "perspective",
+          "notes": "Maps to .chart3DCameraProjection(_:)."
+        },
+        {
+          "name": "pose",
+          "swiftType": "Chart3DPose",
+          "control": "picker",
+          "options": [
+            "default",
+            "front",
+            "back",
+            "top"
+          ],
+          "defaultValue": "default",
+          "notes": "Drives .chart3DPose(_:) initial orientation."
+        },
+        {
+          "name": "interactive",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "true",
+          "notes": "Allows drag-to-rotate of the 3D scene."
+        },
+        {
+          "name": "zAxisLabel",
+          "swiftType": "String",
+          "control": "text",
+          "options": [],
+          "defaultValue": "z",
+          "notes": "3D adds a third spatial axis. Configure z extent via .chartZScale(domain:); SurfacePlot/3D PointMark/RuleMark/RectangleMark all take an explicit z value."
+        }
+      ],
+      "codeTemplate": "Chart3D {\n    SurfacePlot(x: \"x\", y: \"y\", z: \"z\") { x, z in\n        sin(x) * cos(z)\n    }\n}\n.chart3DCameraProjection({cameraProjection})\n.chart3DPose({pose})"
+    },
+    {
+      "id": "chart-axis-customization",
+      "title": "Axis Customization",
+      "api": "AxisMarks",
+      "summary": "Customizes axis ticks, grid lines, and value labels via chartXAxis/chartYAxis with AxisMarks builders.",
+      "minOS": "iOS 16.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default",
+        "longContent"
+      ],
+      "styles": [
+        "automatic",
+        "custom"
+      ],
+      "higNotes": "Keep axes clean: limit tick density, format value labels for the data type (dates, currency), and use grid lines sparingly. Hide redundant axes. Use AxisMarkValues.automatic(desiredCount:) to control tick count instead of hardcoding.",
+      "properties": [
+        {
+          "name": "axis",
+          "swiftType": "enum",
+          "control": "segmented",
+          "options": [
+            "x",
+            "y"
+          ],
+          "defaultValue": "y",
+          "notes": "Selects chartXAxis vs chartYAxis to customize."
+        },
+        {
+          "name": "axisPosition",
+          "swiftType": "AxisMarkPosition",
+          "control": "segmented",
+          "options": [
+            "automatic",
+            "leading",
+            "trailing",
+            "top",
+            "bottom"
+          ],
+          "defaultValue": "automatic",
+          "notes": "AxisMarks(position:) location of the axis."
+        },
+        {
+          "name": "tickValues",
+          "swiftType": "AxisMarkValues",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "automaticDesiredCount",
+            "stride",
+            "explicit"
+          ],
+          "defaultValue": "automatic",
+          "notes": "AxisMarks(values:). desiredCount controls tick density."
+        },
+        {
+          "name": "desiredTickCount",
+          "swiftType": "Int",
+          "control": "stepper",
+          "options": [],
+          "defaultValue": "5",
+          "notes": "Used with .automatic(desiredCount:). Range 2...12."
+        },
+        {
+          "name": "showGridLines",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "true",
+          "notes": "Toggles AxisGridLine() in the AxisMarks builder."
+        },
+        {
+          "name": "showTicks",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "true",
+          "notes": "Toggles AxisTick() in the builder."
+        },
+        {
+          "name": "showValueLabels",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "true",
+          "notes": "Toggles AxisValueLabel()."
+        },
+        {
+          "name": "labelOrientation",
+          "swiftType": "AxisValueLabelOrientation",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "horizontal",
+            "vertical",
+            "verticalReversed"
+          ],
+          "defaultValue": "automatic",
+          "notes": "AxisValueLabel(orientation:). Rotate labels to avoid collisions."
+        }
+      ],
+      "codeTemplate": ".chartYAxis {\n    AxisMarks(\n        position: {axisPosition},\n        values: .automatic(desiredCount: {desiredTickCount})\n    ) { value in\n        if {showGridLines} { AxisGridLine() }\n        if {showTicks} { AxisTick() }\n        if {showValueLabels} {\n            AxisValueLabel(orientation: {labelOrientation})\n        }\n    }\n}"
+    },
+    {
+      "id": "chart-scales",
+      "title": "Scales & Domains",
+      "api": "chartXScale",
+      "summary": "Controls the mapping from data to plot via chartXScale/chartYScale domain, range, and scale type.",
+      "minOS": "iOS 16.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [
+        "linear",
+        "log",
+        "symmetricLog",
+        "squareRoot",
+        "category"
+      ],
+      "higNotes": "Let scales be automatic unless a fixed domain aids comparison across charts or you must include zero. Log scales suit data spanning orders of magnitude; always label them clearly so the nonlinearity is obvious.",
+      "properties": [
+        {
+          "name": "axis",
+          "swiftType": "enum",
+          "control": "segmented",
+          "options": [
+            "x",
+            "y"
+          ],
+          "defaultValue": "y",
+          "notes": "Selects chartXScale vs chartYScale."
+        },
+        {
+          "name": "scaleType",
+          "swiftType": "ScaleType",
+          "control": "picker",
+          "options": [
+            "linear",
+            "log",
+            "symmetricLog",
+            "squareRoot",
+            "category"
+          ],
+          "defaultValue": "linear",
+          "notes": "Passed via .chartYScale(type:). Quantitative scales only for numeric data."
+        },
+        {
+          "name": "useFixedDomain",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "true supplies an explicit domain: closed range instead of automatic."
+        },
+        {
+          "name": "domainLowerBound",
+          "swiftType": "Double",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "0",
+          "notes": "Lower bound when useFixedDomain is true. Range -100...100."
+        },
+        {
+          "name": "domainUpperBound",
+          "swiftType": "Double",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "100",
+          "notes": "Upper bound when useFixedDomain is true. Range 0...1000."
+        },
+        {
+          "name": "zAxisAvailable",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "chartZScale(domain:range:type:) exists for Chart3D (OS 26). The spec's axis enum (x/y) omits the z option used by 3D charts."
+        }
+      ],
+      "codeTemplate": ".chartYScale(\n    domain: {useFixedDomain} ? {domainLowerBound} ... {domainUpperBound} : .automatic,\n    type: {scaleType}\n)"
+    },
+    {
+      "id": "chart-foreground-style-scale",
+      "title": "Foreground Style Scale & Legend Grouping",
+      "api": "chartForegroundStyleScale",
+      "summary": "Maps categorical or continuous data to colors via foregroundStyle(by:) and customizes the color scale and legend.",
+      "minOS": "iOS 16.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default",
+        "longContent"
+      ],
+      "styles": [
+        "discreteColorScale",
+        "continuousGradientScale"
+      ],
+      "higNotes": "Use color to encode a single categorical or quantitative dimension. Provide a legend whenever color carries meaning. Choose color-blind-safe palettes and pair color with shape (symbol) where differentiation is critical.",
+      "properties": [
+        {
+          "name": "scaleMode",
+          "swiftType": "enum",
+          "control": "segmented",
+          "options": [
+            "discrete",
+            "continuous"
+          ],
+          "defaultValue": "discrete",
+          "notes": "discrete maps categories to a palette; continuous maps a value range to a gradient."
+        },
+        {
+          "name": "paletteColor1",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "options": [],
+          "defaultValue": "Color.blue",
+          "notes": "First color in the discrete range / gradient start."
+        },
+        {
+          "name": "paletteColor2",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "options": [],
+          "defaultValue": "Color.green",
+          "notes": "Second color."
+        },
+        {
+          "name": "paletteColor3",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "options": [],
+          "defaultValue": "Color.orange",
+          "notes": "Third color (discrete only)."
+        }
+      ],
+      "codeTemplate": ".chartForegroundStyleScale(\n    range: {scaleMode} == .continuous\n        ? AnyShapeStyle(Gradient(colors: [{paletteColor1}, {paletteColor2}]))\n        : AnyShapeStyle({paletteColor1})\n)\n// Marks use: .foregroundStyle(by: .value(\"Category\", item.group))"
+    },
+    {
+      "id": "chart-selection",
+      "title": "Chart Selection & Scrolling Annotations",
+      "api": "chartXSelection",
+      "summary": "Adds interactive value selection (tap/drag) on an axis, surfacing a binding used to draw a RuleMark with a scrolling annotation.",
+      "minOS": "iOS 17.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS"
+      ],
+      "states": [
+        "default",
+        "selected",
+        "focused"
+      ],
+      "styles": [
+        "valueSelection",
+        "rangeSelection"
+      ],
+      "higNotes": "Use chartXSelection for scrubbing data on touch. Reflect the selection with a RuleMark plus an .annotation that overflow-resolves within the plot bounds so it never clips. Combine with .chartScrollableAxes and .chartXVisibleDomain for paged time-series.",
+      "properties": [
+        {
+          "name": "selectionAxis",
+          "swiftType": "enum",
+          "control": "segmented",
+          "options": [
+            "x",
+            "y",
+            "xy"
+          ],
+          "defaultValue": "x",
+          "notes": "chartXSelection / chartYSelection / both."
+        },
+        {
+          "name": "selectionMode",
+          "swiftType": "enum",
+          "control": "segmented",
+          "options": [
+            "value",
+            "range"
+          ],
+          "defaultValue": "value",
+          "notes": "value binds a single Plottable; range binds a ClosedRange for brushing."
+        },
+        {
+          "name": "scrollableAxes",
+          "swiftType": "Axis.Set",
+          "control": "segmented",
+          "options": [
+            "none",
+            "horizontal",
+            "vertical"
+          ],
+          "defaultValue": "horizontal",
+          "notes": "Maps to .chartScrollableAxes(_:)."
+        },
+        {
+          "name": "visibleDomainLength",
+          "swiftType": "Int",
+          "control": "stepper",
+          "options": [],
+          "defaultValue": "30",
+          "notes": ".chartXVisibleDomain(length:) number of units visible at once. Range 5...100."
+        },
+        {
+          "name": "annotationOverflow",
+          "swiftType": "AnnotationOverflowResolution.Strategy",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "fit",
+            "padScale",
+            "disabled"
+          ],
+          "defaultValue": "automatic",
+          "notes": "AnnotationOverflowResolution strategy so the scrolling annotation stays in bounds."
+        }
+      ],
+      "codeTemplate": "Chart {\n    ForEach(data) { item in\n        BarMark(x: .value(\"Date\", item.date), y: .value(\"Value\", item.value))\n            .foregroundStyle(item.date == selectedDate ? Color.accentColor : Color.gray)\n    }\n    if let selectedDate {\n        RuleMark(x: .value(\"Selected\", selectedDate))\n            .annotation(position: .top, overflowResolution: .init(x: {annotationOverflow}, y: .fit)) {\n                Text(\"\\(selectedValue)\")\n            }\n    }\n}\n.chartXSelection(value: $selectedDate)\n.chartScrollableAxes({scrollableAxes})\n.chartXVisibleDomain(length: {visibleDomainLength})"
+    },
+    {
+      "id": "surface-plot",
+      "title": "SurfacePlot (3D surface)",
+      "api": "SurfacePlot",
+      "summary": "3D-only chart content that renders a mathematical surface y = f(x, z); the sole mark type exclusive to Chart3D.",
+      "minOS": "iOS 26.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "visionOS"
+      ],
+      "summary_long": "Renders a continuous surface from a closure (x, z) -> y inside a Chart3D. Supports multiple surfaces in one chart, explicit x/y/z scale domains, and surface-specific foreground styles (heightBased gradient, normalBased shading).",
+      "states": [
+        "default",
+        "empty",
+        "focused"
+      ],
+      "styles": [
+        "heightBased",
+        "normalBased",
+        "solidForegroundStyle"
+      ],
+      "higNotes": "New in OS 26 and Chart3D-only. Use heightBased to make surface shape readable via a y-value gradient; normalBased shades by facing direction. Set explicit chartXScale/chartYScale/chartZScale domains to frame the surface. Not available on tvOS or watchOS.",
+      "properties": [
+        {
+          "name": "surfaceStyle",
+          "swiftType": "Chart3DSurfaceStyle",
+          "control": "segmented",
+          "options": [
+            "heightBased",
+            "normalBased",
+            "solid"
+          ],
+          "defaultValue": "heightBased",
+          "notes": "Maps to .foregroundStyle(.heightBased) / .normalBased / a solid color. heightBased gradients by y-value; normalBased shades by surface normal."
+        },
+        {
+          "name": "foregroundStyle",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "options": [],
+          "defaultValue": "Color.accentColor",
+          "notes": "Solid fill used when surfaceStyle is solid."
+        },
+        {
+          "name": "xDomainLength",
+          "swiftType": "Double",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "2",
+          "notes": ".chartXScale(domain: -x...x). Range 1...10. Frames the x extent of the surface."
+        },
+        {
+          "name": "zDomainLength",
+          "swiftType": "Double",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "2",
+          "notes": ".chartZScale(domain: -z...z). Range 1...10. Frames the z extent of the surface."
+        }
+      ],
+      "codeTemplate": "Chart3D {\n    SurfacePlot(x: \"x\", y: \"y\", z: \"z\") { x, z in\n        sin(2 * x) * cos(2 * z)\n    }\n    .foregroundStyle({surfaceStyle})\n}\n.chartXScale(domain: -{xDomainLength} ... {xDomainLength})\n.chartYScale(domain: -1 ... 1)\n.chartZScale(domain: -{zDomainLength} ... {zDomainLength})"
+    },
+    {
+      "id": "chart-overlay-background",
+      "title": "Chart Overlay & Background (ChartProxy)",
+      "api": "chartOverlay",
+      "summary": "Overlays or backs the plot area with custom SwiftUI content, using ChartProxy to convert between data values and view coordinates for custom interactivity.",
+      "minOS": "iOS 16.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "visionOS",
+        "watchOS"
+      ],
+      "summary_long": "The foundational customization/interaction surface predating chartXSelection. .chartOverlay { proxy in ... } and .chartBackground { proxy in ... } give a ChartProxy plus a GeometryProxy so you can hit-test gestures, draw custom highlights, and map data<->position via proxy.value(atX:) / proxy.position(forX:). Used for custom tooltips, crosshairs, and lollipop selection on iOS 16 where chartXSelection (17+) is unavailable.",
+      "states": [
+        "default",
+        "selected",
+        "focused"
+      ],
+      "styles": [
+        "overlay",
+        "background"
+      ],
+      "higNotes": "Use chartOverlay for custom touch interaction and annotations layered above marks; chartBackground for static decoration behind them. Convert gesture locations with ChartProxy and the supplied GeometryProxy. Keep overlay content lightweight; prefer the higher-level chartXSelection on iOS 17+ for simple scrubbing.",
+      "properties": [
+        {
+          "name": "layer",
+          "swiftType": "enum",
+          "control": "segmented",
+          "options": [
+            "overlay",
+            "background"
+          ],
+          "defaultValue": "overlay",
+          "notes": "Switches between .chartOverlay (above marks) and .chartBackground (behind marks)."
+        },
+        {
+          "name": "alignment",
+          "swiftType": "Alignment",
+          "control": "picker",
+          "options": [
+            "topLeading",
+            "top",
+            "topTrailing",
+            "leading",
+            "center",
+            "trailing",
+            "bottomLeading",
+            "bottom",
+            "bottomTrailing"
+          ],
+          "defaultValue": "center",
+          "notes": "alignment: parameter positioning the custom content within the plot area."
+        },
+        {
+          "name": "showCrosshair",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "true",
+          "notes": "Demo toggle: draw a crosshair/rule at the gesture location using proxy.value(atX:) -> proxy.position(forX:)."
+        },
+        {
+          "name": "accentColor",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "options": [],
+          "defaultValue": "Color.accentColor",
+          "notes": "Color of the custom overlay marker / crosshair."
+        }
+      ],
+      "codeTemplate": "Chart(data) { item in\n    LineMark(x: .value(\"Date\", item.date), y: .value(\"Value\", item.value))\n}\n.chartOverlay { proxy in\n    GeometryReader { geo in\n        Rectangle().fill(.clear).contentShape(Rectangle())\n            .gesture(DragGesture().onChanged { value in\n                let origin = geo[proxy.plotAreaFrame].origin\n                if let date: Date = proxy.value(atX: value.location.x - origin.x) {\n                    selectedDate = date\n                }\n            })\n        if {showCrosshair}, let selectedDate, let x = proxy.position(forX: selectedDate) {\n            Rectangle()\n                .fill({accentColor})\n                .frame(width: 1)\n                .offset(x: x + geo[proxy.plotAreaFrame].origin.x)\n        }\n    }\n}"
+    }
+  ]
+}

@@ -1,0 +1,1018 @@
+{
+  "category": "Selection & Input",
+  "key": "selection",
+  "folder": "Selection",
+  "components": [
+    {
+      "id": "picker",
+      "title": "Picker",
+      "api": "Picker",
+      "summary": "A control for selecting from a set of mutually exclusive values, bound to a Hashable selection.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "styles": [
+        "automatic (.automatic)",
+        "inline (.inline)",
+        "menu (.menu)",
+        "segmented (.segmented)",
+        "wheel (.wheel)",
+        "palette (.palette)",
+        "navigationLink (.navigationLink)",
+        "radioGroup (.radioGroup, macOS only)"
+      ],
+      "states": [
+        "default",
+        "disabled",
+        "selected",
+        "focused",
+        "longContent"
+      ],
+      "higNotes": "Use .menu for compact forms, .segmented for 2-5 short mutually-exclusive options, .wheel/.inline inside forms or wheels. .segmented should hold few short labels or SF Symbols; avoid mixing text and images of very different widths. On watchOS prefer .navigationLink or .wheel. .palette pairs SF Symbols with paletteSelectionEffect for tinted multi/single icon selection.",
+      "properties": [
+        {
+          "name": "style",
+          "swiftType": "PickerStyle",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "inline",
+            "menu",
+            "segmented",
+            "wheel",
+            "palette",
+            "navigationLink",
+            "radioGroup"
+          ],
+          "defaultValue": "automatic",
+          "notes": "Applied via .pickerStyle(_:). radioGroup is macOS-only; segmented/wheel availability varies by platform (no wheel on macOS, no segmented on watchOS)."
+        },
+        {
+          "name": "titleKey",
+          "swiftType": "LocalizedStringKey",
+          "control": "text",
+          "defaultValue": "\"Flavor\"",
+          "notes": "Label text. Use a String Catalog key; omit visually with .labelsHidden() when context conveys meaning."
+        },
+        {
+          "name": "selection",
+          "swiftType": "Binding<SelectionValue>",
+          "control": "segmented",
+          "options": [
+            "chocolate",
+            "vanilla",
+            "strawberry"
+          ],
+          "defaultValue": ".chocolate",
+          "notes": "Bound Hashable value. Each content view must carry a matching .tag(_:) unless ForEach derives it from Identifiable id."
+        },
+        {
+          "name": "labelsHidden",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Applies .labelsHidden() to drop the visible label while keeping it for VoiceOver."
+        },
+        {
+          "name": "paletteSelectionEffect",
+          "swiftType": "PaletteSelectionEffect",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "symbolVariant",
+            "none"
+          ],
+          "defaultValue": "automatic",
+          "notes": "Only meaningful with .palette style; controls how selection is indicated on symbols."
+        },
+        {
+          "name": "isEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Drives .disabled(!isEnabled)."
+        }
+      ],
+      "codeTemplate": "Picker(\"{titleKey}\", selection: {selection}) {\n    Text(\"Chocolate\").tag(Flavor.chocolate)\n    Text(\"Vanilla\").tag(Flavor.vanilla)\n    Text(\"Strawberry\").tag(Flavor.strawberry)\n}\n.pickerStyle(.{style})\n.paletteSelectionEffect(.{paletteSelectionEffect})\n.labelsHidden({labelsHidden})\n.disabled({isDisabled})"
+    },
+    {
+      "id": "datepicker",
+      "title": "DatePicker",
+      "api": "DatePicker",
+      "summary": "A control for selecting an absolute date and/or time, bound to a Date with optional range limits.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / macOS 10.15 / watchOS 10.0",
+      "styles": [
+        "automatic (.automatic)",
+        "compact (.compact)",
+        "graphical (.graphical)",
+        "wheel (.wheel)",
+        "field (.field, macOS only)",
+        "stepperField (.stepperField, macOS only)"
+      ],
+      "states": [
+        "default",
+        "disabled",
+        "focused",
+        "selected"
+      ],
+      "higNotes": "Use .compact in forms (tap to reveal calendar/time). Use .graphical for prominent calendar selection (event creation). Limit selectable range with `in:` to prevent invalid input. Choose displayedComponents to show only date, only time, or both. .wheel is heavy; reserve for legacy/space-constrained flows. Respect the user's locale, calendar, and time zone via the environment.",
+      "properties": [
+        {
+          "name": "style",
+          "swiftType": "DatePickerStyle",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "compact",
+            "graphical",
+            "wheel",
+            "field",
+            "stepperField"
+          ],
+          "defaultValue": "automatic",
+          "notes": "Applied via .datePickerStyle(_:). field & stepperField are macOS-only."
+        },
+        {
+          "name": "titleKey",
+          "swiftType": "LocalizedStringKey",
+          "control": "text",
+          "defaultValue": "\"Start Date\"",
+          "notes": "Label text."
+        },
+        {
+          "name": "selection",
+          "swiftType": "Binding<Date>",
+          "control": "text",
+          "defaultValue": "$date",
+          "notes": "Bound Date value."
+        },
+        {
+          "name": "displayedComponents",
+          "swiftType": "DatePickerComponents",
+          "control": "menu",
+          "options": [
+            ".date",
+            ".hourAndMinute",
+            "[.date, .hourAndMinute]"
+          ],
+          "defaultValue": "[.date, .hourAndMinute]",
+          "notes": "OptionSet selecting which fields appear. .date shows day/month/year; .hourAndMinute shows time."
+        },
+        {
+          "name": "rangeMode",
+          "swiftType": "ClosedRange<Date> | PartialRangeFrom<Date> | PartialRangeThrough<Date>",
+          "control": "segmented",
+          "options": [
+            "unbounded",
+            "closed",
+            "from",
+            "through"
+          ],
+          "defaultValue": "unbounded",
+          "notes": "Drives the `in:` parameter. closed = a...b, from = a..., through = ...b. Prevents out-of-range selection."
+        },
+        {
+          "name": "isEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Drives .disabled(!isEnabled)."
+        }
+      ],
+      "codeTemplate": "DatePicker(\n    \"{titleKey}\",\n    selection: {selection},\n    in: {range},\n    displayedComponents: {displayedComponents}\n)\n.datePickerStyle(.{style})\n.disabled({isDisabled})"
+    },
+    {
+      "id": "multidatepicker",
+      "title": "MultiDatePicker",
+      "api": "MultiDatePicker",
+      "summary": "A calendar control for selecting multiple dates as a Set of DateComponents.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS"
+      ],
+      "minOS": "iOS 16.0 / iPadOS 16.0 / Mac Catalyst 16.0",
+      "styles": [
+        "automatic (graphical calendar; no style modifier)"
+      ],
+      "states": [
+        "default",
+        "disabled",
+        "selected",
+        "empty"
+      ],
+      "higNotes": "Use only when users genuinely select multiple discrete dates (availability calendars, multi-day bookings). Always presents as a graphical month calendar. Constrain with `in:` (a Range<Date> or open range) to bound selectable dates. Respect environment locale/calendar/timeZone. Not available on tvOS or watchOS.",
+      "properties": [
+        {
+          "name": "titleKey",
+          "swiftType": "LocalizedStringKey",
+          "control": "text",
+          "defaultValue": "\"Dates Available\"",
+          "notes": "Accessibility/section label for the calendar."
+        },
+        {
+          "name": "selection",
+          "swiftType": "Binding<Set<DateComponents>>",
+          "control": "text",
+          "defaultValue": "$dates",
+          "notes": "Set of selected DateComponents; empty set is the empty state."
+        },
+        {
+          "name": "rangeMode",
+          "swiftType": "Range<Date> | PartialRangeFrom<Date> | PartialRangeUpTo<Date>",
+          "control": "segmented",
+          "options": [
+            "unbounded",
+            "range",
+            "from",
+            "upTo"
+          ],
+          "defaultValue": "unbounded",
+          "notes": "Drives the `in:` parameter. range = a..<b (half-open), from = a..., upTo = ..<b."
+        },
+        {
+          "name": "isEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Drives .disabled(!isEnabled)."
+        }
+      ],
+      "codeTemplate": "MultiDatePicker(\n    \"{titleKey}\",\n    selection: {selection},\n    in: {range}\n)\n.disabled({isDisabled})"
+    },
+    {
+      "id": "colorpicker",
+      "title": "ColorPicker",
+      "api": "ColorPicker",
+      "summary": "A control that presents the system color picker UI to select a Color, with optional opacity.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS"
+      ],
+      "minOS": "iOS 14.0 / iPadOS 14.0 / macOS 11.0",
+      "styles": [
+        "automatic (system color picker; no style modifier)"
+      ],
+      "states": [
+        "default",
+        "disabled",
+        "selected"
+      ],
+      "higNotes": "Shows a swatch of the current color; tapping opens the full system picker (grid, spectrum, sliders, eyedropper on macOS). Set supportsOpacity: false when alpha is meaningless (e.g. solid theme color). There is one canonical presentation; do not build a custom color UI when this suffices. Not available on tvOS or watchOS. Can bind to Color or to a CGColor.",
+      "properties": [
+        {
+          "name": "titleKey",
+          "swiftType": "LocalizedStringKey",
+          "control": "text",
+          "defaultValue": "\"Background Color\"",
+          "notes": "Label text shown beside the swatch."
+        },
+        {
+          "name": "selection",
+          "swiftType": "Binding<Color>",
+          "control": "colorPicker",
+          "defaultValue": "$color",
+          "notes": "Bound Color (or CGColor variant). The live control is itself a colorPicker."
+        },
+        {
+          "name": "supportsOpacity",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "When false, hides opacity controls and strips alpha from set/selected colors."
+        },
+        {
+          "name": "labelsHidden",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Applies .labelsHidden() to show only the swatch."
+        },
+        {
+          "name": "isEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Drives .disabled(!isEnabled)."
+        }
+      ],
+      "codeTemplate": "ColorPicker(\n    \"{titleKey}\",\n    selection: {selection},\n    supportsOpacity: {supportsOpacity}\n)\n.labelsHidden({labelsHidden})\n.disabled({isDisabled})"
+    },
+    {
+      "id": "slider",
+      "title": "Slider",
+      "api": "Slider",
+      "summary": "A control for selecting a value from a bounded linear range, with optional step, labels, and tick marks.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / macOS 10.15 / watchOS 6.0 (neutralValue & tick marks iOS 26)",
+      "styles": [
+        "default (no slider style protocol; configured via initializer)"
+      ],
+      "states": [
+        "default",
+        "disabled",
+        "focused",
+        "selected"
+      ],
+      "higNotes": "Use for continuous values where exact precision isn't critical (volume, brightness). Provide minimumValueLabel/maximumValueLabel icons to communicate direction of increase. Use `step` for discrete increments; the step is also used by VoiceOver adjust actions. iOS 26 adds a neutral origin (e.g. center-zero for pan/balance) and tick marks via the `.ticks` initializer. Not available on tvOS (use focus-based controls instead).",
+      "properties": [
+        {
+          "name": "value",
+          "swiftType": "Binding<Double>",
+          "control": "slider",
+          "defaultValue": "$value (0...100)",
+          "notes": "Bound value; the live driver is a slider over the same range."
+        },
+        {
+          "name": "range",
+          "swiftType": "ClosedRange<Double>",
+          "control": "text",
+          "defaultValue": "0...100",
+          "notes": "The `in:` bounds. Min maps to leading edge, max to trailing."
+        },
+        {
+          "name": "step",
+          "swiftType": "Double.Stride?",
+          "control": "stepper",
+          "options": [],
+          "defaultValue": "1",
+          "notes": "Optional discrete increment via `step:`. Omit for fully continuous. Range 0.01...50 typical."
+        },
+        {
+          "name": "neutralValue",
+          "swiftType": "Double?",
+          "control": "slider",
+          "defaultValue": "nil",
+          "notes": "iOS 26+: visual origin the fill emanates from (e.g. 0 for a -50...50 pan control). Use the `neutralValue:` initializer."
+        },
+        {
+          "name": "minimumValueLabel",
+          "swiftType": "Label (View)",
+          "control": "text",
+          "defaultValue": "Image(systemName: \"speaker.fill\")",
+          "notes": "Leading label/icon for the minimum extreme."
+        },
+        {
+          "name": "maximumValueLabel",
+          "swiftType": "Label (View)",
+          "control": "text",
+          "defaultValue": "Image(systemName: \"speaker.wave.3.fill\")",
+          "notes": "Trailing label/icon for the maximum extreme."
+        },
+        {
+          "name": "isEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Drives .disabled(!isEnabled)."
+        }
+      ],
+      "codeTemplate": "Slider(\n    value: {value},\n    in: {range},\n    step: {step}\n) {\n    Text(\"Speed\")\n} minimumValueLabel: {\n    {minimumValueLabel}\n} maximumValueLabel: {\n    {maximumValueLabel}\n} onEditingChanged: { editing in\n    isEditing = editing\n}\n.disabled({isDisabled})"
+    },
+    {
+      "id": "stepper",
+      "title": "Stepper",
+      "api": "Stepper",
+      "summary": "A control that performs increment and decrement actions on a value, with optional range and step.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / macOS 10.15 / watchOS 9.0",
+      "styles": [
+        "default (no stepper style protocol)"
+      ],
+      "states": [
+        "default",
+        "disabled",
+        "focused",
+        "selected"
+      ],
+      "higNotes": "Use for small, precise integer or fine adjustments where a slider is too coarse (quantity, count). Pair with a value label so the current value is always visible. Bound the value with `in:` to disable the +/- buttons at the extremes automatically. On watchOS the Digital Crown is the idiomatic alternative for larger ranges. Not available on tvOS.",
+      "properties": [
+        {
+          "name": "titleKey",
+          "swiftType": "LocalizedStringKey",
+          "control": "text",
+          "defaultValue": "\"Quantity\"",
+          "notes": "Label text shown beside the +/- controls."
+        },
+        {
+          "name": "value",
+          "swiftType": "Binding<V>",
+          "control": "stepper",
+          "defaultValue": "$value",
+          "notes": "Bound Strideable value (Int/Double)."
+        },
+        {
+          "name": "range",
+          "swiftType": "ClosedRange<V>",
+          "control": "text",
+          "defaultValue": "1...50",
+          "notes": "The `in:` bounds; buttons disable at extremes."
+        },
+        {
+          "name": "step",
+          "swiftType": "V.Stride",
+          "control": "stepper",
+          "options": [],
+          "defaultValue": "1",
+          "notes": "Increment applied per tap via `step:`."
+        },
+        {
+          "name": "isEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Drives .disabled(!isEnabled)."
+        }
+      ],
+      "codeTemplate": "Stepper(\n    value: {value},\n    in: {range},\n    step: {step}\n) {\n    Text(\"{titleKey}: \\({value}.wrappedValue)\")\n}\n.disabled({isDisabled})"
+    },
+    {
+      "id": "toggle",
+      "title": "Toggle",
+      "api": "Toggle",
+      "summary": "A control that toggles between on and off states, bound to a Bool.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "styles": [
+        "automatic (.automatic)",
+        "switch (.switch)",
+        "button (.button)",
+        "checkbox (.checkbox, macOS only)"
+      ],
+      "states": [
+        "default",
+        "disabled",
+        "selected",
+        "focused"
+      ],
+      "higNotes": "Use a Toggle for a single binary setting. .switch is the iOS default; .button renders a selectable button (great in toolbars with an SF Symbol label) where the on-state shows tinted/filled; .checkbox is macOS-only for forms/lists. Always give a clear label describing the on-state. Use a subtitle Text for extra context. Tint via .tint(_:).",
+      "properties": [
+        {
+          "name": "style",
+          "swiftType": "ToggleStyle",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "switch",
+            "button",
+            "checkbox"
+          ],
+          "defaultValue": "automatic",
+          "notes": "Applied via .toggleStyle(_:). checkbox is macOS-only; button is best with a systemImage label."
+        },
+        {
+          "name": "titleKey",
+          "swiftType": "LocalizedStringKey",
+          "control": "text",
+          "defaultValue": "\"Vibrate on Ring\"",
+          "notes": "Label text."
+        },
+        {
+          "name": "systemImage",
+          "swiftType": "String?",
+          "control": "text",
+          "defaultValue": "\"dot.radiowaves.left.and.right\"",
+          "notes": "Optional SF Symbol name for the convenience label initializer; pairs well with .button style."
+        },
+        {
+          "name": "isOn",
+          "swiftType": "Binding<Bool>",
+          "control": "toggle",
+          "defaultValue": "$isOn",
+          "notes": "Bound on/off state."
+        },
+        {
+          "name": "tint",
+          "swiftType": "Color?",
+          "control": "colorPicker",
+          "defaultValue": ".accentColor",
+          "notes": "Applied via .tint(_:); colors the on-state track or filled button."
+        },
+        {
+          "name": "isEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Drives .disabled(!isEnabled)."
+        }
+      ],
+      "codeTemplate": "Toggle(\n    \"{titleKey}\",\n    systemImage: \"{systemImage}\",\n    isOn: {isOn}\n)\n.toggleStyle(.{style})\n.tint({tint})\n.disabled({isDisabled})"
+    },
+    {
+      "id": "gauge",
+      "title": "Gauge",
+      "api": "Gauge",
+      "summary": "A view that shows a current value within a finite range, with labels and a tintable indicator.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 16.0 / iPadOS 16.0 / macOS 13.0 / watchOS 7.0",
+      "styles": [
+        "automatic (.automatic)",
+        "linearCapacity (.linearCapacity)",
+        "accessoryLinear (.accessoryLinear)",
+        "accessoryLinearCapacity (.accessoryLinearCapacity)",
+        "circular (.circular, watchOS) / accessoryCircular (.accessoryCircular)",
+        "accessoryCircularCapacity (.accessoryCircularCapacity)"
+      ],
+      "states": [
+        "default",
+        "disabled",
+        "longContent"
+      ],
+      "higNotes": "Use a Gauge to show a value relative to a known capacity (battery, heart-rate zone, progress toward a goal). accessory* styles are designed for watchOS complications and Lock Screen widgets; capacity variants fill proportionally while non-capacity variants show a moving indicator. Apply a Gradient via the style initializer (e.g. CircularGaugeStyle(tint:)) to convey severity. circular is watchOS-only; on iOS use accessoryCircular.",
+      "properties": [
+        {
+          "name": "style",
+          "swiftType": "GaugeStyle",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "linearCapacity",
+            "accessoryLinear",
+            "accessoryLinearCapacity",
+            "accessoryCircular",
+            "accessoryCircularCapacity",
+            "circular"
+          ],
+          "defaultValue": "automatic",
+          "notes": "Applied via .gaugeStyle(_:). circular is watchOS-only. linearCapacity is the default linear bar on iOS."
+        },
+        {
+          "name": "value",
+          "swiftType": "Binding<Double>",
+          "control": "slider",
+          "defaultValue": "0.67",
+          "notes": "Current value, driven live by a slider over `range`."
+        },
+        {
+          "name": "range",
+          "swiftType": "ClosedRange<Double>",
+          "control": "text",
+          "defaultValue": "0...170",
+          "notes": "The `in:` capacity bounds (defaults to 0...1 when omitted)."
+        },
+        {
+          "name": "label",
+          "swiftType": "Label (View)",
+          "control": "text",
+          "defaultValue": "Text(\"BPM\")",
+          "notes": "Describes the gauge's purpose; can be an SF Symbol."
+        },
+        {
+          "name": "currentValueLabel",
+          "swiftType": "CurrentValueLabel (View)",
+          "control": "text",
+          "defaultValue": "Text(\"67\")",
+          "notes": "Shown inside/near the indicator on most styles."
+        },
+        {
+          "name": "minimumValueLabel",
+          "swiftType": "BoundsLabel (View)",
+          "control": "text",
+          "defaultValue": "Text(\"0\")",
+          "notes": "Label for the range minimum."
+        },
+        {
+          "name": "maximumValueLabel",
+          "swiftType": "BoundsLabel (View)",
+          "control": "text",
+          "defaultValue": "Text(\"170\")",
+          "notes": "Label for the range maximum."
+        },
+        {
+          "name": "tint",
+          "swiftType": "Gradient | Color",
+          "control": "colorPicker",
+          "defaultValue": "Gradient(colors: [.green, .yellow, .orange, .red])",
+          "notes": "Pass via the style initializer, e.g. CircularGaugeStyle(tint:), or .tint(_:)."
+        }
+      ],
+      "codeTemplate": "Gauge(value: {value}, in: {range}) {\n    {label}\n} currentValueLabel: {\n    {currentValueLabel}\n} minimumValueLabel: {\n    {minimumValueLabel}\n} maximumValueLabel: {\n    {maximumValueLabel}\n}\n.gaugeStyle(.{style})\n.tint({tint})"
+    },
+    {
+      "id": "progressview",
+      "title": "ProgressView",
+      "api": "ProgressView",
+      "summary": "A view that shows progress toward completion of a task — determinate (value/total), indeterminate, or time-based.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 14.0 / iPadOS 14.0 / macOS 11.0 / tvOS 14.0 / watchOS 7.0",
+      "styles": [
+        "automatic (.automatic)",
+        "linear (.linear)",
+        "circular (.circular)"
+      ],
+      "states": [
+        "default",
+        "loading",
+        "longContent"
+      ],
+      "higNotes": "Use determinate (value:total:) when you can measure progress, otherwise the indeterminate spinner. .circular often renders as an indeterminate spinner on non-macOS platforms; use .linear for measurable file/download progress. The timerInterval: initializer auto-advances over a Date range — ideal for countdowns. Provide a Text label for context; tint with .tint(_:). For full-screen branded loading prefer a custom LoadingView per house rules.",
+      "properties": [
+        {
+          "name": "style",
+          "swiftType": "ProgressViewStyle",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "linear",
+            "circular"
+          ],
+          "defaultValue": "automatic",
+          "notes": "Applied via .progressViewStyle(_:). circular may appear indeterminate off macOS."
+        },
+        {
+          "name": "mode",
+          "swiftType": "ProgressInit",
+          "control": "segmented",
+          "options": [
+            "indeterminate",
+            "determinate",
+            "timerInterval"
+          ],
+          "defaultValue": "indeterminate",
+          "notes": "Selects the initializer family: ProgressView(), ProgressView(value:total:), or ProgressView(timerInterval:)."
+        },
+        {
+          "name": "value",
+          "swiftType": "Binding<Double>?",
+          "control": "slider",
+          "defaultValue": "0.5",
+          "notes": "Determinate progress fraction; live driver is a slider 0...total."
+        },
+        {
+          "name": "total",
+          "swiftType": "Double",
+          "control": "stepper",
+          "options": [],
+          "defaultValue": "1.0",
+          "notes": "Completion value (default 1.0). value/total drives the fill."
+        },
+        {
+          "name": "label",
+          "swiftType": "Label (View)",
+          "control": "text",
+          "defaultValue": "Text(\"Downloading…\")",
+          "notes": "Optional descriptive label."
+        },
+        {
+          "name": "currentValueLabel",
+          "swiftType": "CurrentValueLabel (View)",
+          "control": "text",
+          "defaultValue": "Text(\"50%\")",
+          "notes": "Optional label showing the formatted current value."
+        },
+        {
+          "name": "tint",
+          "swiftType": "Color?",
+          "control": "colorPicker",
+          "defaultValue": ".accentColor",
+          "notes": "Applied via .tint(_:); colors the bar/spinner."
+        }
+      ],
+      "codeTemplate": "ProgressView(value: {value}, total: {total}) {\n    {label}\n} currentValueLabel: {\n    {currentValueLabel}\n}\n.progressViewStyle(.{style})\n.tint({tint})"
+    },
+    {
+      "id": "textfield",
+      "title": "TextField",
+      "api": "TextField",
+      "summary": "A control that displays an editable single-line text interface, bound to a String or — via a FormatStyle — to a non-string value.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / Mac Catalyst 13.0 / macOS 10.15 / tvOS 13.0 / visionOS 1.0 / watchOS 6.0",
+      "styles": [
+        "automatic (.automatic)",
+        "plain (.plain)",
+        "roundedBorder (.roundedBorder)",
+        "squareBorder (.squareBorder, macOS only)"
+      ],
+      "properties": [
+        {
+          "name": "style",
+          "swiftType": "TextFieldStyle",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "plain",
+            "roundedBorder",
+            "squareBorder"
+          ],
+          "defaultValue": "automatic",
+          "notes": "Applied via .textFieldStyle(_:). roundedBorder is the common boxed look; squareBorder is macOS-only."
+        },
+        {
+          "name": "titleKey",
+          "swiftType": "LocalizedStringKey",
+          "control": "text",
+          "defaultValue": "\"User name\"",
+          "notes": "Label / placeholder. Used as placeholder text when no separate prompt is supplied."
+        },
+        {
+          "name": "text",
+          "swiftType": "Binding<String>",
+          "control": "text",
+          "defaultValue": "$text",
+          "notes": "Bound string updated continuously as the user types. For non-string values use the value:format: initializer instead."
+        },
+        {
+          "name": "prompt",
+          "swiftType": "Text?",
+          "control": "text",
+          "defaultValue": "Text(\"Required\")",
+          "notes": "Optional guidance text. In a Form, macOS keeps the label at the leading edge and uses the prompt as placeholder; iOS shows the prompt as placeholder."
+        },
+        {
+          "name": "axis",
+          "swiftType": "Axis",
+          "control": "segmented",
+          "options": [
+            "horizontal",
+            "vertical"
+          ],
+          "defaultValue": "horizontal",
+          "notes": "iOS 16+/macOS 13+: pass axis: .vertical to let the field grow into multiple lines as text wraps. Pair with lineLimit(_:reservesSpace:)."
+        },
+        {
+          "name": "keyboardType",
+          "swiftType": "UIKeyboardType",
+          "control": "menu",
+          "options": [
+            ".default",
+            ".emailAddress",
+            ".numberPad",
+            ".decimalPad",
+            ".URL",
+            ".phonePad"
+          ],
+          "defaultValue": ".default",
+          "notes": "iOS/iPadOS only, via .keyboardType(_:). Not available on macOS/tvOS."
+        },
+        {
+          "name": "textContentType",
+          "swiftType": "UITextContentType?",
+          "control": "menu",
+          "options": [
+            "none",
+            ".username",
+            ".password",
+            ".emailAddress",
+            ".oneTimeCode"
+          ],
+          "defaultValue": "none",
+          "notes": "Drives autofill suggestions via .textContentType(_:)."
+        },
+        {
+          "name": "submitLabel",
+          "swiftType": "SubmitLabel",
+          "control": "menu",
+          "options": [
+            ".done",
+            ".go",
+            ".send",
+            ".search",
+            ".next",
+            ".return"
+          ],
+          "defaultValue": ".return",
+          "notes": "Return-key label via .submitLabel(_:). Handle the action with .onSubmit { }."
+        },
+        {
+          "name": "isEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Drives .disabled(!isEnabled)."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled",
+        "focused",
+        "error",
+        "longContent"
+      ],
+      "higNotes": "Use TextField for short, single-line input. Provide a clear label or prompt; in Forms the placement of label vs. prompt differs by platform. Manage focus with @FocusState and .focused(_:); commit edits with .onSubmit. Set keyboardType, textContentType, textInputAutocapitalization, and autocorrectionDisabled to match the data being entered. Use axis: .vertical (iOS 16+) for input that may wrap to multiple lines instead of reaching for TextEditor. Bind non-string types with the value:format: initializer so validation happens on commit.",
+      "codeTemplate": "TextField(\n    \"{titleKey}\",\n    text: {text},\n    prompt: {prompt},\n    axis: .{axis}\n)\n.textFieldStyle(.{style})\n.keyboardType({keyboardType})\n.textContentType({textContentType})\n.submitLabel({submitLabel})\n.focused($isFocused)\n.onSubmit { submit() }\n.disabled({isDisabled})"
+    },
+    {
+      "id": "securefield",
+      "title": "SecureField",
+      "api": "SecureField",
+      "summary": "A control into which people securely enter private text such as passwords; behaves like TextField but masks the entered characters.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / Mac Catalyst 13.0 / macOS 10.15 / tvOS 13.0 / visionOS 1.0 / watchOS 6.0",
+      "styles": [
+        "automatic (.automatic)",
+        "plain (.plain)",
+        "roundedBorder (.roundedBorder)",
+        "squareBorder (.squareBorder, macOS only)"
+      ],
+      "properties": [
+        {
+          "name": "style",
+          "swiftType": "TextFieldStyle",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "plain",
+            "roundedBorder",
+            "squareBorder"
+          ],
+          "defaultValue": "automatic",
+          "notes": "Shares TextFieldStyle with TextField, applied via .textFieldStyle(_:)."
+        },
+        {
+          "name": "titleKey",
+          "swiftType": "LocalizedStringKey",
+          "control": "text",
+          "defaultValue": "\"Password\"",
+          "notes": "Label / placeholder text."
+        },
+        {
+          "name": "text",
+          "swiftType": "Binding<String>",
+          "control": "text",
+          "defaultValue": "$password",
+          "notes": "Bound string updated on every keystroke; characters are visually masked."
+        },
+        {
+          "name": "prompt",
+          "swiftType": "Text?",
+          "control": "text",
+          "defaultValue": "Text(\"Required\")",
+          "notes": "Optional guidance text; same label-vs-prompt placement rules as TextField."
+        },
+        {
+          "name": "textContentType",
+          "swiftType": "UITextContentType?",
+          "control": "menu",
+          "options": [
+            "none",
+            ".password",
+            ".newPassword",
+            ".oneTimeCode"
+          ],
+          "defaultValue": ".password",
+          "notes": "Use .password / .newPassword to enable Passwords autofill and Strong Password suggestions; .oneTimeCode for SMS codes."
+        },
+        {
+          "name": "submitLabel",
+          "swiftType": "SubmitLabel",
+          "control": "menu",
+          "options": [
+            ".done",
+            ".go",
+            ".send",
+            ".continue",
+            ".return"
+          ],
+          "defaultValue": ".return",
+          "notes": "Return-key label via .submitLabel(_:); handle with .onSubmit."
+        },
+        {
+          "name": "isEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Drives .disabled(!isEnabled)."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled",
+        "focused",
+        "error"
+      ],
+      "higNotes": "Use SecureField only for sensitive text (passwords, PINs). Set textContentType to .password or .newPassword so the system offers AutoFill and strong-password generation; use .oneTimeCode for verification codes. Always pair with a visible username TextField for AutoFill to associate credentials. Never log or persist the bound string in plaintext. Manage focus and submission the same way as TextField.",
+      "codeTemplate": "SecureField(\n    \"{titleKey}\",\n    text: {text},\n    prompt: {prompt}\n)\n.textFieldStyle(.{style})\n.textContentType({textContentType})\n.submitLabel({submitLabel})\n.onSubmit { submit() }\n.disabled({isDisabled})"
+    },
+    {
+      "id": "texteditor",
+      "title": "TextEditor",
+      "api": "TextEditor",
+      "summary": "A view that displays and edits long-form, multiline, scrollable text bound to a String (or, on newer OSes, an AttributedString for rich text).",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS"
+      ],
+      "minOS": "iOS 14.0 / iPadOS 14.0 / Mac Catalyst 14.0 / macOS 11.0 / visionOS 1.0",
+      "styles": [
+        "default (no TextEditorStyle protocol; styled via environment modifiers like .font, .foregroundStyle, .lineSpacing)"
+      ],
+      "properties": [
+        {
+          "name": "text",
+          "swiftType": "Binding<String>",
+          "control": "text",
+          "defaultValue": "$fullText",
+          "notes": "Bound multiline string. iOS 26 / macOS adds an AttributedString-bound initializer for rich text editing."
+        },
+        {
+          "name": "font",
+          "swiftType": "Font",
+          "control": "picker",
+          "options": [
+            "body",
+            "callout",
+            "footnote",
+            "title3",
+            "custom"
+          ],
+          "defaultValue": "body",
+          "notes": "Inherited from environment via .font(_:); TextEditor has no dedicated style protocol."
+        },
+        {
+          "name": "lineSpacing",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "defaultValue": "0",
+          "notes": "Spacing between lines via .lineSpacing(_:). Range 0...20 typical."
+        },
+        {
+          "name": "foregroundStyle",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": ".primary",
+          "notes": "Text color via .foregroundStyle(_:)."
+        },
+        {
+          "name": "scrollContentBackground",
+          "swiftType": "Visibility",
+          "control": "segmented",
+          "options": [
+            "automatic",
+            "hidden",
+            "visible"
+          ],
+          "defaultValue": "automatic",
+          "notes": "Use .scrollContentBackground(.hidden) plus .background(_:) to recolor the editor's default container background."
+        },
+        {
+          "name": "isEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Drives .disabled(!isEnabled)."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled",
+        "focused",
+        "empty",
+        "longContent"
+      ],
+      "higNotes": "Use TextEditor for multiline, free-form, scrollable text (notes, comments, descriptions). It inherits styling from the environment — there is no TextEditorStyle protocol, so configure appearance with .font, .foregroundStyle, .lineSpacing, and .multilineTextAlignment. There is no built-in placeholder; overlay a Text prompt when the binding is empty. Not available on tvOS or watchOS. For short input that merely wraps, prefer TextField(axis: .vertical) instead. Recolor the container with .scrollContentBackground(.hidden) + .background(_:).",
+      "codeTemplate": "TextEditor(text: {text})\n    .font(.{font})\n    .foregroundStyle({foregroundStyle})\n    .lineSpacing({lineSpacing})\n    .scrollContentBackground(.{scrollContentBackground})\n    .frame(minHeight: 120)\n    .disabled({isDisabled})"
+    }
+  ]
+}

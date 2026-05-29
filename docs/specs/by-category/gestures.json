@@ -1,0 +1,937 @@
+{
+  "category": "Gestures",
+  "key": "gestures",
+  "folder": "Gestures",
+  "components": [
+    {
+      "id": "tap-gesture",
+      "title": "Tap Gesture",
+      "api": "TapGesture",
+      "summary": "Recognizes one or more taps (or clicks) and fires on completion.",
+      "minOS": "iOS 13.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "summaryNote": "On tvOS available 16.0+; counts clicks of the Siri Remote select button.",
+      "properties": [
+        {
+          "name": "count",
+          "swiftType": "Int",
+          "control": "stepper",
+          "options": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5"
+          ],
+          "defaultValue": "1",
+          "notes": "Number of taps/clicks required before the gesture succeeds. Range 1...5 is sensible for a showroom; 1 = single tap, 2 = double tap."
+        },
+        {
+          "name": "attachMode",
+          "swiftType": "GestureAttachMode",
+          "control": "segmented",
+          "options": [
+            "gesture",
+            "onTapGesture",
+            "highPriorityGesture",
+            "simultaneousGesture"
+          ],
+          "defaultValue": "gesture",
+          "notes": "Showroom-only switch: how the gesture is attached. .onTapGesture(count:perform:) is the shorthand; .gesture(_:) wraps an explicit TapGesture; high-priority and simultaneous demonstrate composition with child gestures."
+        },
+        {
+          "name": "isEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Drives gesture(_:isEnabled:). Disabling stops recognition without removing the modifier (iOS 18+ overload)."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled",
+        "selected"
+      ],
+      "styles": [],
+      "higNotes": "Use single tap for the primary action; reserve double-tap for secondary/zoom. Keep tap targets at least 44x44 pt. Prefer a Button over a raw tap gesture for anything that reads as a control, so it inherits accessibility traits and focus behavior automatically.",
+      "codeTemplate": "struct TapGestureDemo: View {\n    @State private var tapCount = 0\n\n    var body: some View {\n        Circle()\n            .fill(tapCount.isMultiple(of: 2) ? Color.blue : Color.red)\n            .frame(width: 120, height: 120)\n            .onTapGesture(count: {count}) {\n                tapCount += 1\n            }\n            .accessibilityLabel(\"Tap target, tapped \\(tapCount) times\")\n    }\n}"
+    },
+    {
+      "id": "spatial-tap-gesture",
+      "title": "Spatial Tap Gesture",
+      "api": "SpatialTapGesture",
+      "summary": "Recognizes taps and reports the tap location in a chosen coordinate space.",
+      "minOS": "iOS 16.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "count",
+          "swiftType": "Int",
+          "control": "stepper",
+          "options": [
+            "1",
+            "2",
+            "3"
+          ],
+          "defaultValue": "1",
+          "notes": "Number of taps required before the gesture reports its location."
+        },
+        {
+          "name": "coordinateSpace",
+          "swiftType": "CoordinateSpace",
+          "control": "picker",
+          "options": [
+            ".local",
+            ".global",
+            ".named(\"container\")"
+          ],
+          "defaultValue": ".local",
+          "notes": "Coordinate space the reported location (Value.location) is resolved into. Use .local for view-relative, .global for window-relative."
+        },
+        {
+          "name": "isEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Drives gesture(_:isEnabled:)."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled",
+        "selected"
+      ],
+      "styles": [],
+      "higNotes": "Use when the action depends on where the user tapped (e.g. dropping a pin, placing an annotation). For purely binary actions, prefer plain TapGesture or a Button. Surface the resolved location visibly so the spatial nature is clear.",
+      "codeTemplate": "struct SpatialTapDemo: View {\n    @State private var location: CGPoint = .zero\n\n    var body: some View {\n        Rectangle()\n            .fill(.blue.opacity(0.2))\n            .frame(width: 240, height: 160)\n            .overlay(alignment: .topLeading) {\n                Circle().fill(.red).frame(width: 16, height: 16)\n                    .position(location)\n            }\n            .gesture(\n                SpatialTapGesture(count: {count}, coordinateSpace: {coordinateSpace})\n                    .onEnded { value in location = value.location }\n            )\n    }\n}"
+    },
+    {
+      "id": "long-press-gesture",
+      "title": "Long Press Gesture",
+      "api": "LongPressGesture",
+      "summary": "Succeeds when the user presses and holds for at least a minimum duration.",
+      "minOS": "iOS 13.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "summaryNote": "tvOS 14.0+. The .onLongPressGesture view modifier shorthand is unavailable on tvOS; use the gesture type there.",
+      "properties": [
+        {
+          "name": "minimumDuration",
+          "swiftType": "Double",
+          "control": "slider",
+          "options": [
+            "0.1",
+            "5.0",
+            "0.1"
+          ],
+          "defaultValue": "0.5",
+          "notes": "Seconds the press must be held before the gesture succeeds. Slider range 0.1...5.0, step 0.1. Default 0.5."
+        },
+        {
+          "name": "maximumDistance",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "0",
+            "100",
+            "1"
+          ],
+          "defaultValue": "10",
+          "notes": "Maximum points the finger/cursor may move before the gesture fails. Range 0...100, default 10. Only on the .onLongPressGesture modifier and the LongPressGesture initializer overload."
+        },
+        {
+          "name": "usePressingChanged",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Showroom toggle: wire onPressingChanged to reflect the in-progress pressing state (true while finger is down before success). Lets you animate during the hold."
+        },
+        {
+          "name": "isEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Drives gesture(_:isEnabled:) / the modifier's enablement."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled",
+        "selected",
+        "focused"
+      ],
+      "styles": [],
+      "higNotes": "Long press reveals secondary actions; pair it with a context menu (.contextMenu) where possible since that is the discoverable native pattern. Give clear in-progress feedback (scale, haptic) so users know the hold registered. Don't make long press the only way to reach an action.",
+      "codeTemplate": "struct LongPressDemo: View {\n    @GestureState private var isPressing = false\n    @State private var completed = false\n\n    var body: some View {\n        Circle()\n            .fill(completed ? .green : (isPressing ? .orange : .blue))\n            .frame(width: 120, height: 120)\n            .scaleEffect(isPressing ? 1.15 : 1.0)\n            .gesture(\n                LongPressGesture(minimumDuration: {minimumDuration}, maximumDistance: {maximumDistance})\n                    .updating($isPressing) { current, state, _ in state = current }\n                    .onEnded { finished in completed = finished }\n            )\n            .animation(.easeInOut, value: isPressing)\n    }\n}"
+    },
+    {
+      "id": "drag-gesture",
+      "title": "Drag Gesture",
+      "api": "DragGesture",
+      "summary": "Tracks a continuous dragging motion, reporting translation, location, and velocity.",
+      "minOS": "iOS 13.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "watchOS"
+      ],
+      "summaryNote": "Not available on tvOS. minimumDistance:coordinateSpace: initializer with CoordinateSpaceProtocol is iOS 17+/macOS 14+; predictedEndTranslation and velocity are exposed on Value.",
+      "properties": [
+        {
+          "name": "minimumDistance",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "0",
+            "100",
+            "1"
+          ],
+          "defaultValue": "10",
+          "notes": "Distance in points the touch must move before the drag is recognized. Range 0...100. Default 10; set to 0 for an immediately-tracking drag."
+        },
+        {
+          "name": "coordinateSpace",
+          "swiftType": "CoordinateSpace",
+          "control": "picker",
+          "options": [
+            ".local",
+            ".global",
+            ".named(\"canvas\")"
+          ],
+          "defaultValue": ".local",
+          "notes": "Coordinate space in which Value.location / startLocation are reported."
+        },
+        {
+          "name": "trackingMode",
+          "swiftType": "DragTrackingMode",
+          "control": "segmented",
+          "options": [
+            "updating",
+            "onChanged",
+            "both"
+          ],
+          "defaultValue": "updating",
+          "notes": "Showroom-only: whether the demo binds via @GestureState .updating (auto-resets on end), state via .onChanged (persists), or both. Demonstrates the rubber-band reset behavior of GestureState."
+        },
+        {
+          "name": "showVelocity",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Overlay Value.velocity and Value.predictedEndTranslation, useful for momentum/flick demos."
+        },
+        {
+          "name": "isEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Drives gesture(_:isEnabled:)."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled",
+        "selected",
+        "longContent"
+      ],
+      "higNotes": "Drag is for direct manipulation: move, reorder, dismiss. Provide a draggable affordance and respect the natural direction of motion. Use predictedEndTranslation/velocity for momentum-aware snapping. Don't conflict with system edge gestures; use defersSystemGestures only when a fullscreen experience truly needs it.",
+      "codeTemplate": "struct DragDemo: View {\n    @GestureState private var drag: CGSize = .zero\n    @State private var offset: CGSize = .zero\n\n    var body: some View {\n        RoundedRectangle(cornerRadius: 16)\n            .fill(.blue)\n            .frame(width: 100, height: 100)\n            .offset(x: offset.width + drag.width, y: offset.height + drag.height)\n            .gesture(\n                DragGesture(minimumDistance: {minimumDistance}, coordinateSpace: {coordinateSpace})\n                    .updating($drag) { value, state, _ in state = value.translation }\n                    .onEnded { value in\n                        offset.width += value.translation.width\n                        offset.height += value.translation.height\n                    }\n            )\n    }\n}",
+      "styles": []
+    },
+    {
+      "id": "magnify-gesture",
+      "title": "Magnify Gesture",
+      "api": "MagnifyGesture",
+      "summary": "Recognizes a pinch and tracks the magnification scale factor and anchor.",
+      "minOS": "iOS 17.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS"
+      ],
+      "summaryNote": "macOS 14.0+. Replaces the deprecated MagnificationGesture. Value exposes magnification, velocity, and startAnchor.",
+      "properties": [
+        {
+          "name": "minimumScaleDelta",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "0",
+            "0.5",
+            "0.01"
+          ],
+          "defaultValue": "0.01",
+          "notes": "Minimum change in scale before the gesture begins. Range 0...0.5. Default 0.01 — small so it starts responsively."
+        },
+        {
+          "name": "trackingMode",
+          "swiftType": "DragTrackingMode",
+          "control": "segmented",
+          "options": [
+            "updating",
+            "onChanged",
+            "both"
+          ],
+          "defaultValue": "onChanged",
+          "notes": "Showroom-only: bind scale through @GestureState .updating (resets to 1.0 on end) versus .onChanged accumulating into @State."
+        },
+        {
+          "name": "isEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Drives gesture(_:isEnabled:)."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled",
+        "selected"
+      ],
+      "styles": [],
+      "higNotes": "Pinch-to-zoom is the expected gesture for scaling content like photos and maps. Multiply the live magnification onto a committed base scale and clamp to sensible min/max. Combine with RotateGesture via .simultaneously for natural photo manipulation. Honor the gesture's startAnchor so zoom is centered on the pinch.",
+      "codeTemplate": "struct MagnifyDemo: View {\n    @State private var scale: CGFloat = 1.0\n    @GestureState private var pinch: CGFloat = 1.0\n\n    var body: some View {\n        Image(systemName: \"photo\")\n            .resizable().scaledToFit()\n            .frame(width: 160, height: 160)\n            .scaleEffect(scale * pinch)\n            .gesture(\n                MagnifyGesture(minimumScaleDelta: {minimumScaleDelta})\n                    .updating($pinch) { value, state, _ in state = value.magnification }\n                    .onEnded { value in scale *= value.magnification }\n            )\n    }\n}"
+    },
+    {
+      "id": "rotate-gesture",
+      "title": "Rotate Gesture",
+      "api": "RotateGesture",
+      "summary": "Recognizes a two-finger rotation and tracks the rotation angle and anchor.",
+      "minOS": "iOS 17.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS"
+      ],
+      "summaryNote": "macOS 14.0+. Replaces the deprecated RotationGesture. Value exposes rotation (Angle), velocity, and startAnchor.",
+      "properties": [
+        {
+          "name": "minimumAngleDelta",
+          "swiftType": "Angle",
+          "control": "slider",
+          "options": [
+            "0",
+            "30",
+            "1"
+          ],
+          "defaultValue": ".degrees(1)",
+          "notes": "Minimum rotation (in degrees) before the gesture starts. Slider drives Angle(degrees:), range 0...30. Default 1 degree."
+        },
+        {
+          "name": "trackingMode",
+          "swiftType": "DragTrackingMode",
+          "control": "segmented",
+          "options": [
+            "updating",
+            "onChanged",
+            "both"
+          ],
+          "defaultValue": "onChanged",
+          "notes": "Showroom-only: live angle via @GestureState .updating (resets on end) versus accumulating into @State on .onChanged."
+        },
+        {
+          "name": "isEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Drives gesture(_:isEnabled:)."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled",
+        "selected"
+      ],
+      "styles": [],
+      "higNotes": "Rotation suits free transform of content (photos, stickers, shapes). Add the live rotation to a committed base angle, and rotate about the gesture's anchor. Pair with MagnifyGesture using .simultaneously for combined scale-and-rotate manipulation.",
+      "codeTemplate": "struct RotateDemo: View {\n    @State private var angle: Angle = .zero\n    @GestureState private var spin: Angle = .zero\n\n    var body: some View {\n        Rectangle()\n            .fill(.blue)\n            .frame(width: 160, height: 160)\n            .rotationEffect(angle + spin)\n            .gesture(\n                RotateGesture(minimumAngleDelta: {minimumAngleDelta})\n                    .updating($spin) { value, state, _ in state = value.rotation }\n                    .onEnded { value in angle += value.rotation }\n            )\n    }\n}"
+    },
+    {
+      "id": "rotate-gesture-3d",
+      "title": "Rotate Gesture 3D",
+      "api": "RotateGesture3D",
+      "summary": "Recognizes 3D rotation, tracking angle and axis, optionally constrained to one axis.",
+      "minOS": "visionOS 1.0",
+      "platforms": [],
+      "summaryNote": "visionOS only. Value exposes rotation as a Rotation3D (RealityFoundation). Included for completeness; not renderable on iOS/macOS showroom targets.",
+      "properties": [
+        {
+          "name": "constrainedToAxis",
+          "swiftType": "RotationAxis3D?",
+          "control": "picker",
+          "options": [
+            "nil",
+            ".x",
+            ".y",
+            ".z"
+          ],
+          "defaultValue": "nil",
+          "notes": "Optional axis to constrain rotation to; the supplied axis is normalized. nil allows free 3D rotation."
+        },
+        {
+          "name": "minimumAngleDelta",
+          "swiftType": "Angle",
+          "control": "slider",
+          "options": [
+            "0",
+            "30",
+            "1"
+          ],
+          "defaultValue": ".degrees(1)",
+          "notes": "Minimum rotation before the gesture starts."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled"
+      ],
+      "styles": [],
+      "higNotes": "visionOS spatial manipulation only. Constrain to a single axis when free rotation would be disorienting. Not applicable to the iOS/iPadOS/macOS/tvOS/watchOS showroom build.",
+      "codeTemplate": "#if os(visionOS)\nstruct Rotate3DDemo: View {\n    @State private var rotation = Rotation3D.identity\n\n    var body: some View {\n        Model3D(named: \"Object\")\n            .gesture(\n                RotateGesture3D(constrainedToAxis: {constrainedToAxis}, minimumAngleDelta: {minimumAngleDelta})\n                    .onChanged { value in rotation = value.rotation }\n            )\n    }\n}\n#endif"
+    },
+    {
+      "id": "spatial-event-gesture",
+      "title": "Spatial Event Gesture",
+      "api": "SpatialEventGesture",
+      "summary": "Tracks multiple simultaneous spatial events (touches/clicks) with per-event identity and phase.",
+      "minOS": "iOS 18.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "watchOS"
+      ],
+      "summaryNote": "macOS 15.0+, watchOS 11.0+. Delivers a SpatialEventCollection; each Event has a stable id, phase (.active/.ended/.cancelled), location, timestamp, pose, and chirality. Ideal for multi-touch playgrounds.",
+      "properties": [
+        {
+          "name": "coordinateSpace",
+          "swiftType": "CoordinateSpace",
+          "control": "picker",
+          "options": [
+            ".local",
+            ".global"
+          ],
+          "defaultValue": ".local",
+          "notes": "Coordinate space for each event's reported location."
+        },
+        {
+          "name": "isEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Drives gesture(_:isEnabled:)."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled",
+        "longContent"
+      ],
+      "styles": [],
+      "higNotes": "Use for advanced multi-point interactions (particle fields, multi-finger drawing) where you need per-event identity across frames. Track and clean up state per event id inside onChanged, and clear all state in onEnded; events can reach .ended or .cancelled while the gesture stays active.",
+      "codeTemplate": "struct SpatialEventDemo: View {\n    @State private var points: [SpatialEventCollection.Event.ID: CGPoint] = [:]\n\n    var body: some View {\n        Canvas { context, _ in\n            for point in points.values {\n                context.fill(Path(ellipseIn: CGRect(x: point.x - 8, y: point.y - 8, width: 16, height: 16)), with: .color(.blue))\n            }\n        }\n        .gesture(\n            SpatialEventGesture(coordinateSpace: {coordinateSpace})\n                .onChanged { events in\n                    for event in events {\n                        points[event.id] = event.phase == .active ? event.location : nil\n                    }\n                }\n                .onEnded { _ in points.removeAll() }\n        )\n    }\n}"
+    },
+    {
+      "id": "simultaneous-gesture",
+      "title": "Simultaneous Gesture Composition",
+      "api": "SimultaneousGesture",
+      "summary": "Combines two gestures so both can recognize and update at the same time.",
+      "minOS": "iOS 13.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "summaryNote": "Built via the .simultaneously(with:) operator. Value is a struct with optional first/second sub-values.",
+      "properties": [
+        {
+          "name": "firstGesture",
+          "swiftType": "GestureKind",
+          "control": "picker",
+          "options": [
+            "MagnifyGesture",
+            "RotateGesture",
+            "DragGesture",
+            "TapGesture",
+            "LongPressGesture"
+          ],
+          "defaultValue": "MagnifyGesture",
+          "notes": "Showroom selector for the first composed gesture. Classic pairing is Magnify + Rotate."
+        },
+        {
+          "name": "secondGesture",
+          "swiftType": "GestureKind",
+          "control": "picker",
+          "options": [
+            "MagnifyGesture",
+            "RotateGesture",
+            "DragGesture",
+            "TapGesture",
+            "LongPressGesture"
+          ],
+          "defaultValue": "RotateGesture",
+          "notes": "Showroom selector for the second composed gesture."
+        },
+        {
+          "name": "isEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Drives gesture(_:isEnabled:) on the composed gesture."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled",
+        "selected"
+      ],
+      "styles": [],
+      "higNotes": "Use simultaneous composition when two manipulations genuinely co-occur, like pinch-zoom and rotate on a photo. Both sub-values arrive together; guard for nil per sub-gesture. Avoid composing gestures that fight for the same touches.",
+      "codeTemplate": "struct SimultaneousDemo: View {\n    @State private var scale: CGFloat = 1\n    @State private var angle: Angle = .zero\n\n    var body: some View {\n        Image(systemName: \"photo\")\n            .resizable().scaledToFit()\n            .frame(width: 160, height: 160)\n            .scaleEffect(scale)\n            .rotationEffect(angle)\n            .gesture(\n                {firstGesture}()\n                    .simultaneously(with: {secondGesture}())\n                    .onChanged { value in\n                        if let m = value.first?.magnification { scale = m }\n                        if let r = value.second?.rotation { angle = r }\n                    }\n            )\n    }\n}"
+    },
+    {
+      "id": "sequenced-gesture",
+      "title": "Sequenced Gesture Composition",
+      "api": "SequenceGesture",
+      "summary": "Runs a second gesture only after the first one succeeds, in order.",
+      "minOS": "iOS 13.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "summaryNote": "Built via the .sequenced(before:) operator. Value is an enum: .first(_) while the first runs, .second(_, _) once it succeeds.",
+      "properties": [
+        {
+          "name": "firstGesture",
+          "swiftType": "GestureKind",
+          "control": "picker",
+          "options": [
+            "LongPressGesture",
+            "TapGesture",
+            "MagnifyGesture"
+          ],
+          "defaultValue": "LongPressGesture",
+          "notes": "Gesture that must succeed first. Classic pattern: long press to 'pick up', then drag."
+        },
+        {
+          "name": "secondGesture",
+          "swiftType": "GestureKind",
+          "control": "picker",
+          "options": [
+            "DragGesture",
+            "RotateGesture",
+            "MagnifyGesture"
+          ],
+          "defaultValue": "DragGesture",
+          "notes": "Gesture that becomes active only after the first succeeds."
+        },
+        {
+          "name": "isEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Drives gesture(_:isEnabled:) on the composed gesture."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled",
+        "selected"
+      ],
+      "styles": [],
+      "higNotes": "Use sequencing for two-phase interactions where the first phase confirms intent, like long-press-then-drag to reorder list rows. Give clear feedback at the transition (haptic + scale) so users know phase two armed. Switch on the Value enum to drive each phase's UI.",
+      "codeTemplate": "struct SequencedDemo: View {\n    @GestureState private var isActive = false\n    @State private var offset: CGSize = .zero\n\n    var body: some View {\n        RoundedRectangle(cornerRadius: 16)\n            .fill(isActive ? .green : .blue)\n            .frame(width: 100, height: 100)\n            .offset(offset)\n            .gesture(\n                {firstGesture}()\n                    .sequenced(before: {secondGesture}())\n                    .updating($isActive) { value, state, _ in\n                        switch value {\n                        case .second(true, _): state = true\n                        default: state = false\n                        }\n                    }\n                    .onEnded { value in\n                        if case let .second(_, drag?) = value { offset = drag.translation }\n                    }\n            )\n    }\n}"
+    },
+    {
+      "id": "exclusive-gesture",
+      "title": "Exclusive Gesture Composition",
+      "api": "ExclusiveGesture",
+      "summary": "Recognizes two gestures but lets only the first to succeed win, ignoring the other.",
+      "minOS": "iOS 13.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "summaryNote": "Built via the .exclusively(before:) operator. Value is an enum: .first(_) or .second(_). The first gesture has priority.",
+      "properties": [
+        {
+          "name": "firstGesture",
+          "swiftType": "GestureKind",
+          "control": "picker",
+          "options": [
+            "DragGesture",
+            "TapGesture",
+            "LongPressGesture"
+          ],
+          "defaultValue": "DragGesture",
+          "notes": "Higher-priority gesture; if it succeeds the second is ignored."
+        },
+        {
+          "name": "secondGesture",
+          "swiftType": "GestureKind",
+          "control": "picker",
+          "options": [
+            "TapGesture",
+            "LongPressGesture",
+            "MagnifyGesture"
+          ],
+          "defaultValue": "TapGesture",
+          "notes": "Fallback gesture, recognized only if the first fails."
+        },
+        {
+          "name": "isEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Drives gesture(_:isEnabled:) on the composed gesture."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled",
+        "selected"
+      ],
+      "styles": [],
+      "higNotes": "Use exclusivity to disambiguate gestures competing for the same touches, e.g. prefer a drag but fall back to a tap. Order matters — put the gesture you want to win first. Switch on the Value enum to react to whichever won.",
+      "codeTemplate": "struct ExclusiveDemo: View {\n    @State private var label = \"Idle\"\n\n    var body: some View {\n        Circle()\n            .fill(.blue)\n            .frame(width: 120, height: 120)\n            .overlay(Text(label).foregroundStyle(.white))\n            .gesture(\n                {firstGesture}()\n                    .exclusively(before: {secondGesture}())\n                    .onEnded { value in\n                        switch value {\n                        case .first: label = \"First\"\n                        case .second: label = \"Second\"\n                        }\n                    }\n            )\n    }\n}"
+    },
+    {
+      "id": "gesture-state",
+      "title": "Gesture State (@GestureState + updating)",
+      "api": "GestureState",
+      "summary": "A property wrapper holding transient gesture state that auto-resets when the gesture ends.",
+      "minOS": "iOS 13.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "summaryNote": "Used with Gesture.updating(_:body:) which returns a GestureStateGesture. State rubber-bands back to its initial value automatically on gesture end/cancel.",
+      "properties": [
+        {
+          "name": "resetTransaction",
+          "swiftType": "Transaction",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Showroom toggle: set transaction.animation inside the updating body so the auto-reset animates. Off = snap back instantly."
+        },
+        {
+          "name": "stateType",
+          "swiftType": "GestureStateType",
+          "control": "segmented",
+          "options": [
+            "CGSize (drag)",
+            "Bool (press)",
+            "CGFloat (scale)",
+            "Angle (rotation)"
+          ],
+          "defaultValue": "CGSize (drag)",
+          "notes": "Showroom selector for which value type the demo's @GestureState carries, mapped to a matching gesture."
+        },
+        {
+          "name": "initialValue",
+          "swiftType": "GestureState.Value",
+          "control": "text",
+          "defaultValue": ".zero",
+          "notes": "The value the state returns to when the gesture ends. Defined at declaration via @GestureState(initialValue:) or the wrapper's default."
+        }
+      ],
+      "states": [
+        "default",
+        "selected"
+      ],
+      "styles": [],
+      "higNotes": "Prefer @GestureState over @State for values that only matter during the gesture: it guarantees a clean reset and avoids stale state if the gesture cancels. Commit the final value into a separate @State in onEnded. Set transaction.animation in the updating body to animate the spring-back.",
+      "codeTemplate": "struct GestureStateDemo: View {\n    @GestureState(initialValue: {initialValue}) private var translation: CGSize\n    @State private var committed: CGSize = .zero\n\n    var body: some View {\n        Circle()\n            .fill(.blue)\n            .frame(width: 100, height: 100)\n            .offset(x: committed.width + translation.width, y: committed.height + translation.height)\n            .gesture(\n                DragGesture()\n                    .updating($translation) { value, state, transaction in\n                        state = value.translation\n                        transaction.animation = {resetTransaction}\n                    }\n                    .onEnded { value in\n                        committed.width += value.translation.width\n                        committed.height += value.translation.height\n                    }\n            )\n    }\n}"
+    },
+    {
+      "id": "gesture-modifier",
+      "title": "Gesture Attach Modifiers (.gesture / .highPriorityGesture / .simultaneousGesture)",
+      "api": "View.gesture(_:including:)",
+      "summary": "View modifiers that attach a gesture and control its priority relative to child gestures.",
+      "minOS": "iOS 13.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "summaryNote": "iOS 18+/macOS 15+ add the gesture(_:isEnabled:) and gesture(_:name:isEnabled:) overloads. Priority modifiers determine whether this view's gesture beats, ties, or loses to gestures on child views.",
+      "properties": [
+        {
+          "name": "priority",
+          "swiftType": "GesturePriority",
+          "control": "segmented",
+          "options": [
+            "gesture",
+            "highPriorityGesture",
+            "simultaneousGesture"
+          ],
+          "defaultValue": "gesture",
+          "notes": ".gesture = lowest (child wins ties); .highPriorityGesture = this view wins over children; .simultaneousGesture = both recognize together."
+        },
+        {
+          "name": "mask",
+          "swiftType": "GestureMask",
+          "control": "picker",
+          "options": [
+            ".all",
+            ".gesture",
+            ".subviews",
+            ".none"
+          ],
+          "defaultValue": ".all",
+          "notes": "including: parameter. .all allows this gesture + subview gestures; .gesture only this; .subviews only children; .none disables all."
+        },
+        {
+          "name": "name",
+          "swiftType": "String?",
+          "control": "text",
+          "defaultValue": "nil",
+          "notes": "iOS 18+ gesture(_:name:isEnabled:): a name to reference the gesture from GestureMask / dependency APIs."
+        },
+        {
+          "name": "isEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "iOS 18+ overload: toggle recognition without removing the modifier."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled"
+      ],
+      "styles": [
+        "gesture",
+        "highPriorityGesture",
+        "simultaneousGesture"
+      ],
+      "higNotes": "Reach for .highPriorityGesture when a parent must intercept a gesture that a child (e.g. a scroll view or button) would otherwise consume. Use GestureMask to surgically disable subview gestures. Avoid stacking many high-priority gestures, which makes precedence hard to reason about.",
+      "codeTemplate": "struct GestureModifierDemo: View {\n    @State private var taps = 0\n\n    var body: some View {\n        Rectangle()\n            .fill(.blue.opacity(0.3))\n            .frame(width: 200, height: 200)\n            .overlay(Text(\"\\(taps)\"))\n            .{priority}(\n                TapGesture().onEnded { taps += 1 },\n                including: {mask}\n            )\n    }\n}"
+    },
+    {
+      "id": "defers-system-gestures",
+      "title": "Defers System Gestures",
+      "api": "View.defersSystemGestures(on:)",
+      "summary": "Asks the system to delay its own edge gestures so your view's gestures take priority first.",
+      "minOS": "iOS 16.0",
+      "platforms": [
+        "iOS",
+        "iPadOS"
+      ],
+      "summaryNote": "iOS/iPadOS only. Delays system edge swipes (e.g. Home, Control Center, Notification Center) along the given edges so an app gesture can run first; the user can still trigger the system gesture with a second swipe.",
+      "properties": [
+        {
+          "name": "edges",
+          "swiftType": "Edge.Set",
+          "control": "picker",
+          "options": [
+            ".all",
+            ".top",
+            ".bottom",
+            ".leading",
+            ".trailing",
+            ".horizontal",
+            ".vertical"
+          ],
+          "defaultValue": ".all",
+          "notes": "Which screen edges to defer the system gesture on."
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Use sparingly and only in immersive, full-screen experiences (games, drawing) where edge swipes would disrupt the core interaction. Deferring system gestures degrades discoverability of system affordances, so scope it to the smallest edge set required.",
+      "codeTemplate": "struct DeferSystemGesturesDemo: View {\n    var body: some View {\n        Color.black\n            .ignoresSafeArea()\n            .gesture(DragGesture().onChanged { _ in })\n            .defersSystemGestures(on: {edges})\n    }\n}"
+    },
+    {
+      "id": "window-drag-gesture",
+      "title": "Window Drag Gesture",
+      "api": "WindowDragGesture",
+      "summary": "Recognizes a drag and moves the containing window, for custom title-bar / drag regions.",
+      "minOS": "macOS 15.0",
+      "platforms": [
+        "macOS"
+      ],
+      "summary_note": "macOS only. Pair with allowsWindowActivationEvents(_:) so dragging works even when the window is inactive. Listed in the Gestures collection under 'Recognizing gestures that change over time' but absent from the draft.",
+      "properties": [
+        {
+          "name": "isEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Drives gesture(_:isEnabled:); disabling stops window-drag recognition without removing the modifier."
+        },
+        {
+          "name": "allowsWindowActivationEvents",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Showroom toggle wiring the companion .allowsWindowActivationEvents(_:) modifier so the drag still works when the window is inactive (the canonical pairing in Apple's docs)."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled",
+        "selected"
+      ],
+      "styles": [],
+      "higNotes": "Use to build custom window chrome (toolbars, drag handles, frameless windows) on macOS. Keep an obvious draggable affordance and avoid covering standard title-bar areas. Enable window activation events so an inactive window can be moved in one motion.",
+      "codeTemplate": "struct WindowDragDemo: View {\n    @GestureState private var isDragging = false\n\n    var body: some View {\n        Circle()\n            .fill(isDragging ? Color.green : .blue)\n            .frame(width: 80, height: 80)\n            .gesture(\n                WindowDragGesture()\n                    .updating($isDragging) { _, state, _ in state = true }\n            )\n            .allowsWindowActivationEvents({allowsWindowActivationEvents})\n    }\n}"
+    },
+    {
+      "id": "pencil-gesture",
+      "title": "Apple Pencil Gestures (double-tap & squeeze)",
+      "api": "View.onPencilDoubleTap(perform:)",
+      "summary": "Responds to Apple Pencil double-tap and squeeze gestures, honoring the user's system preference.",
+      "minOS": "iOS 17.5",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "visionOS"
+      ],
+      "summary_note": "iOS/iPadOS/Mac Catalyst 17.5+, macOS 14.5+, visionOS 26.2+. Two modifiers: onPencilDoubleTap (PencilDoubleTapGestureValue) and onPencilSqueeze (PencilSqueezeGesturePhase). Honor preferredPencilDoubleTapAction / preferredPencilSqueezeAction. An entire 'Recognizing Apple Pencil gestures' section of the collection is missing from the draft.",
+      "properties": [
+        {
+          "name": "gestureKind",
+          "swiftType": "PencilGestureKind",
+          "control": "segmented",
+          "options": [
+            "doubleTap",
+            "squeeze"
+          ],
+          "defaultValue": "doubleTap",
+          "notes": "Showroom selector: onPencilDoubleTap delivers a discrete value; onPencilSqueeze delivers a phase (.began/.changed/.ended) you can use to drive a contextual palette."
+        },
+        {
+          "name": "respectPreferredAction",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Showroom toggle: read @Environment(\\.preferredPencilDoubleTapAction)/(\\.preferredPencilSqueezeAction) and bail when it is .ignore, demonstrating the recommended honoring of the user's system setting."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled",
+        "selected"
+      ],
+      "styles": [],
+      "higNotes": "Respect the user's chosen system action for double-tap and squeeze via the preferredPencil*Action environment values; only override with explicit in-app configuration. Use squeeze to surface a contextual palette anchored at the hover pose. Don't make a Pencil gesture the only path to an action.",
+      "codeTemplate": "struct PencilGestureDemo: View {\n    @Environment(\\.preferredPencilDoubleTapAction) private var preferred\n    @State private var label = \"Idle\"\n\n    var body: some View {\n        RoundedRectangle(cornerRadius: 16)\n            .fill(.blue.opacity(0.2))\n            .frame(width: 240, height: 160)\n            .overlay(Text(label))\n            .onPencilDoubleTap { _ in\n                guard preferred != .ignore else { return }\n                label = \"Double-tapped\"\n            }\n            .onPencilSqueeze { phase in\n                if case .ended = phase { label = \"Squeezed\" }\n            }\n    }\n}"
+    },
+    {
+      "id": "long-touch-gesture",
+      "title": "Long Touch Gesture (tvOS)",
+      "api": "View.onLongTouchGesture(minimumDuration:perform:onTouchingChanged:)",
+      "summary": "Recognizes a long touch on the tvOS Siri Remote surface without an actual click.",
+      "minOS": "tvOS 16.0",
+      "platforms": [
+        "tvOS"
+      ],
+      "summary_note": "tvOS only. Distinct from LongPressGesture: it fires when the finger rests on the remote's touch surface without pressing. Listed in the Gestures collection's long-press section but omitted from the draft.",
+      "properties": [
+        {
+          "name": "minimumDuration",
+          "swiftType": "Double",
+          "control": "slider",
+          "options": [
+            "0.1",
+            "5.0",
+            "0.1"
+          ],
+          "defaultValue": "0.5",
+          "notes": "Seconds the finger must rest on the touch surface before the gesture succeeds. Range 0.1...5.0, default 0.5."
+        },
+        {
+          "name": "useTouchingChanged",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Showroom toggle: wire onTouchingChanged to reflect the in-progress touching state (true while the finger rests before success)."
+        }
+      ],
+      "states": [
+        "default",
+        "focused",
+        "selected"
+      ],
+      "styles": [],
+      "higNotes": "tvOS-only interaction tied to the Siri Remote touch surface. Provide clear focus-engine feedback since there is no on-screen cursor. Reserve for secondary affordances; don't gate the primary action behind a long touch.",
+      "codeTemplate": "#if os(tvOS)\nstruct LongTouchDemo: View {\n    @State private var touching = false\n    @State private var fired = false\n\n    var body: some View {\n        Circle()\n            .fill(fired ? .green : (touching ? .orange : .blue))\n            .frame(width: 160, height: 160)\n            .onLongTouchGesture(minimumDuration: {minimumDuration}) {\n                fired = true\n            } onTouchingChanged: { isTouching in\n                touching = isTouching\n            }\n    }\n}\n#endif"
+    },
+    {
+      "id": "hand-gesture-shortcut",
+      "title": "Hand Gesture Shortcut",
+      "api": "View.handGestureShortcut(_:isEnabled:)",
+      "summary": "Maps a system hand gesture (e.g. double-pinch on watchOS) to a control's primary action.",
+      "minOS": "iOS 18.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "summary_note": "iOS/iPadOS/Mac Catalyst 18.0+, macOS 15.0+, tvOS 18.0+, watchOS 11.0+. Takes a HandGestureShortcut (e.g. .primaryAction); performing the system hand gesture is equivalent to interacting with the control. Listed in 'Defining custom gestures'; omitted from the draft.",
+      "properties": [
+        {
+          "name": "shortcut",
+          "swiftType": "HandGestureShortcut",
+          "control": "picker",
+          "options": [
+            ".primaryAction"
+          ],
+          "defaultValue": ".primaryAction",
+          "notes": "The hand-gesture shortcut to associate with this control. On watchOS, .primaryAction maps to the double-pinch (AssistiveTouch) gesture. Target is resolved leading-to-trailing in the active scene."
+        },
+        {
+          "name": "isEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Whether the shortcut is active for this control."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled",
+        "selected"
+      ],
+      "styles": [],
+      "higNotes": "Primarily a watchOS interaction (double-pinch). Attach the shortcut to the single most important control in the scene so the system resolves it unambiguously. Don't assign the same shortcut to multiple competing controls. Pair with a clear visual hint that the gesture is available.",
+      "codeTemplate": "struct HandGestureShortcutDemo: View {\n    @State private var playing = false\n\n    var body: some View {\n        Button(playing ? \"Pause\" : \"Play\") {\n            playing.toggle()\n        }\n        .handGestureShortcut({shortcut}, isEnabled: {isEnabled})\n    }\n}"
+    }
+  ]
+}

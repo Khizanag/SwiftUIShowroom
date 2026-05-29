@@ -1,0 +1,1634 @@
+{
+  "category": "Containers & Layout",
+  "key": "containers",
+  "folder": "Containers",
+  "components": [
+    {
+      "id": "hstack",
+      "title": "HStack",
+      "api": "HStack",
+      "summary": "A view that arranges its subviews in a horizontal line.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "summary_dup": "",
+      "styles": [],
+      "states": [
+        "default",
+        "longContent"
+      ],
+      "higNotes": "Use for laying out a small, known number of subviews in a row. It eagerly loads all children, so do not use for long scrollable content (use LazyHStack inside a horizontal ScrollView instead). Respect Dynamic Type by letting content reflow; consider ViewThatFits for adaptive layouts.",
+      "properties": [
+        {
+          "name": "alignment",
+          "swiftType": "VerticalAlignment",
+          "control": "picker",
+          "options": [
+            "top",
+            "center",
+            "bottom",
+            "firstTextBaseline",
+            "lastTextBaseline"
+          ],
+          "defaultValue": "center",
+          "notes": "Guides vertical alignment of subviews relative to each other."
+        },
+        {
+          "name": "spacing",
+          "swiftType": "CGFloat?",
+          "control": "slider",
+          "options": [
+            "0",
+            "64"
+          ],
+          "defaultValue": "nil",
+          "notes": "Distance between adjacent subviews. nil uses the platform default spacing."
+        }
+      ],
+      "codeTemplate": "HStack(alignment: .{alignment}, spacing: {spacing}) {\n    Text(\"Leading\")\n    Spacer()\n    Text(\"Trailing\")\n}"
+    },
+    {
+      "id": "vstack",
+      "title": "VStack",
+      "api": "VStack",
+      "summary": "A view that arranges its subviews in a vertical line.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "styles": [],
+      "states": [
+        "default",
+        "longContent"
+      ],
+      "higNotes": "Use for a small, known number of vertically stacked subviews. Eagerly loads all children; for long scrollable lists use LazyVStack inside a ScrollView or a List. Keep alignment consistent with reading direction.",
+      "properties": [
+        {
+          "name": "alignment",
+          "swiftType": "HorizontalAlignment",
+          "control": "picker",
+          "options": [
+            "leading",
+            "center",
+            "trailing"
+          ],
+          "defaultValue": "center",
+          "notes": "Guides horizontal alignment of subviews relative to each other. Custom alignment guides also supported."
+        },
+        {
+          "name": "spacing",
+          "swiftType": "CGFloat?",
+          "control": "slider",
+          "options": [
+            "0",
+            "64"
+          ],
+          "defaultValue": "nil",
+          "notes": "Distance between adjacent subviews. nil uses the platform default spacing."
+        }
+      ],
+      "codeTemplate": "VStack(alignment: .{alignment}, spacing: {spacing}) {\n    Text(\"Top\")\n    Text(\"Middle\")\n    Text(\"Bottom\")\n}"
+    },
+    {
+      "id": "zstack",
+      "title": "ZStack",
+      "api": "ZStack",
+      "summary": "A view that overlays its subviews, aligning them on both axes.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "styles": [],
+      "states": [
+        "default"
+      ],
+      "higNotes": "Use to layer content (e.g. a background behind foreground). Later subviews draw on top of earlier ones. Prefer .background/.overlay modifiers for two-element layering as they do not affect the layout of the primary view.",
+      "properties": [
+        {
+          "name": "alignment",
+          "swiftType": "Alignment",
+          "control": "picker",
+          "options": [
+            "topLeading",
+            "top",
+            "topTrailing",
+            "leading",
+            "center",
+            "trailing",
+            "bottomLeading",
+            "bottom",
+            "bottomTrailing"
+          ],
+          "defaultValue": "center",
+          "notes": "Aligns subviews on both the horizontal and vertical axes."
+        }
+      ],
+      "codeTemplate": "ZStack(alignment: .{alignment}) {\n    Color.accentColor\n    Text(\"On top\")\n}"
+    },
+    {
+      "id": "lazyvstack",
+      "title": "LazyVStack",
+      "api": "LazyVStack",
+      "summary": "A vertical stack that lazily creates its subviews as they become visible inside a ScrollView.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 14.0 / iPadOS 14.0 / macOS 11.0 / tvOS 14.0 / watchOS 7.0",
+      "styles": [],
+      "states": [
+        "default",
+        "empty",
+        "longContent"
+      ],
+      "higNotes": "Use inside a vertical ScrollView for long content where eager VStack would be wasteful. Use pinnedViews to keep Section headers/footers stuck to the edge while scrolling. For row separators, selection, and swipe actions prefer List.",
+      "properties": [
+        {
+          "name": "alignment",
+          "swiftType": "HorizontalAlignment",
+          "control": "picker",
+          "options": [
+            "leading",
+            "center",
+            "trailing"
+          ],
+          "defaultValue": "center",
+          "notes": "Horizontal alignment of each subview."
+        },
+        {
+          "name": "spacing",
+          "swiftType": "CGFloat?",
+          "control": "slider",
+          "options": [
+            "0",
+            "48"
+          ],
+          "defaultValue": "nil",
+          "notes": "Distance between rows. nil uses default spacing."
+        },
+        {
+          "name": "pinnedViews",
+          "swiftType": "PinnedScrollableViews",
+          "control": "picker",
+          "options": [
+            "none",
+            "sectionHeaders",
+            "sectionFooters",
+            "sectionHeaders+sectionFooters"
+          ],
+          "defaultValue": "none",
+          "notes": "Which Section header/footer views pin to the scroll bounds while scrolling."
+        }
+      ],
+      "codeTemplate": "ScrollView {\n    LazyVStack(alignment: .{alignment}, spacing: {spacing}, pinnedViews: {pinnedViews}) {\n        ForEach(items) { item in\n            Text(item.title)\n        }\n    }\n}"
+    },
+    {
+      "id": "lazyhstack",
+      "title": "LazyHStack",
+      "api": "LazyHStack",
+      "summary": "A horizontal stack that lazily creates its subviews as they scroll into view.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 14.0 / iPadOS 14.0 / macOS 11.0 / tvOS 14.0 / watchOS 7.0",
+      "styles": [],
+      "states": [
+        "default",
+        "empty",
+        "longContent"
+      ],
+      "higNotes": "Use inside a horizontal ScrollView for carousels and long horizontal content. Combine with .scrollTargetLayout() and .scrollTargetBehavior(.viewAligned) for snapping carousels.",
+      "properties": [
+        {
+          "name": "alignment",
+          "swiftType": "VerticalAlignment",
+          "control": "picker",
+          "options": [
+            "top",
+            "center",
+            "bottom",
+            "firstTextBaseline",
+            "lastTextBaseline"
+          ],
+          "defaultValue": "center",
+          "notes": "Vertical alignment of each subview."
+        },
+        {
+          "name": "spacing",
+          "swiftType": "CGFloat?",
+          "control": "slider",
+          "options": [
+            "0",
+            "48"
+          ],
+          "defaultValue": "nil",
+          "notes": "Distance between columns. nil uses default spacing."
+        },
+        {
+          "name": "pinnedViews",
+          "swiftType": "PinnedScrollableViews",
+          "control": "picker",
+          "options": [
+            "none",
+            "sectionHeaders",
+            "sectionFooters",
+            "sectionHeaders+sectionFooters"
+          ],
+          "defaultValue": "none",
+          "notes": "Which Section header/footer views pin to the leading/trailing edge while scrolling."
+        }
+      ],
+      "codeTemplate": "ScrollView(.horizontal) {\n    LazyHStack(alignment: .{alignment}, spacing: {spacing}, pinnedViews: {pinnedViews}) {\n        ForEach(items) { item in\n            CardView(item)\n        }\n    }\n}"
+    },
+    {
+      "id": "grid",
+      "title": "Grid",
+      "api": "Grid",
+      "summary": "A container that arranges other views in a two-dimensional layout, aligning cells across rows and columns.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 16.0 / iPadOS 16.0 / macOS 13.0 / tvOS 16.0 / watchOS 9.0",
+      "styles": [],
+      "states": [
+        "default",
+        "longContent"
+      ],
+      "higNotes": "Use for a small, fixed grid where columns must align across rows (like a form or spreadsheet-style layout). Loads all cells eagerly; for large scrollable grids use LazyVGrid/LazyHGrid. Use .gridCellColumns() to span and .gridCellAnchor() for per-cell alignment.",
+      "properties": [
+        {
+          "name": "alignment",
+          "swiftType": "Alignment",
+          "control": "picker",
+          "options": [
+            "topLeading",
+            "top",
+            "topTrailing",
+            "leading",
+            "center",
+            "trailing",
+            "bottomLeading",
+            "bottom",
+            "bottomTrailing"
+          ],
+          "defaultValue": "center",
+          "notes": "Default alignment for cells that do not specify their own anchor."
+        },
+        {
+          "name": "horizontalSpacing",
+          "swiftType": "CGFloat?",
+          "control": "slider",
+          "options": [
+            "0",
+            "32"
+          ],
+          "defaultValue": "nil",
+          "notes": "Horizontal distance between columns. nil uses default spacing."
+        },
+        {
+          "name": "verticalSpacing",
+          "swiftType": "CGFloat?",
+          "control": "slider",
+          "options": [
+            "0",
+            "32"
+          ],
+          "defaultValue": "nil",
+          "notes": "Vertical distance between rows. nil uses default spacing."
+        }
+      ],
+      "codeTemplate": "Grid(alignment: .{alignment}, horizontalSpacing: {horizontalSpacing}, verticalSpacing: {verticalSpacing}) {\n    GridRow {\n        Text(\"A1\")\n        Text(\"B1\")\n    }\n    GridRow {\n        Text(\"A2\")\n        Text(\"B2\")\n    }\n}"
+    },
+    {
+      "id": "grid-row",
+      "title": "GridRow",
+      "api": "GridRow",
+      "summary": "A horizontal row in a two-dimensional Grid container.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 16.0 / iPadOS 16.0 / macOS 13.0 / tvOS 16.0 / watchOS 9.0",
+      "styles": [],
+      "states": [
+        "default"
+      ],
+      "higNotes": "Place GridRow directly inside a Grid. Views not wrapped in a GridRow span the full grid width (useful for dividers or section headers). Use .gridCellColumns(n) on a child to span multiple columns.",
+      "properties": [
+        {
+          "name": "alignment",
+          "swiftType": "VerticalAlignment?",
+          "control": "picker",
+          "options": [
+            "nil",
+            "top",
+            "center",
+            "bottom",
+            "firstTextBaseline",
+            "lastTextBaseline"
+          ],
+          "defaultValue": "nil",
+          "notes": "Overrides the parent Grid's vertical alignment for this row only."
+        }
+      ],
+      "codeTemplate": "GridRow(alignment: .{alignment}) {\n    Text(\"Label\")\n    Image(systemName: \"star\")\n}"
+    },
+    {
+      "id": "lazyvgrid",
+      "title": "LazyVGrid",
+      "api": "LazyVGrid",
+      "summary": "A grid that grows vertically, lazily creating items as needed from an array of column definitions.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 14.0 / iPadOS 14.0 / macOS 11.0 / tvOS 14.0 / watchOS 7.0",
+      "styles": [],
+      "states": [
+        "default",
+        "empty",
+        "loading",
+        "longContent"
+      ],
+      "higNotes": "Use inside a vertical ScrollView for photo grids and collections. Columns are defined with GridItem (.adaptive, .flexible, .fixed). Adaptive packs as many items as fit per row; flexible distributes available width; fixed pins exact widths.",
+      "properties": [
+        {
+          "name": "columnSizing",
+          "swiftType": "[GridItem]",
+          "control": "picker",
+          "options": [
+            "adaptive(minimum:)",
+            "flexible()",
+            "fixed()",
+            "mixed"
+          ],
+          "defaultValue": "adaptive(minimum:)",
+          "notes": "Each GridItem can be .adaptive(minimum:maximum:), .flexible(minimum:maximum:), or .fixed(size). Count of items determines column count for flexible/fixed."
+        },
+        {
+          "name": "gridItemSpacing",
+          "swiftType": "CGFloat?",
+          "control": "slider",
+          "options": [
+            "0",
+            "32"
+          ],
+          "defaultValue": "nil",
+          "notes": "Per-GridItem spacing argument: trailing spacing between this and the next column."
+        },
+        {
+          "name": "alignment",
+          "swiftType": "HorizontalAlignment",
+          "control": "picker",
+          "options": [
+            "leading",
+            "center",
+            "trailing"
+          ],
+          "defaultValue": "center",
+          "notes": "Horizontal alignment of the grid within its container."
+        },
+        {
+          "name": "spacing",
+          "swiftType": "CGFloat?",
+          "control": "slider",
+          "options": [
+            "0",
+            "32"
+          ],
+          "defaultValue": "nil",
+          "notes": "Vertical spacing between rows of the grid."
+        },
+        {
+          "name": "pinnedViews",
+          "swiftType": "PinnedScrollableViews",
+          "control": "picker",
+          "options": [
+            "none",
+            "sectionHeaders",
+            "sectionFooters",
+            "sectionHeaders+sectionFooters"
+          ],
+          "defaultValue": "none",
+          "notes": "Which Section headers/footers pin while scrolling."
+        }
+      ],
+      "codeTemplate": "ScrollView {\n    LazyVGrid(columns: [GridItem(.{columnSizing}, spacing: {gridItemSpacing})], alignment: .{alignment}, spacing: {spacing}, pinnedViews: {pinnedViews}) {\n        ForEach(items) { item in\n            Color.gray.frame(height: 80)\n        }\n    }\n}"
+    },
+    {
+      "id": "lazyhgrid",
+      "title": "LazyHGrid",
+      "api": "LazyHGrid",
+      "summary": "A grid that grows horizontally, lazily creating items as needed from an array of row definitions.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 14.0 / iPadOS 14.0 / macOS 11.0 / tvOS 14.0 / watchOS 7.0",
+      "styles": [],
+      "states": [
+        "default",
+        "empty",
+        "loading",
+        "longContent"
+      ],
+      "higNotes": "Use inside a horizontal ScrollView. Rows are defined with GridItem the same way columns are for LazyVGrid. Good for horizontally scrolling multi-row shelves.",
+      "properties": [
+        {
+          "name": "rowSizing",
+          "swiftType": "[GridItem]",
+          "control": "picker",
+          "options": [
+            "adaptive(minimum:)",
+            "flexible()",
+            "fixed()",
+            "mixed"
+          ],
+          "defaultValue": "fixed()",
+          "notes": "Each GridItem defines a row: .adaptive, .flexible, or .fixed."
+        },
+        {
+          "name": "gridItemSpacing",
+          "swiftType": "CGFloat?",
+          "control": "slider",
+          "options": [
+            "0",
+            "32"
+          ],
+          "defaultValue": "nil",
+          "notes": "Per-GridItem spacing between this and the next row."
+        },
+        {
+          "name": "alignment",
+          "swiftType": "VerticalAlignment",
+          "control": "picker",
+          "options": [
+            "top",
+            "center",
+            "bottom",
+            "firstTextBaseline",
+            "lastTextBaseline"
+          ],
+          "defaultValue": "center",
+          "notes": "Vertical alignment of the grid within its container."
+        },
+        {
+          "name": "spacing",
+          "swiftType": "CGFloat?",
+          "control": "slider",
+          "options": [
+            "0",
+            "32"
+          ],
+          "defaultValue": "nil",
+          "notes": "Horizontal spacing between columns of the grid."
+        },
+        {
+          "name": "pinnedViews",
+          "swiftType": "PinnedScrollableViews",
+          "control": "picker",
+          "options": [
+            "none",
+            "sectionHeaders",
+            "sectionFooters",
+            "sectionHeaders+sectionFooters"
+          ],
+          "defaultValue": "none",
+          "notes": "Which Section headers/footers pin while scrolling."
+        }
+      ],
+      "codeTemplate": "ScrollView(.horizontal) {\n    LazyHGrid(rows: [GridItem(.{rowSizing}, spacing: {gridItemSpacing})], alignment: .{alignment}, spacing: {spacing}, pinnedViews: {pinnedViews}) {\n        ForEach(items) { item in\n            Color.gray.frame(width: 80)\n        }\n    }\n}"
+    },
+    {
+      "id": "grid-item",
+      "title": "GridItem",
+      "api": "GridItem",
+      "summary": "A description of a single column (or row) sizing rule for a lazy grid.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 14.0 / iPadOS 14.0 / macOS 11.0 / tvOS 14.0 / watchOS 7.0",
+      "styles": [],
+      "states": [
+        "default"
+      ],
+      "higNotes": "Compose arrays of GridItem to define LazyVGrid columns / LazyHGrid rows. .adaptive is best for responsive photo grids; .flexible for even distribution; .fixed for exact sizes. Provide a minimum to avoid overcrowding on small screens.",
+      "properties": [
+        {
+          "name": "size",
+          "swiftType": "GridItem.Size",
+          "control": "picker",
+          "options": [
+            "adaptive(minimum:maximum:)",
+            "flexible(minimum:maximum:)",
+            "fixed(_:)"
+          ],
+          "defaultValue": "flexible(minimum:maximum:)",
+          "notes": "The sizing strategy for this track."
+        },
+        {
+          "name": "spacing",
+          "swiftType": "CGFloat?",
+          "control": "slider",
+          "options": [
+            "0",
+            "32"
+          ],
+          "defaultValue": "nil",
+          "notes": "Spacing to the next track. nil uses default."
+        },
+        {
+          "name": "alignment",
+          "swiftType": "Alignment?",
+          "control": "picker",
+          "options": [
+            "nil",
+            "leading",
+            "center",
+            "trailing",
+            "top",
+            "bottom"
+          ],
+          "defaultValue": "nil",
+          "notes": "Alignment of items placed within this track."
+        }
+      ],
+      "codeTemplate": "GridItem(.{size}, spacing: {spacing}, alignment: {alignment})"
+    },
+    {
+      "id": "scrollview",
+      "title": "ScrollView",
+      "api": "ScrollView",
+      "summary": "A scrollable container that lets users move through content larger than the visible area.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "styles": [],
+      "states": [
+        "default",
+        "empty",
+        "longContent"
+      ],
+      "higNotes": "Pair with LazyVStack/LazyHStack for long content. Use scrollPosition + scrollTargetLayout for programmatic scrolling, and scrollTargetBehavior(.paging or .viewAligned) for snapping. Use scrollIndicators to hide/show indicators, and scrollClipDisabled for overflowing decorations. Avoid nesting same-axis scroll views.",
+      "properties": [
+        {
+          "name": "axes",
+          "swiftType": "Axis.Set",
+          "control": "segmented",
+          "options": [
+            "vertical",
+            "horizontal",
+            "both"
+          ],
+          "defaultValue": "vertical",
+          "notes": "Scroll directions the view allows."
+        },
+        {
+          "name": "showsIndicators",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "true",
+          "notes": "Legacy init parameter. Prefer the .scrollIndicators(_:) modifier on iOS 16+."
+        },
+        {
+          "name": "scrollIndicators",
+          "swiftType": "ScrollIndicatorVisibility",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "visible",
+            "hidden",
+            "never"
+          ],
+          "defaultValue": "automatic",
+          "notes": ".scrollIndicators(_:) modifier (iOS 16+)."
+        },
+        {
+          "name": "scrollTargetBehavior",
+          "swiftType": "some ScrollTargetBehavior",
+          "control": "picker",
+          "options": [
+            "none",
+            "paging",
+            "viewAligned"
+          ],
+          "defaultValue": "none",
+          "notes": ".scrollTargetBehavior(_:) (iOS 17+). viewAligned requires .scrollTargetLayout() on the inner lazy stack."
+        },
+        {
+          "name": "scrollBounceBehavior",
+          "swiftType": "ScrollBounceBehavior",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "always",
+            "basedOnSize"
+          ],
+          "defaultValue": "automatic",
+          "notes": ".scrollBounceBehavior(_:axes:) (iOS 16.4+)."
+        },
+        {
+          "name": "scrollDisabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": ".scrollDisabled(_:) (iOS 16+)."
+        },
+        {
+          "name": "scrollClipDisabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": ".scrollClipDisabled(_:) (iOS 17+). Lets content draw outside the scroll bounds."
+        },
+        {
+          "name": "scrollPosition",
+          "swiftType": "Binding<ScrollPosition>",
+          "control": "text",
+          "options": [],
+          "defaultValue": "nil",
+          "notes": ".scrollPosition(_:anchor:) (iOS 18+) drives and reads scroll offset programmatically. iOS 17 used scrollPosition(id:)."
+        },
+        {
+          "name": "defaultScrollAnchor",
+          "swiftType": "UnitPoint?",
+          "control": "picker",
+          "options": [
+            "nil",
+            "top",
+            "center",
+            "bottom",
+            "leading",
+            "trailing"
+          ],
+          "defaultValue": "nil",
+          "notes": ".defaultScrollAnchor(_:) (iOS 17+) sets where content is initially scrolled; documented as the primary initial-position control. Missing from the draft."
+        },
+        {
+          "name": "scrollPositionID",
+          "swiftType": "Binding<ID?>",
+          "control": "text",
+          "options": [],
+          "defaultValue": "nil",
+          "notes": ".scrollPosition(id:) (iOS 17+) — the id-based variant. The draft only lists the iOS 18 ScrollPosition binding; the id-based form is the widely used one and should be its own property/note, not folded into a footnote."
+        },
+        {
+          "name": "scrollIndicatorsFlash",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": ".scrollIndicatorsFlash(onAppear:) / (trigger:) (iOS 17+) briefly flashes indicators to hint scrollability."
+        }
+      ],
+      "codeTemplate": "ScrollView(.{axes}) {\n    LazyVStack {\n        ForEach(items) { item in\n            RowView(item)\n        }\n    }\n    .scrollTargetLayout()\n}\n.scrollIndicators(.{scrollIndicators})\n.scrollTargetBehavior(.{scrollTargetBehavior})\n.scrollBounceBehavior(.{scrollBounceBehavior})\n.scrollDisabled({scrollDisabled})\n.scrollClipDisabled({scrollClipDisabled})\n.scrollPosition($scrollPosition)"
+    },
+    {
+      "id": "scrollview-reader",
+      "title": "ScrollViewReader",
+      "api": "ScrollViewReader",
+      "summary": "A view that provides programmatic scrolling to a target view identified by ID via a ScrollViewProxy.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 14.0 / iPadOS 14.0 / macOS 11.0 / tvOS 14.0 / watchOS 7.0",
+      "styles": [],
+      "states": [
+        "default"
+      ],
+      "higNotes": "Use when you must scroll to a specific child by id with proxy.scrollTo(id:anchor:). On iOS 18+ prefer the scrollPosition(_:) binding for offset/edge tracking; keep ScrollViewReader for id-targeted jumps. Wrap the ScrollView, not the inner content.",
+      "properties": [
+        {
+          "name": "targetAnchor",
+          "swiftType": "UnitPoint?",
+          "control": "picker",
+          "options": [
+            "nil",
+            "top",
+            "center",
+            "bottom",
+            "leading",
+            "trailing"
+          ],
+          "defaultValue": "nil",
+          "notes": "Anchor passed to proxy.scrollTo(_:anchor:) to position the target within the viewport."
+        }
+      ],
+      "codeTemplate": "ScrollViewReader { proxy in\n    ScrollView {\n        ForEach(items) { item in\n            RowView(item).id(item.id)\n        }\n    }\n    Button(\"Jump\") {\n        withAnimation { proxy.scrollTo(targetID, anchor: {targetAnchor}) }\n    }\n}"
+    },
+    {
+      "id": "list",
+      "title": "List",
+      "api": "List",
+      "summary": "A container that presents rows of data in a single scrollable column, with native row styling, selection, and editing.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "styles": [
+        "automatic",
+        "plain",
+        "grouped",
+        "insetGrouped",
+        "inset",
+        "sidebar",
+        "bordered (macOS)",
+        "carousel (watchOS)",
+        "elliptical (watchOS)"
+      ],
+      "states": [
+        "default",
+        "empty",
+        "loading",
+        "selected",
+        "longContent",
+        "error"
+      ],
+      "higNotes": "Prefer List over a ScrollView+LazyVStack when you need separators, selection, swipe actions, or edit mode. Use insetGrouped for settings-style screens, sidebar for source lists / NavigationSplitView columns. Provide ContentUnavailableView for the empty state. Each interactive row needs an accessibility label.",
+      "properties": [
+        {
+          "name": "style",
+          "swiftType": "any ListStyle",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "plain",
+            "grouped",
+            "insetGrouped",
+            "inset",
+            "sidebar",
+            "bordered",
+            "carousel",
+            "elliptical"
+          ],
+          "defaultValue": "automatic",
+          "notes": ".listStyle(_:). insetGrouped/grouped iOS-only; bordered macOS-only; carousel/elliptical watchOS-only; sidebar all but watchOS."
+        },
+        {
+          "name": "selectionMode",
+          "swiftType": "Binding<Set<ID>> / Binding<ID?>",
+          "control": "segmented",
+          "options": [
+            "none",
+            "single",
+            "multiple"
+          ],
+          "defaultValue": "none",
+          "notes": "Single binds to ID?, multiple binds to Set<ID>. Multi-select on iOS appears in edit mode."
+        },
+        {
+          "name": "editMode",
+          "swiftType": "EditMode",
+          "control": "toggle",
+          "options": [
+            "inactive",
+            "active"
+          ],
+          "defaultValue": "inactive",
+          "notes": "Drive via .environment(\\.editMode) or an EditButton. Enables reorder (onMove) and delete (onDelete)."
+        },
+        {
+          "name": "rowSeparatorVisibility",
+          "swiftType": "Visibility",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "visible",
+            "hidden"
+          ],
+          "defaultValue": "automatic",
+          "notes": ".listRowSeparator(_:edges:)."
+        },
+        {
+          "name": "rowSeparatorTint",
+          "swiftType": "Color?",
+          "control": "colorPicker",
+          "options": [],
+          "defaultValue": "nil",
+          "notes": ".listRowSeparatorTint(_:edges:)."
+        },
+        {
+          "name": "rowSpacing",
+          "swiftType": "CGFloat?",
+          "control": "slider",
+          "options": [
+            "0",
+            "40"
+          ],
+          "defaultValue": "nil",
+          "notes": ".listRowSpacing(_:) (iOS 17+)."
+        },
+        {
+          "name": "sectionSpacing",
+          "swiftType": "ListSectionSpacing",
+          "control": "picker",
+          "options": [
+            "default",
+            "compact",
+            "custom"
+          ],
+          "defaultValue": "default",
+          "notes": ".listSectionSpacing(_:) (iOS 17+). Accepts .default, .compact, or a CGFloat."
+        },
+        {
+          "name": "rowBackground",
+          "swiftType": "Color?",
+          "control": "colorPicker",
+          "options": [],
+          "defaultValue": "nil",
+          "notes": ".listRowBackground(_:) on each row."
+        },
+        {
+          "name": "swipeActionsEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": ".swipeActions(edge:allowsFullSwipe:) on rows. Leading/trailing edges; mark destructive with role: .destructive."
+        },
+        {
+          "name": "refreshable",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": ".refreshable { } adds pull-to-refresh."
+        }
+      ],
+      "codeTemplate": "List(selection: $selection) {\n    ForEach(items) { item in\n        Text(item.title)\n            .listRowBackground({rowBackground})\n            .listRowSeparatorTint({rowSeparatorTint})\n            .swipeActions(edge: .trailing) {\n                Button(role: .destructive) { delete(item) } label: { Label(\"Delete\", systemImage: \"trash\") }\n            }\n    }\n    .onMove { from, to in move(from, to) }\n    .onDelete { offsets in remove(offsets) }\n}\n.listStyle(.{style})\n.listRowSeparator(.{rowSeparatorVisibility})\n.listRowSpacing({rowSpacing})\n.listSectionSpacing(.{sectionSpacing})\n.environment(\\.editMode, $editMode)\n.refreshable { await reload() }"
+    },
+    {
+      "id": "table",
+      "title": "Table",
+      "api": "Table",
+      "summary": "A container presenting rows of data in one or more sortable, selectable columns.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS"
+      ],
+      "minOS": "iOS 16.0 / iPadOS 16.0 / macOS 12.0",
+      "styles": [
+        "automatic",
+        "inset",
+        "inset (alternatesRowBackgrounds:)",
+        "bordered (macOS)",
+        "bordered (alternatesRowBackgrounds:) (macOS)"
+      ],
+      "states": [
+        "default",
+        "empty",
+        "selected",
+        "longContent"
+      ],
+      "higNotes": "Best on macOS and regular-width iPad for multi-column data. On iPhone / compact width it collapses to the first column only and hides headers, so design the first column to carry the essential info. Provide selection and sortOrder bindings for interactivity; re-sort your data in onChange of the sort order.",
+      "properties": [
+        {
+          "name": "style",
+          "swiftType": "any TableStyle",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "inset",
+            "bordered"
+          ],
+          "defaultValue": "automatic",
+          "notes": ".tableStyle(_:). bordered is macOS-only. inset supports alternatesRowBackgrounds:."
+        },
+        {
+          "name": "selectionMode",
+          "swiftType": "Binding<Set<Value.ID>> / Binding<Value.ID?>",
+          "control": "segmented",
+          "options": [
+            "none",
+            "single",
+            "multiple"
+          ],
+          "defaultValue": "none",
+          "notes": "Single binds Value.ID?, multiple binds Set<Value.ID>."
+        },
+        {
+          "name": "sortOrder",
+          "swiftType": "Binding<[KeyPathComparator<Value>]>",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "[]",
+          "notes": "Providing a sortOrder binding makes value-backed columns tappable to sort. Re-sort data on change."
+        },
+        {
+          "name": "columnCustomization",
+          "swiftType": "Binding<TableColumnCustomization<Value>>",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "nil",
+          "notes": ".tableColumnHeaders and columnCustomization(_:) let users hide/reorder columns (macOS, iPadOS 17+)."
+        },
+        {
+          "name": "columnHeadersVisibility",
+          "swiftType": "Visibility",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "visible",
+            "hidden"
+          ],
+          "defaultValue": "automatic",
+          "notes": ".tableColumnHeaders(_:)."
+        }
+      ],
+      "codeTemplate": "Table(people, selection: $selection, sortOrder: $sortOrder) {\n    TableColumn(\"Given Name\", value: \\.givenName)\n    TableColumn(\"Family Name\", value: \\.familyName)\n    TableColumn(\"E-Mail\", value: \\.emailAddress)\n}\n.tableStyle(.{style})\n.tableColumnHeaders(.{columnHeadersVisibility})\n.onChange(of: sortOrder) { _, newOrder in people.sort(using: newOrder) }"
+    },
+    {
+      "id": "table-column",
+      "title": "TableColumn",
+      "api": "TableColumn",
+      "summary": "A column that displays a value or custom cell for each row of a Table, optionally sortable.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS"
+      ],
+      "minOS": "iOS 16.0 / iPadOS 16.0 / macOS 12.0",
+      "styles": [],
+      "states": [
+        "default"
+      ],
+      "higNotes": "Use a value-keypath column for plain text plus free sorting. Use a content-closure column for custom cells (badges, images). Set width/min/max/ideal to control sizing on macOS; use .defaultVisibility to start columns hidden.",
+      "properties": [
+        {
+          "name": "title",
+          "swiftType": "LocalizedStringKey",
+          "control": "text",
+          "options": [],
+          "defaultValue": "\"Column\"",
+          "notes": "Header text for the column."
+        },
+        {
+          "name": "value",
+          "swiftType": "KeyPath<RowValue, Comparable>",
+          "control": "text",
+          "options": [],
+          "defaultValue": "\\.title",
+          "notes": "Key path used for sorting when a sortOrder binding is present."
+        },
+        {
+          "name": "width",
+          "swiftType": "CGFloat?",
+          "control": "slider",
+          "options": [
+            "40",
+            "400"
+          ],
+          "defaultValue": "nil",
+          "notes": ".width(_:) / .width(min:ideal:max:). Primarily affects macOS."
+        },
+        {
+          "name": "defaultVisibility",
+          "swiftType": "Visibility",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "visible",
+            "hidden"
+          ],
+          "defaultValue": "automatic",
+          "notes": ".defaultVisibility(_:) for user-customizable columns."
+        }
+      ],
+      "codeTemplate": "TableColumn(\"{title}\", value: {value}) { row in\n    Text(row.title)\n}\n.width({width})\n.defaultVisibility(.{defaultVisibility})"
+    },
+    {
+      "id": "form",
+      "title": "Form",
+      "api": "Form",
+      "summary": "A container for grouping controls used for data entry, with platform-appropriate styling.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "styles": [
+        "automatic",
+        "columns",
+        "grouped"
+      ],
+      "states": [
+        "default",
+        "disabled",
+        "longContent"
+      ],
+      "higNotes": "Use Form for settings and data-entry screens; it styles labels, controls, and sections natively per platform. On macOS use .formStyle(.grouped) for the modern card-grouped look. Use LabeledContent for read-only key/value rows. Group related fields into Sections with headers.",
+      "properties": [
+        {
+          "name": "style",
+          "swiftType": "any FormStyle",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "columns",
+            "grouped"
+          ],
+          "defaultValue": "automatic",
+          "notes": ".formStyle(_:) (iOS 16+/macOS 13+). grouped gives the inset card look; columns aligns labels and fields (macOS)."
+        }
+      ],
+      "codeTemplate": "Form {\n    Section(\"Profile\") {\n        TextField(\"Name\", text: $name)\n        Toggle(\"Notifications\", isOn: $notify)\n    }\n    Section {\n        LabeledContent(\"Version\", value: appVersion)\n    }\n}\n.formStyle(.{style})"
+    },
+    {
+      "id": "section",
+      "title": "Section",
+      "api": "Section",
+      "summary": "A grouping of content with an optional header and footer, used inside List, Form, Table, Picker, and lazy stacks.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "styles": [],
+      "states": [
+        "default",
+        "collapsed",
+        "longContent"
+      ],
+      "higNotes": "Use Sections to group related rows and give them headers/footers. On iOS 17+ use isExpanded for collapsible sidebar sections. Header text is automatically styled per the container's list style. Use .headerProminence(.increased) for a more prominent header.",
+      "properties": [
+        {
+          "name": "header",
+          "swiftType": "String?",
+          "control": "text",
+          "options": [],
+          "defaultValue": "nil",
+          "notes": "Header label; can also be a full view via the header: trailing closure."
+        },
+        {
+          "name": "footer",
+          "swiftType": "String?",
+          "control": "text",
+          "options": [],
+          "defaultValue": "nil",
+          "notes": "Footer label; commonly used for explanatory captions."
+        },
+        {
+          "name": "isExpanded",
+          "swiftType": "Binding<Bool>?",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "nil",
+          "notes": "Collapsible section (iOS 17+). Provide a Bool binding to expand/collapse."
+        },
+        {
+          "name": "headerProminence",
+          "swiftType": "Prominence",
+          "control": "segmented",
+          "options": [
+            "standard",
+            "increased"
+          ],
+          "defaultValue": "standard",
+          "notes": ".headerProminence(_:). Increased renders a larger, bolder header."
+        }
+      ],
+      "codeTemplate": "Section(isExpanded: $isExpanded) {\n    ForEach(items) { Text($0.title) }\n} header: {\n    Text(\"{header}\")\n} footer: {\n    Text(\"{footer}\")\n}\n.headerProminence(.{headerProminence})"
+    },
+    {
+      "id": "groupbox",
+      "title": "GroupBox",
+      "api": "GroupBox",
+      "summary": "A stylized container that visually groups a label with related content in a bordered card.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "visionOS"
+      ],
+      "minOS": "iOS 14.0 / iPadOS 14.0 / macOS 11.0",
+      "styles": [
+        "automatic"
+      ],
+      "states": [
+        "default",
+        "longContent"
+      ],
+      "higNotes": "Use GroupBox to set off a chunk of related controls or information with a subtle background and optional title, outside of a List/Form. Common in settings panes and inspectors. Not available on tvOS/watchOS. Provide a clear label for the group.",
+      "properties": [
+        {
+          "name": "label",
+          "swiftType": "String?",
+          "control": "text",
+          "options": [],
+          "defaultValue": "nil",
+          "notes": "Title shown above the grouped content; omit for an unlabeled card."
+        },
+        {
+          "name": "style",
+          "swiftType": "any GroupBoxStyle",
+          "control": "picker",
+          "options": [
+            "automatic"
+          ],
+          "defaultValue": "automatic",
+          "notes": ".groupBoxStyle(_:). Only the automatic system style ships; custom styles can be defined."
+        }
+      ],
+      "codeTemplate": "GroupBox(\"{label}\") {\n    Toggle(\"Wi-Fi\", isOn: $wifi)\n    Toggle(\"Bluetooth\", isOn: $bluetooth)\n}\n.groupBoxStyle(.{style})"
+    },
+    {
+      "id": "disclosure-group",
+      "title": "DisclosureGroup",
+      "api": "DisclosureGroup",
+      "summary": "A container that shows or hides its content behind a disclosure control bound to an expansion state.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "visionOS"
+      ],
+      "minOS": "iOS 14.0 / iPadOS 14.0 / macOS 11.0",
+      "styles": [
+        "automatic"
+      ],
+      "states": [
+        "default",
+        "selected",
+        "disabled",
+        "longContent"
+      ],
+      "higNotes": "Use for progressive disclosure of secondary content (advanced settings, nested outlines). Bind isExpanded for programmatic control. Not on tvOS/watchOS. Animate expansion with withAnimation when toggling the binding. Keep labels concise.",
+      "properties": [
+        {
+          "name": "label",
+          "swiftType": "String",
+          "control": "text",
+          "options": [],
+          "defaultValue": "\"Details\"",
+          "notes": "Title of the disclosure row; can also be a full view."
+        },
+        {
+          "name": "isExpanded",
+          "swiftType": "Binding<Bool>",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "Two-way binding for expansion state. Omit to let it manage state internally."
+        },
+        {
+          "name": "style",
+          "swiftType": "any DisclosureGroupStyle",
+          "control": "picker",
+          "options": [
+            "automatic"
+          ],
+          "defaultValue": "automatic",
+          "notes": ".disclosureGroupStyle(_:). Only the automatic system style ships."
+        }
+      ],
+      "codeTemplate": "DisclosureGroup(\"{label}\", isExpanded: $isExpanded) {\n    Toggle(\"Option A\", isOn: $a)\n    Toggle(\"Option B\", isOn: $b)\n}\n.disclosureGroupStyle(.{style})"
+    },
+    {
+      "id": "group",
+      "title": "Group",
+      "api": "Group",
+      "summary": "A transparent container that collects views together so modifiers and the ten-child limit can be applied collectively, without affecting layout.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "styles": [],
+      "states": [
+        "default"
+      ],
+      "higNotes": "Use Group to apply a shared modifier to several views or to exceed the implicit child limit inside a container. Group itself imposes no layout; it inherits the layout behavior of its parent container.",
+      "properties": [],
+      "codeTemplate": "Group {\n    Text(\"One\")\n    Text(\"Two\")\n    Text(\"Three\")\n}\n.font(.headline)\n.foregroundStyle(.secondary)"
+    },
+    {
+      "id": "viewthatfits",
+      "title": "ViewThatFits",
+      "api": "ViewThatFits",
+      "summary": "A container that picks the first child view that fits the available space along the specified axes.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 16.0 / iPadOS 16.0 / macOS 13.0 / tvOS 16.0 / watchOS 9.0",
+      "styles": [],
+      "states": [
+        "default",
+        "longContent"
+      ],
+      "higNotes": "Provide candidate layouts from most-expansive to most-compact; ViewThatFits renders the first one that fits. Ideal for adaptive labels, toolbars, and responsive layouts that must collapse on small screens or large Dynamic Type sizes. Limit candidate count to keep evaluation cheap.",
+      "properties": [
+        {
+          "name": "axes",
+          "swiftType": "Axis.Set",
+          "control": "segmented",
+          "options": [
+            "horizontal",
+            "vertical",
+            "both"
+          ],
+          "defaultValue": "both",
+          "notes": "Which dimensions are measured for the fit test."
+        }
+      ],
+      "codeTemplate": "ViewThatFits(in: .{axes}) {\n    HStack { Label(\"Settings\", systemImage: \"gear\"); Spacer() }\n    Image(systemName: \"gear\")\n}"
+    },
+    {
+      "id": "spacer",
+      "title": "Spacer",
+      "api": "Spacer",
+      "summary": "A flexible space that expands along the major axis of its containing stack, pushing adjacent views apart.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "styles": [],
+      "states": [
+        "default"
+      ],
+      "higNotes": "Use inside HStack/VStack to push content to the edges. Set minLength to guarantee a minimum gap. A Spacer outside a stack expands in both directions. Avoid using many Spacers to fake alignment; prefer alignment, padding, or frame for precise layout.",
+      "properties": [
+        {
+          "name": "minLength",
+          "swiftType": "CGFloat?",
+          "control": "slider",
+          "options": [
+            "0",
+            "100"
+          ],
+          "defaultValue": "nil",
+          "notes": "Minimum length the spacer will occupy even when space is constrained. nil uses default spacing."
+        }
+      ],
+      "codeTemplate": "HStack {\n    Text(\"Leading\")\n    Spacer(minLength: {minLength})\n    Text(\"Trailing\")\n}"
+    },
+    {
+      "id": "divider",
+      "title": "Divider",
+      "api": "Divider",
+      "summary": "A visual line that separates content; horizontal inside a VStack, vertical inside an HStack.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "styles": [],
+      "states": [
+        "default"
+      ],
+      "higNotes": "Orientation is inferred from the enclosing stack. Use to break up grouped content outside a List (List provides its own separators). Tint with .overlay or .background sparingly; the default uses the system separator color for correct contrast in light and dark mode.",
+      "properties": [
+        {
+          "name": "tint",
+          "swiftType": "Color?",
+          "control": "colorPicker",
+          "options": [],
+          "defaultValue": "nil",
+          "notes": "Applied via .overlay(color) or foreground style. nil keeps the adaptive system separator color (recommended)."
+        }
+      ],
+      "codeTemplate": "VStack {\n    Text(\"Above\")\n    Divider()\n        .overlay({tint})\n    Text(\"Below\")\n}"
+    },
+    {
+      "id": "labeled-content",
+      "title": "LabeledContent",
+      "api": "LabeledContent",
+      "summary": "A container pairing a label with a value or content view, styled consistently inside Forms and Lists.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 16.0 / iPadOS 16.0 / macOS 13.0 / tvOS 16.0 / watchOS 9.0",
+      "styles": [
+        "automatic"
+      ],
+      "states": [
+        "default",
+        "longContent"
+      ],
+      "higNotes": "Use for read-only key/value rows in a Form or settings list (e.g. Version: 1.0). It applies the platform label-and-value layout and respects label-hidden contexts. Prefer it over a manual HStack + Spacer for these rows.",
+      "properties": [
+        {
+          "name": "label",
+          "swiftType": "String",
+          "control": "text",
+          "options": [],
+          "defaultValue": "\"Label\"",
+          "notes": "Leading descriptive text."
+        },
+        {
+          "name": "value",
+          "swiftType": "String",
+          "control": "text",
+          "options": [],
+          "defaultValue": "\"Value\"",
+          "notes": "Trailing value. Can also be a full content view via the trailing closure."
+        },
+        {
+          "name": "labelHidden",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": ".labelsHidden() hides the label visually while keeping it for accessibility."
+        }
+      ],
+      "codeTemplate": "LabeledContent(\"{label}\", value: \"{value}\")"
+    },
+    {
+      "id": "geometry-reader",
+      "title": "GeometryReader",
+      "api": "GeometryReader",
+      "summary": "A container view that defines its content as a function of its own size and coordinate space, exposing a GeometryProxy for reading dimensions, safe-area insets, and frames.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS",
+        "visionOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0 / visionOS 1.0",
+      "styles": [],
+      "states": [
+        "default",
+        "longContent"
+      ],
+      "higNotes": "Use sparingly. GeometryReader returns a flexible preferred size to its parent and greedily fills available space, which frequently breaks surrounding layout; prefer ViewThatFits, the Layout protocol, containerRelativeFrame, or onGeometryChange(for:of:action:) (iOS 18+) where possible. Read proxy.size, proxy.frame(in:), and proxy.safeAreaInsets. Note GeometryReader3D for visionOS depth. Common modern replacement for size-reactive logic is the lighter onGeometryChange.",
+      "properties": [
+        {
+          "name": "coordinateSpace",
+          "swiftType": "CoordinateSpace",
+          "control": "picker",
+          "options": [
+            "local",
+            "global",
+            "named"
+          ],
+          "defaultValue": "local",
+          "notes": "Space passed to proxy.frame(in:). .local is the reader's own space; .global is the screen; .named(_:) targets an ancestor tagged with .coordinateSpace(_:)."
+        },
+        {
+          "name": "readsSafeArea",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "true",
+          "notes": "Whether the example reads proxy.safeAreaInsets. Demonstrates inset-aware layout."
+        }
+      ],
+      "codeTemplate": "GeometryReader { proxy in\n    Color.accentColor\n        .overlay(Text(\"w: \\(Int(proxy.size.width)) h: \\(Int(proxy.size.height))\"))\n        .frame(width: proxy.size.width, height: proxy.size.height)\n}"
+    },
+    {
+      "id": "layout",
+      "title": "Layout (custom layout)",
+      "api": "Layout",
+      "summary": "A protocol for defining a custom layout container by implementing sizeThatFits and placeSubviews, letting you arrange subviews with fully custom geometry like flow layouts or radial arrangements.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS",
+        "visionOS"
+      ],
+      "minOS": "iOS 16.0 / iPadOS 16.0 / macOS 13.0 / tvOS 16.0 / watchOS 9.0 / visionOS 1.0",
+      "styles": [],
+      "states": [
+        "default",
+        "longContent"
+      ],
+      "higNotes": "Conform a value type to Layout and implement sizeThatFits(proposal:subviews:cache:) and placeSubviews(in:proposal:subviews:cache:). Use it the same way as HStack/VStack via a ViewBuilder. Read each subview proxy's sizeThatFits, dimensions(in:), priority, and spacing; place with subview.place(at:anchor:proposal:). Add a cache for expensive measurements, expose layoutProperties for axis, and use AnyLayout to animate between two layouts. Prefer the Layout protocol over GeometryReader hacks for custom arrangements such as flow/wrapping/tag layouts.",
+      "properties": [
+        {
+          "name": "exampleLayout",
+          "swiftType": "any Layout",
+          "control": "segmented",
+          "options": [
+            "flow",
+            "radial",
+            "equalWidth"
+          ],
+          "defaultValue": "flow",
+          "notes": "Which custom layout the showcase demonstrates."
+        },
+        {
+          "name": "spacing",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "0",
+            "32"
+          ],
+          "defaultValue": "8",
+          "notes": "Inter-subview spacing the custom layout applies between placed subviews."
+        },
+        {
+          "name": "animatesBetweenLayouts",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "When true, wraps the chosen layout in AnyLayout to animate transitions between two layout types."
+        }
+      ],
+      "codeTemplate": "struct FlowLayout: Layout {\n    var spacing: CGFloat = {spacing}\n\n    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {\n        // measure subviews and return container size\n    }\n\n    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {\n        // call subview.place(at:anchor:proposal:) for each subview\n    }\n}\n\nFlowLayout(spacing: {spacing}) {\n    ForEach(tags, id: \\.self) { Text($0) }\n}"
+    },
+    {
+      "id": "control-group",
+      "title": "ControlGroup",
+      "api": "ControlGroup",
+      "summary": "A container that displays semantically related controls grouped together in a way appropriate for the surrounding context, such as a segmented cluster in a toolbar or an overflow menu.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "visionOS"
+      ],
+      "minOS": "iOS 15.0 / iPadOS 15.0 / macOS 12.0 / tvOS 17.0 / visionOS 1.0",
+      "styles": [
+        "automatic",
+        "navigation",
+        "palette",
+        "menu",
+        "compactMenu"
+      ],
+      "states": [
+        "default",
+        "disabled"
+      ],
+      "higNotes": "Use to cluster a small set of related controls (commonly buttons) so the system styles and spaces them as a unit. In a toolbar, the optional label is used when the group collapses into the overflow menu. .palette / .compactMenu styles render the children as a compact picker-like cluster. Not available on watchOS.",
+      "properties": [
+        {
+          "name": "style",
+          "swiftType": "any ControlGroupStyle",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "navigation",
+            "palette",
+            "menu",
+            "compactMenu"
+          ],
+          "defaultValue": "automatic",
+          "notes": ".controlGroupStyle(_:). palette/compactMenu available iOS 17+; navigation styles affect toolbar grouping."
+        },
+        {
+          "name": "label",
+          "swiftType": "String?",
+          "control": "text",
+          "options": [],
+          "defaultValue": "nil",
+          "notes": "Optional label used when the group is moved into a toolbar overflow menu."
+        }
+      ],
+      "codeTemplate": "ControlGroup {\n    Button { } label: { Label(\"Add\", systemImage: \"plus\") }\n    Button { } label: { Label(\"Edit\", systemImage: \"pencil\") }\n    Button { } label: { Label(\"Delete\", systemImage: \"trash\") }\n} label: {\n    Label(\"{label}\", systemImage: \"ellipsis\")\n}\n.controlGroupStyle(.{style})"
+    },
+    {
+      "id": "outline-group",
+      "title": "OutlineGroup",
+      "api": "OutlineGroup",
+      "summary": "A container that computes views and nested DisclosureGroups on demand from tree-structured, identified data, rendering an expandable/collapsible hierarchy.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "visionOS"
+      ],
+      "minOS": "iOS 14.0 / iPadOS 14.0 / macOS 11.0 / visionOS 1.0",
+      "styles": [],
+      "states": [
+        "default",
+        "empty",
+        "longContent"
+      ],
+      "higNotes": "Use for hierarchical data (file trees, nested categories) where each node can expand/collapse. Provide the root collection and the children key path. For a scrollable hierarchical list with selection, prefer List(_:children:) which builds outline rows automatically. Not available on tvOS/watchOS. Each node's data must be Identifiable/Hashable.",
+      "properties": [
+        {
+          "name": "childrenKeyPath",
+          "swiftType": "KeyPath<Data.Element, Data?>",
+          "control": "text",
+          "options": [],
+          "defaultValue": "\\.children",
+          "notes": "Optional key path to a node's children. nil children mark leaf nodes."
+        },
+        {
+          "name": "startsExpanded",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "Whether branches render initially expanded in the showcase."
+        }
+      ],
+      "codeTemplate": "OutlineGroup(rootItems, children: {childrenKeyPath}) { item in\n    Label(item.name, systemImage: item.icon)\n}"
+    },
+    {
+      "id": "table-row",
+      "title": "TableRow",
+      "api": "TableRow",
+      "summary": "A row that represents a single data value within a Table built from static rows.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "visionOS"
+      ],
+      "minOS": "iOS 16.0 / iPadOS 16.0 / macOS 12.0 / visionOS 1.0",
+      "styles": [],
+      "states": [
+        "default",
+        "selected"
+      ],
+      "higNotes": "Use TableRow inside a Table's rows: closure when you build a table from static, hand-listed rows (Table(of:columns:rows:)) rather than from a collection. The row's value is matched against each TableColumn's content/value. Combine with TableRowContent and Group/ForEach to build static row sets. macOS/iPadOS/iOS only.",
+      "properties": [
+        {
+          "name": "value",
+          "swiftType": "Value",
+          "control": "text",
+          "options": [],
+          "defaultValue": "row",
+          "notes": "The data value this row represents; columns read their content from it."
+        }
+      ],
+      "codeTemplate": "Table(of: Purchase.self) {\n    TableColumn(\"Base price\") { Text($0.price, format: .currency(code: \"USD\")) }\n} rows: {\n    TableRow(Purchase(price: 20))\n    TableRow(Purchase(price: 50))\n}"
+    }
+  ]
+}

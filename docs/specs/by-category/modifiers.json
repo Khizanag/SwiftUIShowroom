@@ -1,0 +1,2108 @@
+{
+  "category": "Modifiers Reference",
+  "key": "modifiers",
+  "folder": "Modifiers",
+  "components": [
+    {
+      "id": "frame-fixed",
+      "title": "Frame (Fixed Size)",
+      "api": "View.frame(width:height:alignment:)",
+      "summary": "Proposes a fixed width and/or height to the modified view, positioning it within the resulting frame by an alignment.",
+      "minOS": "iOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "summary_note": "",
+      "properties": [
+        {
+          "name": "width",
+          "swiftType": "CGFloat?",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "200",
+          "notes": "Range 0...500 for the showroom. Pass nil to leave the dimension flexible; expose a 'set width' toggle to allow nil."
+        },
+        {
+          "name": "height",
+          "swiftType": "CGFloat?",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "120",
+          "notes": "Range 0...500. nil leaves height driven by content."
+        },
+        {
+          "name": "alignment",
+          "swiftType": "Alignment",
+          "control": "picker",
+          "options": [
+            "center",
+            "leading",
+            "trailing",
+            "top",
+            "bottom",
+            "topLeading",
+            "topTrailing",
+            "bottomLeading",
+            "bottomTrailing"
+          ],
+          "defaultValue": "center",
+          "notes": "Positions the content within the frame when the frame is larger than the content."
+        }
+      ],
+      "states": [
+        "default",
+        "longContent"
+      ],
+      "styles": [],
+      "higNotes": "Avoid hardcoding pixel sizes that fight Dynamic Type. Prefer flexible frames and let content size itself; reserve fixed frames for genuinely fixed-dimension elements like avatars or icons.",
+      "codeTemplate": "Text(\"Framed\")\n    .frame(width: {width}, height: {height}, alignment: .{alignment})"
+    },
+    {
+      "id": "frame-flexible",
+      "title": "Frame (Flexible / Min-Ideal-Max)",
+      "api": "View.frame(minWidth:idealWidth:maxWidth:minHeight:idealHeight:maxHeight:alignment:)",
+      "summary": "Constrains a view between minimum, ideal, and maximum bounds; .infinity makes the view expand to fill available space.",
+      "minOS": "iOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "minWidth",
+          "swiftType": "CGFloat?",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "0",
+          "notes": "Range 0...400. nil leaves the lower bound unconstrained."
+        },
+        {
+          "name": "maxWidth",
+          "swiftType": "CGFloat?",
+          "control": "menu",
+          "options": [
+            ".infinity",
+            "200",
+            "320",
+            "nil"
+          ],
+          "defaultValue": ".infinity",
+          "notes": "Use .infinity to expand to fill the parent's proposed width."
+        },
+        {
+          "name": "minHeight",
+          "swiftType": "CGFloat?",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "0",
+          "notes": "Range 0...400."
+        },
+        {
+          "name": "maxHeight",
+          "swiftType": "CGFloat?",
+          "control": "menu",
+          "options": [
+            ".infinity",
+            "200",
+            "320",
+            "nil"
+          ],
+          "defaultValue": "nil",
+          "notes": "Use .infinity to fill vertically."
+        },
+        {
+          "name": "alignment",
+          "swiftType": "Alignment",
+          "control": "picker",
+          "options": [
+            "center",
+            "leading",
+            "trailing",
+            "top",
+            "bottom",
+            "topLeading",
+            "topTrailing",
+            "bottomLeading",
+            "bottomTrailing"
+          ],
+          "defaultValue": "center",
+          "notes": "Positions content inside the resolved frame."
+        }
+      ],
+      "states": [
+        "default",
+        "longContent"
+      ],
+      "styles": [],
+      "higNotes": "maxWidth: .infinity is the idiomatic way to make buttons and rows span the full width. Pair with alignment to control where content sits inside the expanded frame.",
+      "codeTemplate": "Text(\"Flexible\")\n    .frame(maxWidth: {maxWidth}, alignment: .{alignment})"
+    },
+    {
+      "id": "padding",
+      "title": "Padding",
+      "api": "View.padding(_:_:)",
+      "summary": "Adds space around the view along the chosen edges; with no arguments uses a system-default amount that adapts to context.",
+      "minOS": "iOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "edges",
+          "swiftType": "Edge.Set",
+          "control": "picker",
+          "options": [
+            "all",
+            "horizontal",
+            "vertical",
+            "top",
+            "bottom",
+            "leading",
+            "trailing"
+          ],
+          "defaultValue": "all",
+          "notes": "Which edges receive padding."
+        },
+        {
+          "name": "length",
+          "swiftType": "CGFloat?",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "16",
+          "notes": "Range 0...64. Pass nil to use the system default adaptive padding."
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Prefer system default padding (no length argument) for standard layouts; it adapts across platforms and size classes. Reserve explicit values for design-system spacing tokens.",
+      "codeTemplate": "Text(\"Padded\")\n    .padding(.{edges}, {length})"
+    },
+    {
+      "id": "offset",
+      "title": "Offset",
+      "api": "View.offset(x:y:)",
+      "summary": "Shifts the view's rendered position by a CGSize without affecting its layout footprint (siblings see the original frame).",
+      "minOS": "iOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "x",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "0",
+          "notes": "Range -100...100. Positive moves right."
+        },
+        {
+          "name": "y",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "0",
+          "notes": "Range -100...100. Positive moves down."
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Offset is purely visual and does not change layout; use it for nudges and animations, not for structural positioning. For layout-affecting moves, use padding or a stack.",
+      "codeTemplate": "Text(\"Offset\")\n    .offset(x: {x}, y: {y})"
+    },
+    {
+      "id": "position",
+      "title": "Position",
+      "api": "View.position(x:y:)",
+      "summary": "Centers the view at an absolute point in the parent's coordinate space, then claims all available space for layout.",
+      "minOS": "iOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "x",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "150",
+          "notes": "Range 0...300. X coordinate of the view's center in parent space."
+        },
+        {
+          "name": "y",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "150",
+          "notes": "Range 0...300. Y coordinate of the view's center."
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "position consumes all proposed space and centers the child at the given point. Use sparingly; stacks and alignment guides are usually clearer for structured layout.",
+      "codeTemplate": "Text(\"Positioned\")\n    .position(x: {x}, y: {y})"
+    },
+    {
+      "id": "fixed-size",
+      "title": "Fixed Size",
+      "api": "View.fixedSize(horizontal:vertical:)",
+      "summary": "Fixes the view at its ideal size on the chosen axes, overriding the parent's proposed size (e.g. prevents Text truncation).",
+      "minOS": "iOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "horizontal",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "true",
+          "notes": "When true, the view keeps its ideal width regardless of the parent proposal."
+        },
+        {
+          "name": "vertical",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "When true, the view keeps its ideal height."
+        }
+      ],
+      "states": [
+        "default",
+        "longContent"
+      ],
+      "styles": [],
+      "higNotes": "The most common use is .fixedSize(horizontal: false, vertical: true) to let multi-line Text grow vertically instead of truncating. Avoid fixing both axes unless the content is genuinely intrinsic.",
+      "codeTemplate": "Text(\"A very long line of text that would otherwise truncate\")\n    .fixedSize(horizontal: {horizontal}, vertical: {vertical})"
+    },
+    {
+      "id": "layout-priority",
+      "title": "Layout Priority",
+      "api": "View.layoutPriority(_:)",
+      "summary": "Sets the relative priority a view has when a stack divides limited space among its children.",
+      "minOS": "iOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "value",
+          "swiftType": "Double",
+          "control": "stepper",
+          "options": [],
+          "defaultValue": "0",
+          "notes": "Range -10...10. Higher values get space first; default for all views is 0."
+        }
+      ],
+      "states": [
+        "default",
+        "longContent"
+      ],
+      "styles": [],
+      "higNotes": "Raise layoutPriority on the element that should win when an HStack/VStack is tight (e.g. a title over a trailing badge). Keep the scale small and intentional.",
+      "codeTemplate": "HStack {\n    Text(\"Title that wins space\")\n        .layoutPriority({value})\n    Text(\"Trailing\")\n}"
+    },
+    {
+      "id": "alignment-guide",
+      "title": "Alignment Guide",
+      "api": "View.alignmentGuide(_:computeValue:)",
+      "summary": "Overrides how a view reports its position for a named alignment guide, enabling custom cross-stack alignment.",
+      "minOS": "iOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "alignment",
+          "swiftType": "HorizontalAlignment | VerticalAlignment",
+          "control": "picker",
+          "options": [
+            "leading",
+            "center",
+            "trailing",
+            "top",
+            "bottom",
+            "firstTextBaseline",
+            "lastTextBaseline"
+          ],
+          "defaultValue": "leading",
+          "notes": "The named guide to override. Horizontal guides for HStack cross-alignment, vertical for VStack."
+        },
+        {
+          "name": "offset",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "0",
+          "notes": "Range -50...50. Demonstrates returning d[guide] + offset from computeValue."
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "An advanced layout tool. Reach for it only when standard stack alignments and alignment IDs cannot express the relationship. Document the guide math because it is non-obvious to future readers.",
+      "codeTemplate": "VStack(alignment: .{alignment}) {\n    Text(\"Aligned\")\n        .alignmentGuide(.{alignment}) { d in d[.{alignment}] + {offset} }\n    Text(\"Reference\")\n}"
+    },
+    {
+      "id": "safe-area-inset",
+      "title": "Safe Area Inset",
+      "api": "View.safeAreaInset(edge:alignment:spacing:content:)",
+      "summary": "Insets the view's safe area by an auxiliary view pinned to an edge (e.g. a floating bar over a scroll view).",
+      "minOS": "iOS 15.0 / macOS 12.0 / tvOS 15.0 / watchOS 8.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "edge",
+          "swiftType": "VerticalEdge | HorizontalEdge",
+          "control": "picker",
+          "options": [
+            "top",
+            "bottom",
+            "leading",
+            "trailing"
+          ],
+          "defaultValue": "bottom",
+          "notes": "Edge the auxiliary content pins to. Vertical edges (top/bottom) and horizontal edges (leading/trailing) use different overloads."
+        },
+        {
+          "name": "alignment",
+          "swiftType": "HorizontalAlignment | VerticalAlignment",
+          "control": "picker",
+          "options": [
+            "center",
+            "leading",
+            "trailing",
+            "top",
+            "bottom"
+          ],
+          "defaultValue": "center",
+          "notes": "Alignment of the inset content along the cross axis."
+        },
+        {
+          "name": "spacing",
+          "swiftType": "CGFloat?",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "0",
+          "notes": "Range 0...32. Gap between the primary content and the inset view; nil uses the default."
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Use this to keep content clear of floating controls (toolbars, action bars). Scrollable content correctly insets so the last items remain reachable above the bar.",
+      "codeTemplate": "ScrollView {\n    contentRows\n}\n.safeAreaInset(edge: .{edge}, alignment: .{alignment}, spacing: {spacing}) {\n    BottomBar()\n}"
+    },
+    {
+      "id": "safe-area-padding",
+      "title": "Safe Area Padding",
+      "api": "View.safeAreaPadding(_:_:)",
+      "summary": "Extends the safe area by a fixed amount on the chosen edges without inserting an auxiliary view.",
+      "minOS": "iOS 17.0 / macOS 14.0 / tvOS 17.0 / watchOS 10.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "edges",
+          "swiftType": "Edge.Set",
+          "control": "picker",
+          "options": [
+            "all",
+            "horizontal",
+            "vertical",
+            "top",
+            "bottom",
+            "leading",
+            "trailing"
+          ],
+          "defaultValue": "horizontal",
+          "notes": "Edges to pad within the safe area."
+        },
+        {
+          "name": "length",
+          "swiftType": "CGFloat?",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "16",
+          "notes": "Range 0...48. nil uses the system default padding."
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Prefer over manual padding when you want scroll content to respect added margins while still scrolling edge-to-edge. Common for horizontally scrolling carousels.",
+      "codeTemplate": "ScrollView(.horizontal) {\n    LazyHStack { cards }\n}\n.safeAreaPadding(.{edges}, {length})"
+    },
+    {
+      "id": "container-relative-frame",
+      "title": "Container Relative Frame",
+      "api": "View.containerRelativeFrame(_:alignment:)",
+      "summary": "Sizes a view relative to its nearest container (scroll view, window) rather than its immediate parent, optionally dividing into spaced columns.",
+      "minOS": "iOS 17.0 / macOS 14.0 / tvOS 17.0 / watchOS 10.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "axes",
+          "swiftType": "Axis.Set",
+          "control": "segmented",
+          "options": [
+            "horizontal",
+            "vertical",
+            "[.horizontal, .vertical]"
+          ],
+          "defaultValue": "horizontal",
+          "notes": "Which axes are sized relative to the container."
+        },
+        {
+          "name": "count",
+          "swiftType": "Int",
+          "control": "stepper",
+          "options": [],
+          "defaultValue": "1",
+          "notes": "Range 1...5. Divides the container into N columns/rows (count:span:spacing: overload)."
+        },
+        {
+          "name": "span",
+          "swiftType": "Int",
+          "control": "stepper",
+          "options": [],
+          "defaultValue": "1",
+          "notes": "Range 1...5. How many of the N divisions this view spans."
+        },
+        {
+          "name": "spacing",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "8",
+          "notes": "Range 0...32. Gap between divisions when count > 1."
+        },
+        {
+          "name": "alignment",
+          "swiftType": "Alignment",
+          "control": "picker",
+          "options": [
+            "center",
+            "leading",
+            "trailing",
+            "top",
+            "bottom"
+          ],
+          "defaultValue": "center",
+          "notes": "Alignment of content within the resolved frame."
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "The modern way to build snapping carousels: combine with .scrollTargetBehavior(.viewAligned). Use count/span to show fractional peeks of the next card.",
+      "codeTemplate": "ScrollView(.horizontal) {\n    LazyHStack {\n        ForEach(items) { item in\n            Card(item)\n                .containerRelativeFrame(.{axes}, count: {count}, span: {span}, spacing: {spacing}, alignment: .{alignment})\n        }\n    }\n}"
+    },
+    {
+      "id": "ignores-safe-area",
+      "title": "Ignores Safe Area",
+      "api": "View.ignoresSafeArea(_:edges:)",
+      "summary": "Lets the view extend under the safe area (notch, home indicator, keyboard) on the specified regions and edges.",
+      "minOS": "iOS 14.0 / macOS 11.0 / tvOS 14.0 / watchOS 7.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "regions",
+          "swiftType": "SafeAreaRegions",
+          "control": "picker",
+          "options": [
+            "all",
+            "container",
+            "keyboard"
+          ],
+          "defaultValue": "all",
+          "notes": "Which safe-area regions to ignore. .keyboard prevents content shifting when the keyboard appears."
+        },
+        {
+          "name": "edges",
+          "swiftType": "Edge.Set",
+          "control": "picker",
+          "options": [
+            "all",
+            "horizontal",
+            "vertical",
+            "top",
+            "bottom",
+            "leading",
+            "trailing"
+          ],
+          "defaultValue": "all",
+          "notes": "Edges on which to extend beyond the safe area."
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Reserve for full-bleed backgrounds and media. Never place interactive controls or critical text in the ignored region — keep them within the safe area.",
+      "codeTemplate": "Color.accentColor\n    .ignoresSafeArea(.{regions}, edges: .{edges})"
+    },
+    {
+      "id": "foreground-style",
+      "title": "Foreground Style",
+      "api": "View.foregroundStyle(_:)",
+      "summary": "Sets the style (color, hierarchical level, gradient, or material) used to fill foreground content such as text and symbols.",
+      "minOS": "iOS 15.0 / macOS 12.0 / tvOS 15.0 / watchOS 8.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "primary",
+          "swiftType": "ShapeStyle",
+          "control": "menu",
+          "options": [
+            ".tint",
+            ".primary",
+            ".secondary",
+            ".tertiary",
+            ".quaternary",
+            "Color.accentColor",
+            "LinearGradient",
+            "AngularGradient",
+            ".white",
+            ".black"
+          ],
+          "defaultValue": ".tint",
+          "notes": "Primary fill style. Hierarchical styles (.secondary etc.) adapt to context. Supports up to three layered styles via the multi-argument overload."
+        },
+        {
+          "name": "color",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "options": [],
+          "defaultValue": "Color.accentColor",
+          "notes": "Live color when a solid Color is chosen for primary."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled"
+      ],
+      "styles": [],
+      "higNotes": "Prefer hierarchical styles (.secondary/.tertiary) and semantic colors over raw .white/.black so content adapts to Dark Mode and vibrancy. Supersedes the deprecated foregroundColor.",
+      "codeTemplate": "Label(\"Styled\", systemImage: \"star.fill\")\n    .foregroundStyle({primary})"
+    },
+    {
+      "id": "background",
+      "title": "Background",
+      "api": "View.background(_:in:fillStyle:) / background(alignment:content:)",
+      "summary": "Layers a style or view behind the modified view, optionally clipped to a shape; can also extend into ignored safe-area edges.",
+      "minOS": "iOS 15.0 / macOS 12.0 / tvOS 15.0 / watchOS 8.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "style",
+          "swiftType": "ShapeStyle",
+          "control": "menu",
+          "options": [
+            ".regularMaterial",
+            ".thinMaterial",
+            ".ultraThinMaterial",
+            ".thickMaterial",
+            ".ultraThickMaterial",
+            ".background",
+            "Color.gray.opacity(0.15)",
+            "LinearGradient"
+          ],
+          "defaultValue": ".regularMaterial",
+          "notes": "Background fill. Materials provide system blur; provide an opaque fallback for Reduce Transparency."
+        },
+        {
+          "name": "shape",
+          "swiftType": "Shape",
+          "control": "picker",
+          "options": [
+            "Rectangle()",
+            "RoundedRectangle(cornerRadius: 12)",
+            "Capsule()",
+            "Circle()",
+            ".rect(cornerRadius: 12)"
+          ],
+          "defaultValue": "RoundedRectangle(cornerRadius: 12)",
+          "notes": "Optional clip shape for the background fill (the in: parameter)."
+        },
+        {
+          "name": "alignment",
+          "swiftType": "Alignment",
+          "control": "picker",
+          "options": [
+            "center",
+            "leading",
+            "trailing",
+            "top",
+            "bottom",
+            "topTrailing"
+          ],
+          "defaultValue": "center",
+          "notes": "Alignment of a background view built with the @ViewBuilder overload."
+        }
+      ],
+      "states": [
+        "default",
+        "selected"
+      ],
+      "styles": [],
+      "higNotes": "Use materials for layered, translucent surfaces; always supply an opaque fallback under Reduce Transparency. Avoid raw .white/.black backgrounds — use semantic .background or design tokens.",
+      "codeTemplate": "Text(\"Card\")\n    .padding()\n    .background({style}, in: {shape})"
+    },
+    {
+      "id": "overlay",
+      "title": "Overlay",
+      "api": "View.overlay(_:in:fillStyle:) / overlay(alignment:content:)",
+      "summary": "Layers a style or view in front of the modified view, sized to match it, aligned by the given alignment.",
+      "minOS": "iOS 15.0 / macOS 12.0 / tvOS 15.0 / watchOS 8.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "style",
+          "swiftType": "ShapeStyle",
+          "control": "menu",
+          "options": [
+            ".tint",
+            "Color.black.opacity(0.2)",
+            "LinearGradient",
+            ".ultraThinMaterial"
+          ],
+          "defaultValue": "Color.black.opacity(0.2)",
+          "notes": "Overlay fill when using the style+shape overload (e.g. a scrim or stroke gradient)."
+        },
+        {
+          "name": "shape",
+          "swiftType": "Shape",
+          "control": "picker",
+          "options": [
+            "Rectangle()",
+            "RoundedRectangle(cornerRadius: 12)",
+            "Capsule()",
+            "Circle()"
+          ],
+          "defaultValue": "RoundedRectangle(cornerRadius: 12)",
+          "notes": "Clip shape for the style overlay."
+        },
+        {
+          "name": "alignment",
+          "swiftType": "Alignment",
+          "control": "picker",
+          "options": [
+            "center",
+            "topTrailing",
+            "bottomTrailing",
+            "topLeading",
+            "bottomLeading",
+            "bottom"
+          ],
+          "defaultValue": "topTrailing",
+          "notes": "Alignment for a @ViewBuilder overlay, e.g. a badge in the corner."
+        }
+      ],
+      "states": [
+        "default",
+        "selected"
+      ],
+      "styles": [],
+      "higNotes": "Ideal for badges, strokes, and scrims that must track the host view's size. Keep overlays non-interactive unless intended; combine with allowsHitTesting(false) for decorative layers.",
+      "codeTemplate": "Image(\"avatar\")\n    .overlay(alignment: .{alignment}) {\n        Circle().fill(.green).frame(width: 14, height: 14)\n    }"
+    },
+    {
+      "id": "border",
+      "title": "Border",
+      "api": "View.border(_:width:)",
+      "summary": "Draws a rectangular border of the given style and width along the view's edges.",
+      "minOS": "iOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "content",
+          "swiftType": "ShapeStyle",
+          "control": "colorPicker",
+          "options": [],
+          "defaultValue": "Color.accentColor",
+          "notes": "Border style — typically a Color, but any ShapeStyle works."
+        },
+        {
+          "name": "width",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "1",
+          "notes": "Range 0...12. Border line width."
+        }
+      ],
+      "states": [
+        "default",
+        "focused"
+      ],
+      "styles": [],
+      "higNotes": "border draws a square-cornered stroke that ignores clip shapes. For rounded borders use .overlay(RoundedRectangle().stroke(...)) instead.",
+      "codeTemplate": "Text(\"Bordered\")\n    .padding()\n    .border({content}, width: {width})"
+    },
+    {
+      "id": "clip-shape",
+      "title": "Clip Shape",
+      "api": "View.clipShape(_:style:)",
+      "summary": "Clips the view to the outline of any Shape, hiding anything outside the shape's path.",
+      "minOS": "iOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "shape",
+          "swiftType": "Shape",
+          "control": "picker",
+          "options": [
+            "Circle()",
+            "Capsule()",
+            "RoundedRectangle(cornerRadius: 16)",
+            ".rect(cornerRadius: 16)",
+            "Ellipse()",
+            ".rect(topLeadingRadius: 16, bottomTrailingRadius: 16)"
+          ],
+          "defaultValue": "RoundedRectangle(cornerRadius: 16)",
+          "notes": "The clipping shape. Use .rect(cornerRadii:) for per-corner control."
+        },
+        {
+          "name": "style",
+          "swiftType": "FillStyle",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "FillStyle()",
+          "notes": "Anti-aliasing / even-odd fill rule. Default is fine for most cases."
+        }
+      ],
+      "states": [
+        "default",
+        "longContent"
+      ],
+      "styles": [],
+      "higNotes": "Preferred replacement for the deprecated cornerRadius modifier. Apply before shadow so the shadow follows the clipped silhouette.",
+      "codeTemplate": "Image(\"photo\")\n    .resizable()\n    .scaledToFill()\n    .frame(width: 120, height: 120)\n    .clipShape({shape})"
+    },
+    {
+      "id": "clipped",
+      "title": "Clipped",
+      "api": "View.clipped(antialiased:)",
+      "summary": "Clips the view to its own bounding rectangle, hiding content that overflows the frame.",
+      "minOS": "iOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "antialiased",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "Smooths the clip edge at a small performance cost."
+        }
+      ],
+      "states": [
+        "default",
+        "longContent"
+      ],
+      "styles": [],
+      "higNotes": "Use to prevent oversized children (e.g. a scaled image) from spilling past their frame. For non-rectangular clips, use clipShape.",
+      "codeTemplate": "Image(\"photo\")\n    .resizable()\n    .scaledToFill()\n    .frame(width: 100, height: 100)\n    .clipped(antialiased: {antialiased})"
+    },
+    {
+      "id": "corner-radius",
+      "title": "Corner Radius (Deprecated)",
+      "api": "View.cornerRadius(_:antialiased:)",
+      "summary": "Clips the view to a rounded rectangle of the given radius. Deprecated as of OS 26.5 — use clipShape or fill instead.",
+      "minOS": "iOS 13.0 (deprecated 26.5) / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "radius",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "12",
+          "notes": "Range 0...48. Corner radius applied uniformly to all four corners."
+        },
+        {
+          "name": "antialiased",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "true",
+          "notes": "Smooths the rounded edges."
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Deprecated in OS 26.5. Migrate to .clipShape(.rect(cornerRadius:)) or .clipShape(RoundedRectangle(cornerRadius:)). Include in the showroom only as a labeled legacy/deprecated example.",
+      "codeTemplate": "Color.accentColor\n    .frame(width: 120, height: 80)\n    .cornerRadius({radius}, antialiased: {antialiased})"
+    },
+    {
+      "id": "mask",
+      "title": "Mask",
+      "api": "View.mask(alignment:_:)",
+      "summary": "Uses the alpha channel of a mask view to control which parts of the modified view are visible.",
+      "minOS": "iOS 15.0 / macOS 12.0 / tvOS 15.0 / watchOS 8.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "alignment",
+          "swiftType": "Alignment",
+          "control": "picker",
+          "options": [
+            "center",
+            "leading",
+            "trailing",
+            "top",
+            "bottom"
+          ],
+          "defaultValue": "center",
+          "notes": "Alignment of the mask content relative to the masked view."
+        },
+        {
+          "name": "maskShape",
+          "swiftType": "View",
+          "control": "picker",
+          "options": [
+            "LinearGradient(...)",
+            "Circle()",
+            "Text(\"MASK\")",
+            "RoundedRectangle(cornerRadius: 16)"
+          ],
+          "defaultValue": "LinearGradient(...)",
+          "notes": "The mask content; opaque areas show the view, transparent areas hide it. Gradient masks create fades."
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Great for gradient fade-outs at scroll edges and shaped reveals. Heavy masks can be expensive; pair with drawingGroup() if animating.",
+      "codeTemplate": "Image(\"photo\")\n    .resizable()\n    .mask(alignment: .{alignment}) {\n        {maskShape}\n    }"
+    },
+    {
+      "id": "shadow",
+      "title": "Shadow",
+      "api": "View.shadow(color:radius:x:y:)",
+      "summary": "Draws a drop shadow behind the view with configurable color, blur radius, and offset.",
+      "minOS": "iOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "color",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "options": [],
+          "defaultValue": "Color.black.opacity(0.33)",
+          "notes": "Shadow color including its opacity."
+        },
+        {
+          "name": "radius",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "8",
+          "notes": "Range 0...40. Blur radius of the shadow."
+        },
+        {
+          "name": "x",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "0",
+          "notes": "Range -20...20. Horizontal offset."
+        },
+        {
+          "name": "y",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "4",
+          "notes": "Range -20...20. Vertical offset."
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Use subtle shadows for elevation; keep them consistent via design tokens. Apply after clipShape so the shadow follows the clipped outline. For inner/colored shadows on shapes use .shadow(.inner(...)) ShapeStyle modifiers.",
+      "codeTemplate": "Text(\"Elevated\")\n    .padding()\n    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))\n    .shadow(color: {color}, radius: {radius}, x: {x}, y: {y})"
+    },
+    {
+      "id": "opacity",
+      "title": "Opacity",
+      "api": "View.opacity(_:)",
+      "summary": "Sets the transparency of the view and all its content, from fully transparent (0) to fully opaque (1).",
+      "minOS": "iOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "opacity",
+          "swiftType": "Double",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "1.0",
+          "notes": "Range 0...1. Multiplies the existing opacity of the content."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled"
+      ],
+      "styles": [],
+      "higNotes": "Use for fades and disabled-state dimming. Avoid driving opacity to 0 to 'hide' interactive views — they remain hittable; use conditional rendering or allowsHitTesting(false).",
+      "codeTemplate": "Text(\"Faded\")\n    .opacity({opacity})"
+    },
+    {
+      "id": "tint",
+      "title": "Tint",
+      "api": "View.tint(_:)",
+      "summary": "Overrides the accent color for controls within the view hierarchy (buttons, toggles, progress, selection).",
+      "minOS": "iOS 15.0 / macOS 12.0 / tvOS 15.0 / watchOS 8.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "tint",
+          "swiftType": "Color?",
+          "control": "colorPicker",
+          "options": [],
+          "defaultValue": "Color.accentColor",
+          "notes": "Tint applied to controls. Some overloads accept any ShapeStyle. nil reverts to the inherited accent."
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Prefer tint over deprecated accentColor. Use sparingly and consistently; the system tint already conveys interactivity, so reserve custom tints for brand or semantic meaning.",
+      "codeTemplate": "VStack {\n    Toggle(\"On\", isOn: $flag)\n    Button(\"Action\") {}\n}\n.tint({tint})"
+    },
+    {
+      "id": "glass-effect",
+      "title": "Glass Effect (Liquid Glass)",
+      "api": "View.glassEffect(_:in:isEnabled:)",
+      "summary": "Applies a Liquid Glass material to the view — a dynamic translucent surface that refracts and reflects its surroundings.",
+      "minOS": "iOS 26.0 / macOS 26.0 / tvOS 26.0 / watchOS 26.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "glass",
+          "swiftType": "Glass",
+          "control": "menu",
+          "options": [
+            ".regular",
+            ".clear",
+            ".identity",
+            ".regular.tint(.blue)",
+            ".regular.interactive()"
+          ],
+          "defaultValue": ".regular",
+          "notes": "Glass variant. Chain .tint(_:) and .interactive(_:) for tinted/interactive glass."
+        },
+        {
+          "name": "shape",
+          "swiftType": "Shape",
+          "control": "picker",
+          "options": [
+            "Capsule()",
+            "RoundedRectangle(cornerRadius: 20)",
+            "Circle()",
+            ".rect(cornerRadius: 16)"
+          ],
+          "defaultValue": "Capsule()",
+          "notes": "Shape the glass is clipped to (the in: parameter). Defaults to Capsule when omitted."
+        },
+        {
+          "name": "isEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "true",
+          "notes": "Toggles the glass effect on/off without removing the modifier."
+        }
+      ],
+      "states": [
+        "default",
+        "selected",
+        "disabled"
+      ],
+      "styles": [
+        ".regular",
+        ".clear",
+        ".identity"
+      ],
+      "higNotes": "Adopt for floating controls and overlays per iOS 26 design. Group adjacent glass elements in a GlassEffectContainer for correct blending and morphing. Always gate with #available(iOS 26, *) and provide a material fallback.",
+      "codeTemplate": "Image(systemName: \"star.fill\")\n    .padding()\n    .glassEffect({glass}, in: {shape}, isEnabled: {isEnabled})"
+    },
+    {
+      "id": "background-extension-effect",
+      "title": "Background Extension Effect",
+      "api": "View.backgroundExtensionEffect()",
+      "summary": "Extends the view's content beyond the safe area by mirroring and blurring its edges, creating a seamless full-bleed backdrop (iOS 26).",
+      "minOS": "iOS 26.0 / macOS 26.0 / tvOS 26.0 / watchOS 26.0 / visionOS 26.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "enabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "true",
+          "notes": "Showroom toggle to apply/remove the modifier and compare against a plain background."
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Designed to pair with edge-to-edge media and Liquid Glass layouts so artwork bleeds gracefully under sidebars and toolbars. Use behind imagery, not behind legible text.",
+      "codeTemplate": "Image(\"hero\")\n    .resizable()\n    .scaledToFill()\n    .backgroundExtensionEffect()"
+    },
+    {
+      "id": "rotation-effect",
+      "title": "Rotation Effect (2D)",
+      "api": "View.rotationEffect(_:anchor:)",
+      "summary": "Rotates the view in 2D by an angle around an anchor point, without affecting layout.",
+      "minOS": "iOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "angle",
+          "swiftType": "Angle",
+          "control": "slider",
+          "options": [],
+          "defaultValue": ".degrees(0)",
+          "notes": "Range -360...360 degrees. Positive is clockwise."
+        },
+        {
+          "name": "anchor",
+          "swiftType": "UnitPoint",
+          "control": "picker",
+          "options": [
+            "center",
+            "topLeading",
+            "top",
+            "topTrailing",
+            "leading",
+            "trailing",
+            "bottomLeading",
+            "bottom",
+            "bottomTrailing"
+          ],
+          "defaultValue": "center",
+          "notes": "Point the rotation pivots around."
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Layout footprint stays at the unrotated bounds. Combine with animation for spinners; guard looping rotations with accessibilityReduceMotion.",
+      "codeTemplate": "Image(systemName: \"arrow.up\")\n    .rotationEffect({angle}, anchor: .{anchor})"
+    },
+    {
+      "id": "scale-effect",
+      "title": "Scale Effect",
+      "api": "View.scaleEffect(_:anchor:)",
+      "summary": "Scales the view by independent x/y factors around an anchor, without affecting its layout footprint.",
+      "minOS": "iOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "scaleX",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "1.0",
+          "notes": "Range 0...3. Horizontal scale factor. Use the single-CGFloat overload for uniform scaling."
+        },
+        {
+          "name": "scaleY",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "1.0",
+          "notes": "Range 0...3. Vertical scale factor."
+        },
+        {
+          "name": "anchor",
+          "swiftType": "UnitPoint",
+          "control": "picker",
+          "options": [
+            "center",
+            "topLeading",
+            "top",
+            "topTrailing",
+            "leading",
+            "trailing",
+            "bottomLeading",
+            "bottom",
+            "bottomTrailing"
+          ],
+          "defaultValue": "center",
+          "notes": "Point that stays fixed while scaling."
+        }
+      ],
+      "states": [
+        "default",
+        "selected"
+      ],
+      "styles": [],
+      "higNotes": "Use for press feedback and emphasis. Scaling raster images blurs them; scale vector content where possible. Layout footprint remains unscaled.",
+      "codeTemplate": "Image(systemName: \"heart.fill\")\n    .scaleEffect(x: {scaleX}, y: {scaleY}, anchor: .{anchor})"
+    },
+    {
+      "id": "rotation-3d-effect",
+      "title": "Rotation 3D Effect",
+      "api": "View.rotation3DEffect(_:axis:anchor:anchorZ:perspective:)",
+      "summary": "Rotates the view in 3D around an arbitrary axis with optional perspective foreshortening.",
+      "minOS": "iOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0 (perspective variant deprecated on visionOS)",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "angle",
+          "swiftType": "Angle",
+          "control": "slider",
+          "options": [],
+          "defaultValue": ".degrees(0)",
+          "notes": "Range -180...180 degrees."
+        },
+        {
+          "name": "axis",
+          "swiftType": "(x: CGFloat, y: CGFloat, z: CGFloat)",
+          "control": "segmented",
+          "options": [
+            "(1,0,0)",
+            "(0,1,0)",
+            "(0,0,1)"
+          ],
+          "defaultValue": "(0,1,0)",
+          "notes": "Rotation axis. (0,1,0) flips horizontally like a card."
+        },
+        {
+          "name": "anchor",
+          "swiftType": "UnitPoint",
+          "control": "picker",
+          "options": [
+            "center",
+            "leading",
+            "trailing",
+            "top",
+            "bottom"
+          ],
+          "defaultValue": "center",
+          "notes": "Anchor point of the rotation in the view plane."
+        },
+        {
+          "name": "anchorZ",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "0",
+          "notes": "Range -100...100. Z-depth of the anchor."
+        },
+        {
+          "name": "perspective",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "1",
+          "notes": "Range 0...2. Strength of perspective foreshortening. Deprecated on visionOS; use the no-perspective overload there."
+        }
+      ],
+      "states": [
+        "default",
+        "selected"
+      ],
+      "styles": [],
+      "higNotes": "Use for card flips and depth transitions. On visionOS prefer rotation3DEffect without perspective. Guard continuous 3D animation with accessibilityReduceMotion.",
+      "codeTemplate": "CardFront()\n    .rotation3DEffect({angle}, axis: (x: {axis.x}, y: {axis.y}, z: {axis.z}), anchor: .{anchor}, anchorZ: {anchorZ}, perspective: {perspective})"
+    },
+    {
+      "id": "projection-effect",
+      "title": "Projection Effect",
+      "api": "View.projectionEffect(_:)",
+      "summary": "Applies an arbitrary 3D ProjectionTransform (CATransform3D-style matrix) to the view.",
+      "minOS": "iOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "transform",
+          "swiftType": "ProjectionTransform",
+          "control": "menu",
+          "options": [
+            "ProjectionTransform(CGAffineTransform(scaleX: 1.2, y: 1))",
+            "ProjectionTransform(CGAffineTransform(rotationAngle: .pi/6))",
+            "ProjectionTransform()"
+          ],
+          "defaultValue": "ProjectionTransform()",
+          "notes": "The 3x3 projection matrix to apply. For common cases prefer rotationEffect/scaleEffect."
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Low-level; reach for the named transform modifiers first. Use projectionEffect only for custom matrices (skews, shears) not expressible otherwise.",
+      "codeTemplate": "Text(\"Projected\")\n    .projectionEffect({transform})"
+    },
+    {
+      "id": "transform-effect",
+      "title": "Transform Effect (2D Affine)",
+      "api": "View.transformEffect(_:)",
+      "summary": "Applies a 2D affine transform (translate, scale, rotate, skew) to the view's rendering.",
+      "minOS": "iOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "transform",
+          "swiftType": "CGAffineTransform",
+          "control": "menu",
+          "options": [
+            ".identity",
+            "CGAffineTransform(rotationAngle: .pi/8)",
+            "CGAffineTransform(scaleX: 1.5, y: 1)",
+            "CGAffineTransform(a: 1, b: 0, c: 0.3, d: 1, tx: 0, ty: 0)"
+          ],
+          "defaultValue": ".identity",
+          "notes": "The affine matrix. The last option demonstrates a horizontal skew."
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Useful for skews and combined affine transforms. Does not affect layout. For simple rotate/scale, prefer the dedicated modifiers for clarity and animatability.",
+      "codeTemplate": "Text(\"Skewed\")\n    .transformEffect({transform})"
+    },
+    {
+      "id": "blur",
+      "title": "Blur",
+      "api": "View.blur(radius:opaque:)",
+      "summary": "Applies a Gaussian blur to the view's rendered content.",
+      "minOS": "iOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "radius",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "0",
+          "notes": "Range 0...30. Larger radius blurs more."
+        },
+        {
+          "name": "opaque",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "When true, treats edge pixels as opaque, avoiding transparent fringing."
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Blur is GPU-bound; avoid animating large blurred areas every frame. For frosted backgrounds prefer Materials over manual blur, which adapt to vibrancy and Reduce Transparency.",
+      "codeTemplate": "Image(\"photo\")\n    .blur(radius: {radius}, opaque: {opaque})"
+    },
+    {
+      "id": "brightness",
+      "title": "Brightness",
+      "api": "View.brightness(_:)",
+      "summary": "Adds a constant to each color channel, lightening (positive) or darkening (negative) the view.",
+      "minOS": "iOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "amount",
+          "swiftType": "Double",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "0",
+          "notes": "Range -1...1. 0 leaves the view unchanged; 1 forces white, -1 forces black."
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "A simple additive adjustment, not perceptual. For press states prefer opacity or overlay scrims, which read more naturally than raw brightness shifts.",
+      "codeTemplate": "Image(\"photo\")\n    .brightness({amount})"
+    },
+    {
+      "id": "contrast",
+      "title": "Contrast",
+      "api": "View.contrast(_:)",
+      "summary": "Multiplies the color separation from gray, increasing (>1) or decreasing (<1) contrast.",
+      "minOS": "iOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "amount",
+          "swiftType": "Double",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "1",
+          "notes": "Range 0...3. 1 is unchanged; 0 collapses to gray; negative inverts."
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Distinct from the system Increase Contrast accessibility setting (read via accessibilityContrast). Use this modifier only for deliberate visual effects, not to satisfy contrast requirements.",
+      "codeTemplate": "Image(\"photo\")\n    .contrast({amount})"
+    },
+    {
+      "id": "saturation",
+      "title": "Saturation",
+      "api": "View.saturation(_:)",
+      "summary": "Adjusts color intensity; 0 produces grayscale, values above 1 oversaturate.",
+      "minOS": "iOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "amount",
+          "swiftType": "Double",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "1",
+          "notes": "Range 0...2. 0 is grayscale; 1 is unchanged."
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Useful for de-emphasizing inactive media (e.g. desaturate a disabled thumbnail). Combine with opacity for a clear disabled affordance.",
+      "codeTemplate": "Image(\"photo\")\n    .saturation({amount})"
+    },
+    {
+      "id": "grayscale",
+      "title": "Grayscale",
+      "api": "View.grayscale(_:)",
+      "summary": "Desaturates the view toward gray by the given amount.",
+      "minOS": "iOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "amount",
+          "swiftType": "Double",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "0",
+          "notes": "Range 0...1. 0 unchanged; 1 fully gray."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled"
+      ],
+      "styles": [],
+      "higNotes": "Idiomatic for indicating disabled or inactive imagery. Pair with reduced opacity for a stronger disabled read.",
+      "codeTemplate": "Image(\"photo\")\n    .grayscale({amount})"
+    },
+    {
+      "id": "color-invert",
+      "title": "Color Invert",
+      "api": "View.colorInvert()",
+      "summary": "Inverts each color channel of the view's content.",
+      "minOS": "iOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "enabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "Showroom toggle to apply/remove the inversion for before/after comparison."
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "A blunt effect; rarely appropriate for production UI. Do not use to fake Dark Mode — adopt semantic colors and color schemes instead.",
+      "codeTemplate": "Image(\"photo\")\n    .colorInvert()"
+    },
+    {
+      "id": "color-multiply",
+      "title": "Color Multiply",
+      "api": "View.colorMultiply(_:)",
+      "summary": "Multiplies the view's colors by a tint color, darkening toward that hue.",
+      "minOS": "iOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "color",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "options": [],
+          "defaultValue": "Color.white",
+          "notes": ".white leaves content unchanged; darker/colored values tint and darken it."
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Multiply blending only darkens. To tint white artwork toward a brand color, prefer foregroundStyle on template/symbol images for crisper, more predictable results.",
+      "codeTemplate": "Image(\"photo\")\n    .colorMultiply({color})"
+    },
+    {
+      "id": "hue-rotation",
+      "title": "Hue Rotation",
+      "api": "View.hueRotation(_:)",
+      "summary": "Shifts every color's hue around the color wheel by the given angle.",
+      "minOS": "iOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "angle",
+          "swiftType": "Angle",
+          "control": "slider",
+          "options": [],
+          "defaultValue": ".degrees(0)",
+          "notes": "Range 0...360 degrees. Animatable for rainbow cycling effects."
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Fun for playful, animated accents but disorienting if overused. Guard any continuous hue cycling with accessibilityReduceMotion.",
+      "codeTemplate": "Image(\"photo\")\n    .hueRotation({angle})"
+    },
+    {
+      "id": "blend-mode",
+      "title": "Blend Mode",
+      "api": "View.blendMode(_:)",
+      "summary": "Sets how the view composites with the content behind it (multiply, screen, overlay, etc.).",
+      "minOS": "iOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "blendMode",
+          "swiftType": "BlendMode",
+          "control": "picker",
+          "options": [
+            "normal",
+            "multiply",
+            "screen",
+            "overlay",
+            "darken",
+            "lighten",
+            "colorDodge",
+            "colorBurn",
+            "softLight",
+            "hardLight",
+            "difference",
+            "exclusion",
+            "hue",
+            "saturation",
+            "color",
+            "luminosity",
+            "sourceAtop",
+            "destinationOver",
+            "destinationOut",
+            "plusDarker",
+            "plusLighter"
+          ],
+          "defaultValue": "normal",
+          "notes": "Compositing operation against the backdrop."
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Blend modes composite against whatever is behind the view, so results depend on the backdrop. Wrap interacting layers in compositingGroup() to control the blending scope.",
+      "codeTemplate": "Text(\"BLEND\")\n    .font(.largeTitle.bold())\n    .blendMode(.{blendMode})"
+    },
+    {
+      "id": "compositing-group",
+      "title": "Compositing Group",
+      "api": "View.compositingGroup()",
+      "summary": "Renders the view and its children as a single flattened layer before applying effects like opacity, blend mode, or shadow.",
+      "minOS": "iOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "enabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "true",
+          "notes": "Toggle to show how grouping changes how opacity/shadow apply to overlapping children."
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Apply before opacity or shadow when overlapping children would otherwise composite individually (e.g. avoid double-darkened overlaps). Defines the blend scope for blendMode.",
+      "codeTemplate": "ZStack {\n    Circle().fill(.blue)\n    Circle().fill(.red).offset(x: 20)\n}\n.compositingGroup()\n.opacity(0.6)"
+    },
+    {
+      "id": "drawing-group",
+      "title": "Drawing Group (Metal)",
+      "api": "View.drawingGroup(opaque:colorMode:)",
+      "summary": "Flattens the view into an offscreen Metal-rendered image, improving performance for complex composited or animated effects.",
+      "minOS": "iOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "opaque",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "false",
+          "notes": "When true the offscreen buffer has no alpha channel."
+        },
+        {
+          "name": "colorMode",
+          "swiftType": "ColorRenderingMode",
+          "control": "picker",
+          "options": [
+            "nonLinear",
+            "linear",
+            "extendedLinear"
+          ],
+          "defaultValue": "nonLinear",
+          "notes": "Color space used for offscreen rendering."
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "A performance tool for heavy effect stacks (many blurs/gradients/shadows). It rasterizes content, so do not wrap text you need crisp at all scales. Measure before and after; it can hurt simple views.",
+      "codeTemplate": "ComplexGradientArt()\n    .drawingGroup(opaque: {opaque}, colorMode: .{colorMode})"
+    },
+    {
+      "id": "disabled",
+      "title": "Disabled",
+      "api": "View.disabled(_:)",
+      "summary": "Disables user interaction for the view and its controls, dimming them and blocking input.",
+      "minOS": "iOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "disabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "true",
+          "notes": "When true, blocks interaction and applies the disabled appearance. Read inside children via @Environment(\\.isEnabled)."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled"
+      ],
+      "styles": [],
+      "higNotes": "Preferred over manual dimming because it also updates accessibility traits (VoiceOver announces 'dimmed/disabled'). Avoid disabling without explaining why the control is unavailable.",
+      "codeTemplate": "Button(\"Submit\") { submit() }\n    .disabled({disabled})"
+    },
+    {
+      "id": "allows-hit-testing",
+      "title": "Allows Hit Testing",
+      "api": "View.allowsHitTesting(_:)",
+      "summary": "Controls whether the view participates in hit testing; when false, touches pass through to views behind it.",
+      "minOS": "iOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "enabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "true",
+          "notes": "When false, the view (and children) ignore touches but stay visible and enabled-looking."
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Use for purely decorative overlays so they don't intercept taps. Unlike disabled, it does not dim the view or change accessibility traits.",
+      "codeTemplate": "DecorativeOverlay()\n    .allowsHitTesting({enabled})"
+    },
+    {
+      "id": "content-shape",
+      "title": "Content Shape",
+      "api": "View.contentShape(_:_:eoFill:)",
+      "summary": "Defines the hit-testing (and optionally preview/drag) shape of the view, enlarging or restricting its tappable region.",
+      "minOS": "iOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "kind",
+          "swiftType": "ContentShapeKinds",
+          "control": "picker",
+          "options": [
+            "interaction",
+            "contextMenuPreview",
+            "hoverEffect",
+            "dragPreview",
+            "focusEffect",
+            "accessibility"
+          ],
+          "defaultValue": "interaction",
+          "notes": "Which interaction the shape applies to. Default overload applies to .interaction."
+        },
+        {
+          "name": "shape",
+          "swiftType": "Shape",
+          "control": "picker",
+          "options": [
+            "Rectangle()",
+            "RoundedRectangle(cornerRadius: 12)",
+            "Capsule()",
+            "Circle()"
+          ],
+          "defaultValue": "Rectangle()",
+          "notes": "The shape used for hit testing. Rectangle over an HStack makes the whole row tappable, including spacers."
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Use .contentShape(Rectangle()) to make an entire row tappable instead of just its opaque content. Also shapes context-menu/drag previews via the kind parameter.",
+      "codeTemplate": "HStack {\n    Image(systemName: \"folder\")\n    Spacer()\n    Text(\"Files\")\n}\n.contentShape({shape})\n.onTapGesture { open() }"
+    },
+    {
+      "id": "z-index",
+      "title": "Z-Index",
+      "api": "View.zIndex(_:)",
+      "summary": "Sets the front-to-back stacking order of the view within its parent layout (higher draws on top).",
+      "minOS": "iOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "value",
+          "swiftType": "Double",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "0",
+          "notes": "Range -10...10. Default is 0; ties resolve in declaration order."
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Affects sibling ordering within a single container (ZStack/overlay). Essential for keeping a view on top during matchedGeometryEffect/transition animations where default order would clip it.",
+      "codeTemplate": "ZStack {\n    cardA\n    cardB.zIndex({value})\n}"
+    },
+    {
+      "id": "aspect-ratio",
+      "title": "Aspect Ratio",
+      "api": "View.aspectRatio(_:contentMode:)",
+      "summary": "Constrains the view's dimensions to a given width-to-height ratio, fitting or filling the parent context. Pass nil to preserve a resizable view's intrinsic ratio.",
+      "minOS": "iOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "aspectRatio",
+          "swiftType": "CGFloat?",
+          "control": "slider",
+          "options": [],
+          "defaultValue": "1.0",
+          "notes": "Range 0.25...4. Width-to-height ratio. nil keeps the content's own aspect ratio (use a 'set ratio' toggle to expose nil)."
+        },
+        {
+          "name": "contentMode",
+          "swiftType": "ContentMode",
+          "control": "segmented",
+          "options": [
+            "fit",
+            "fill"
+          ],
+          "defaultValue": "fit",
+          "notes": ".fit scales to be fully visible inside the frame; .fill scales to cover it (may overflow — pair with clipped())."
+        }
+      ],
+      "states": [
+        "default",
+        "longContent"
+      ],
+      "styles": [],
+      "higNotes": "The idiomatic way to keep media at a consistent ratio across layouts. There is also an aspectRatio(_:contentMode:) overload that accepts a CGSize. For images, scaledToFit()/scaledToFill() are convenience shorthands.",
+      "codeTemplate": "Image(\"photo\")\n    .resizable()\n    .aspectRatio({aspectRatio}, contentMode: .{contentMode})"
+    },
+    {
+      "id": "scaled-to-fit-fill",
+      "title": "Scaled To Fit / Fill",
+      "api": "View.scaledToFit() / View.scaledToFill()",
+      "summary": "Scales the view to fit inside (or fill) its parent while preserving aspect ratio — convenience shorthands for aspectRatio(nil, contentMode:).",
+      "minOS": "iOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "mode",
+          "swiftType": "ContentMode",
+          "control": "segmented",
+          "options": [
+            "fit",
+            "fill"
+          ],
+          "defaultValue": "fill",
+          "notes": "Selects scaledToFit() (.fit) vs scaledToFill() (.fill). Both are parameterless modifiers; this control just picks which one the showroom applies."
+        }
+      ],
+      "states": [
+        "default",
+        "longContent"
+      ],
+      "styles": [],
+      "higNotes": "scaledToFill() commonly overflows the frame, so combine it with .frame(...) plus .clipped() or .clipShape(...) to crop. scaledToFit() is equivalent to aspectRatio(nil, contentMode: .fit).",
+      "codeTemplate": "Image(\"photo\")\n    .resizable()\n    .scaledToFill()\n    .frame(width: 120, height: 120)\n    .clipped()"
+    },
+    {
+      "id": "redacted",
+      "title": "Redacted",
+      "api": "View.redacted(reason:) / View.unredacted()",
+      "summary": "Applies a redaction (such as a placeholder shimmer) to the view hierarchy, replacing real content with a privacy- or loading-style obscured rendering.",
+      "minOS": "iOS 14.0 / macOS 11.0 / tvOS 14.0 / watchOS 7.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "reason",
+          "swiftType": "RedactionReasons",
+          "control": "picker",
+          "options": [
+            "placeholder",
+            "privacy",
+            "invalidated",
+            "[] (none)"
+          ],
+          "defaultValue": "placeholder",
+          "notes": ".placeholder renders generic shapes (loading skeleton); .privacy obscures sensitive content; [] removes redaction. Read inside children via @Environment(\\.redactionReasons)."
+        }
+      ],
+      "states": [
+        "default",
+        "longContent"
+      ],
+      "styles": [],
+      "higNotes": "The native way to build loading skeletons (.placeholder) and to protect sensitive content while screen sharing (.privacy). Use unredacted() or privacySensitive(_:) to opt subviews in/out. Combine with .redacted on a stub layout for skeleton screens.",
+      "codeTemplate": "VStack(alignment: .leading) {\n    Text(\"Account balance\")\n    Text(\"$1,234.56\").font(.title.bold())\n}\n.redacted(reason: .{reason})"
+    },
+    {
+      "id": "hidden",
+      "title": "Hidden",
+      "api": "View.hidden()",
+      "summary": "Hides the view unconditionally while keeping it in the layout — it occupies space and affects sibling positioning but is not drawn and cannot be interacted with.",
+      "minOS": "iOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "hidden",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "options": [],
+          "defaultValue": "true",
+          "notes": "Showroom toggle to apply/remove .hidden() for before/after comparison. hidden() itself takes no arguments; to conditionally remove a view from layout entirely, use an if statement instead."
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Use to reserve layout space for a view you don't want drawn (e.g. keep an HStack's spacing stable). To omit a view from layout entirely, prefer a conditional `if` over .hidden(). Unlike opacity(0), a hidden view also drops out of hit testing.",
+      "codeTemplate": "HStack {\n    Image(systemName: \"a.circle.fill\")\n    Image(systemName: \"b.circle.fill\")\n        .hidden()\n    Image(systemName: \"c.circle.fill\")\n}"
+    }
+  ]
+}

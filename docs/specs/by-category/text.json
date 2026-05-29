@@ -1,0 +1,963 @@
+{
+  "category": "Text & Labels",
+  "key": "text",
+  "folder": "Text",
+  "components": [
+    {
+      "id": "text",
+      "title": "Text",
+      "api": "Text",
+      "summary": "Displays one or more lines of read-only text, with full control over font, weight, design, color, spacing, line limits, and truncation.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "summary_note": "",
+      "properties": [
+        {
+          "name": "content",
+          "swiftType": "String",
+          "control": "text",
+          "defaultValue": "\"To be, or not to be, that is the question.\"",
+          "notes": "String literal is treated as a LocalizedStringKey; use init(verbatim:) to bypass localization."
+        },
+        {
+          "name": "font",
+          "swiftType": "Font",
+          "control": "picker",
+          "options": [
+            "largeTitle",
+            "title",
+            "title2",
+            "title3",
+            "headline",
+            "subheadline",
+            "body",
+            "callout",
+            "footnote",
+            "caption",
+            "caption2"
+          ],
+          "defaultValue": "body",
+          "notes": "Use semantic text styles so Dynamic Type scales automatically. Maps via .font(_:)."
+        },
+        {
+          "name": "fontWeight",
+          "swiftType": "Font.Weight",
+          "control": "picker",
+          "options": [
+            "ultraLight",
+            "thin",
+            "light",
+            "regular",
+            "medium",
+            "semibold",
+            "bold",
+            "heavy",
+            "black"
+          ],
+          "defaultValue": "regular",
+          "notes": "Applied with .fontWeight(_:)."
+        },
+        {
+          "name": "fontDesign",
+          "swiftType": "Font.Design",
+          "control": "segmented",
+          "options": [
+            "default",
+            "serif",
+            "rounded",
+            "monospaced"
+          ],
+          "defaultValue": "default",
+          "notes": ".fontDesign(_:) on iOS 16.1+; .monospaced() is a shorthand for monospaced design."
+        },
+        {
+          "name": "fontWidth",
+          "swiftType": "Font.Width",
+          "control": "picker",
+          "options": [
+            "compressed",
+            "condensed",
+            "standard",
+            "expanded"
+          ],
+          "defaultValue": "standard",
+          "notes": ".fontWidth(_:) on iOS 16+."
+        },
+        {
+          "name": "foregroundStyle",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": "primary",
+          "notes": "Prefer .primary / .secondary or design tokens over raw colors. Uses .foregroundStyle(_:)."
+        },
+        {
+          "name": "bold",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": ".bold() modifier."
+        },
+        {
+          "name": "italic",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": ".italic() modifier."
+        },
+        {
+          "name": "underline",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": ".underline(_:) on iOS 16+."
+        },
+        {
+          "name": "strikethrough",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": ".strikethrough(_:) on iOS 16+."
+        },
+        {
+          "name": "lineLimit",
+          "swiftType": "Int?",
+          "control": "stepper",
+          "defaultValue": "nil",
+          "notes": "0 = unlimited; range 1...10 typical. Use .lineLimit(_:) or the range variant .lineLimit(_:reservesSpace:)."
+        },
+        {
+          "name": "truncationMode",
+          "swiftType": "Text.TruncationMode",
+          "control": "segmented",
+          "options": [
+            "head",
+            "middle",
+            "tail"
+          ],
+          "defaultValue": "tail",
+          "notes": "Applies when text exceeds lineLimit. .truncationMode(_:)."
+        },
+        {
+          "name": "multilineTextAlignment",
+          "swiftType": "TextAlignment",
+          "control": "segmented",
+          "options": [
+            "leading",
+            "center",
+            "trailing"
+          ],
+          "defaultValue": "leading",
+          "notes": ".multilineTextAlignment(_:) — affects wrapped multi-line text only."
+        },
+        {
+          "name": "lineSpacing",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "defaultValue": "0",
+          "notes": "Range 0...20. Points of space between wrapped lines via .lineSpacing(_:)."
+        },
+        {
+          "name": "kerning",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "defaultValue": "0",
+          "notes": "Range -5...20. Per-character spacing via .kerning(_:)."
+        },
+        {
+          "name": "tracking",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "defaultValue": "0",
+          "notes": "Range -5...20. Adds spacing after each character; overrides kerning. .tracking(_:)."
+        },
+        {
+          "name": "minimumScaleFactor",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "defaultValue": "1.0",
+          "notes": "Range 0.3...1.0. Allows text to shrink to fit. .minimumScaleFactor(_:)."
+        },
+        {
+          "name": "allowsTightening",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Lets the layout tighten inter-character spacing before truncating. .allowsTightening(_:)."
+        },
+        {
+          "name": "isMarkdown",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "String literals support inline Markdown (**bold**, *italic*, [links]) automatically when localized."
+        },
+        {
+          "name": "textSelection",
+          "swiftType": "TextSelectability",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": ".textSelection(.enabled) makes text user-selectable; iOS 15+."
+        },
+        {
+          "name": "dateReference",
+          "swiftType": "Date",
+          "control": "text",
+          "defaultValue": "Date.now",
+          "notes": "Text has live-updating date/time initializers omitted from the draft. Text(_:style:) renders a self-updating .relative / .timer / .date / .time / .offset string."
+        },
+        {
+          "name": "dateStyle",
+          "swiftType": "Text.DateStyle",
+          "control": "picker",
+          "options": [
+            "date",
+            "time",
+            "relative",
+            "offset",
+            "timer"
+          ],
+          "defaultValue": "relative",
+          "notes": "Used via Text(_:style:) (iOS 15+). .timer and .relative auto-update over time without a Timer."
+        },
+        {
+          "name": "timerInterval",
+          "swiftType": "ClosedRange<Date>",
+          "control": "text",
+          "defaultValue": "Date.now...Date.now.addingTimeInterval(60)",
+          "notes": "Text(timerInterval:pauseTime:countsDown:) renders a count-up/count-down timer that updates automatically. iOS 16+."
+        },
+        {
+          "name": "format",
+          "swiftType": "any FormatStyle",
+          "control": "menu",
+          "options": [
+            "date",
+            "number",
+            "percent",
+            "currency",
+            "measurement",
+            "list"
+          ],
+          "defaultValue": "date",
+          "notes": "Text(_:format:) renders a value through a FormatStyle (e.g. Text(price, format: .currency(code: \"USD\"))). iOS 15+."
+        },
+        {
+          "name": "baselineOffset",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "defaultValue": "0",
+          "notes": "Range -10...10. .baselineOffset(_:) shifts text vertically from its baseline — omitted from the draft though it sits in the same Text layout group as kerning/tracking."
+        },
+        {
+          "name": "textCase",
+          "swiftType": "Text.Case?",
+          "control": "segmented",
+          "options": [
+            "uppercase",
+            "lowercase",
+            "none"
+          ],
+          "defaultValue": "none",
+          "notes": ".textCase(_:) applies upper/lowercasing in a locale-aware way; commonly used on section headers. Omitted from the draft."
+        }
+      ],
+      "states": [
+        "default",
+        "longContent"
+      ],
+      "styles": [],
+      "higNotes": "Use semantic text styles (title, body, caption) so text respects Dynamic Type. Limit decorative weights/designs; never disable Dynamic Type scaling. Keep contrast WCAG-compliant against the background."
+    },
+    {
+      "id": "label",
+      "title": "Label",
+      "api": "Label",
+      "summary": "A standard title + icon pairing for list rows, menus, and toolbar items, with switchable presentation via labelStyle.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 14.0 / iPadOS 14.0 / macOS 11.0 / tvOS 14.0 / watchOS 7.0",
+      "properties": [
+        {
+          "name": "title",
+          "swiftType": "LocalizedStringKey",
+          "control": "text",
+          "defaultValue": "\"Lightning\"",
+          "notes": "Title text; localized when a literal."
+        },
+        {
+          "name": "systemImage",
+          "swiftType": "String",
+          "control": "text",
+          "defaultValue": "\"bolt.fill\"",
+          "notes": "SF Symbol name for the icon. Use init(_:image:) for a custom asset instead."
+        },
+        {
+          "name": "labelStyle",
+          "swiftType": "any LabelStyle",
+          "control": "segmented",
+          "options": [
+            "automatic",
+            "titleAndIcon",
+            "titleOnly",
+            "iconOnly"
+          ],
+          "defaultValue": "automatic",
+          "notes": ".labelStyle(_:) — context decides the automatic presentation (e.g. toolbars show icon-only)."
+        },
+        {
+          "name": "symbolRenderingMode",
+          "swiftType": "SymbolRenderingMode",
+          "control": "picker",
+          "options": [
+            "monochrome",
+            "hierarchical",
+            "palette",
+            "multicolor"
+          ],
+          "defaultValue": "monochrome",
+          "notes": "Applies to the SF Symbol icon. .symbolRenderingMode(_:)."
+        },
+        {
+          "name": "foregroundStyle",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": "primary",
+          "notes": "Tints both title and icon unless overridden per element."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled",
+        "selected"
+      ],
+      "styles": [
+        "DefaultLabelStyle (automatic)",
+        "TitleAndIconLabelStyle (titleAndIcon)",
+        "TitleOnlyLabelStyle (titleOnly)",
+        "IconOnlyLabelStyle (iconOnly)",
+        "ToolbarLabelStyle (titleAndIcon for toolbars, iOS 26+)"
+      ],
+      "higNotes": "Pair a clear SF Symbol with concise text. Let containers choose presentation; only force iconOnly/titleOnly when space or rotation demands. Provide an accessibilityLabel when using iconOnly so VoiceOver reads the meaning."
+    },
+    {
+      "id": "textfield",
+      "title": "TextField",
+      "api": "TextField",
+      "summary": "An editable single- or multi-line text input bound to a string or formatted value, with styles, prompt, axis, and submit configuration.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "properties": [
+        {
+          "name": "titleKey",
+          "swiftType": "LocalizedStringKey",
+          "control": "text",
+          "defaultValue": "\"Username\"",
+          "notes": "Label / placeholder. Used as placeholder on iOS when no prompt is supplied."
+        },
+        {
+          "name": "text",
+          "swiftType": "Binding<String>",
+          "control": "text",
+          "defaultValue": "\"\"",
+          "notes": "Bound value; updates continuously for String, on commit for formatted non-String values."
+        },
+        {
+          "name": "prompt",
+          "swiftType": "Text?",
+          "control": "text",
+          "defaultValue": "nil",
+          "notes": "Guidance text shown as placeholder; pass via prompt: parameter. iOS 15+."
+        },
+        {
+          "name": "axis",
+          "swiftType": "Axis",
+          "control": "segmented",
+          "options": [
+            "horizontal",
+            "vertical"
+          ],
+          "defaultValue": "horizontal",
+          "notes": "axis: .vertical grows to multiple lines (combine with lineLimit range). iOS 16+."
+        },
+        {
+          "name": "textFieldStyle",
+          "swiftType": "any TextFieldStyle",
+          "control": "segmented",
+          "options": [
+            "automatic",
+            "plain",
+            "roundedBorder"
+          ],
+          "defaultValue": "automatic",
+          "notes": "roundedBorder unavailable on tvOS; squareBorder is macOS-only. .textFieldStyle(_:)."
+        },
+        {
+          "name": "lineLimit",
+          "swiftType": "ClosedRange<Int>?",
+          "control": "stepper",
+          "defaultValue": "nil",
+          "notes": "Used with axis: .vertical, e.g. .lineLimit(1...5). iOS 16+."
+        },
+        {
+          "name": "submitLabel",
+          "swiftType": "SubmitLabel",
+          "control": "picker",
+          "options": [
+            "done",
+            "go",
+            "send",
+            "join",
+            "route",
+            "search",
+            "return",
+            "next",
+            "continue"
+          ],
+          "defaultValue": "return",
+          "notes": ".submitLabel(_:) sets the keyboard return-key text. iOS 15+."
+        },
+        {
+          "name": "keyboardType",
+          "swiftType": "UIKeyboardType",
+          "control": "picker",
+          "options": [
+            "default",
+            "asciiCapable",
+            "numbersAndPunctuation",
+            "URL",
+            "numberPad",
+            "phonePad",
+            "namePhonePad",
+            "emailAddress",
+            "decimalPad",
+            "twitter",
+            "webSearch"
+          ],
+          "defaultValue": "default",
+          "notes": "iOS/iPadOS only. .keyboardType(_:)."
+        },
+        {
+          "name": "textContentType",
+          "swiftType": "UITextContentType?",
+          "control": "picker",
+          "options": [
+            "none",
+            "username",
+            "password",
+            "newPassword",
+            "oneTimeCode",
+            "emailAddress",
+            "telephoneNumber",
+            "name",
+            "givenName",
+            "familyName",
+            "fullStreetAddress",
+            "postalCode",
+            "creditCardNumber"
+          ],
+          "defaultValue": "none",
+          "notes": "Enables AutoFill / QuickType. .textContentType(_:)."
+        },
+        {
+          "name": "autocapitalization",
+          "swiftType": "TextInputAutocapitalization",
+          "control": "segmented",
+          "options": [
+            "never",
+            "words",
+            "sentences",
+            "characters"
+          ],
+          "defaultValue": "sentences",
+          "notes": ".textInputAutocapitalization(_:) — iOS/iPadOS/tvOS only."
+        },
+        {
+          "name": "autocorrectionDisabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": ".autocorrectionDisabled(_:)."
+        },
+        {
+          "name": "isFocused",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Drive via @FocusState + .focused(_:) to show the focused state."
+        },
+        {
+          "name": "disabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": ".disabled(_:)."
+        },
+        {
+          "name": "value",
+          "swiftType": "Binding<F.FormatInput>",
+          "control": "text",
+          "defaultValue": "nil",
+          "notes": "Missing from draft: TextField(_:value:format:) binds to a non-String type via a FormatStyle (e.g. numbers, PersonNameComponents). Commits on Return. A primary TextField initializer worth showcasing."
+        },
+        {
+          "name": "onSubmit",
+          "swiftType": "() -> Void",
+          "control": "toggle",
+          "defaultValue": "{}",
+          "notes": "Missing from draft: .onSubmit { } fires when the user submits (Return key). Pairs with submitLabel and the focused/error flow."
+        }
+      ],
+      "states": [
+        "default",
+        "focused",
+        "disabled",
+        "error",
+        "empty",
+        "longContent"
+      ],
+      "styles": [
+        "DefaultTextFieldStyle (automatic)",
+        "PlainTextFieldStyle (plain)",
+        "RoundedBorderTextFieldStyle (roundedBorder — not tvOS)",
+        "SquareBorderTextFieldStyle (squareBorder — macOS only)"
+      ],
+      "higNotes": "Provide a clear prompt and an appropriate keyboardType / textContentType to enable AutoFill. Use submitLabel that matches the action. Validate at the boundary and surface errors near the field. Inside a Form, prefer label + prompt for platform-correct placement."
+    },
+    {
+      "id": "securefield",
+      "title": "SecureField",
+      "api": "SecureField",
+      "summary": "A masked text input for passwords and sensitive data; behaves like TextField but obscures characters.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "properties": [
+        {
+          "name": "titleKey",
+          "swiftType": "LocalizedStringKey",
+          "control": "text",
+          "defaultValue": "\"Password\"",
+          "notes": "Label / placeholder."
+        },
+        {
+          "name": "text",
+          "swiftType": "Binding<String>",
+          "control": "text",
+          "defaultValue": "\"\"",
+          "notes": "Updates on every keystroke; never log this value."
+        },
+        {
+          "name": "prompt",
+          "swiftType": "Text?",
+          "control": "text",
+          "defaultValue": "nil",
+          "notes": "Placeholder guidance, e.g. Text(\"Required\"). iOS 15+."
+        },
+        {
+          "name": "textContentType",
+          "swiftType": "UITextContentType?",
+          "control": "picker",
+          "options": [
+            "password",
+            "newPassword",
+            "oneTimeCode"
+          ],
+          "defaultValue": "password",
+          "notes": "newPassword triggers Strong Password suggestions; oneTimeCode enables SMS autofill."
+        },
+        {
+          "name": "submitLabel",
+          "swiftType": "SubmitLabel",
+          "control": "picker",
+          "options": [
+            "done",
+            "go",
+            "send",
+            "join",
+            "continue",
+            "return"
+          ],
+          "defaultValue": "done",
+          "notes": ".submitLabel(_:)."
+        },
+        {
+          "name": "isFocused",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Drive via @FocusState."
+        },
+        {
+          "name": "disabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": ".disabled(_:)."
+        }
+      ],
+      "states": [
+        "default",
+        "focused",
+        "disabled",
+        "error",
+        "empty"
+      ],
+      "styles": [
+        "DefaultTextFieldStyle (automatic)",
+        "PlainTextFieldStyle (plain)",
+        "RoundedBorderTextFieldStyle (roundedBorder)"
+      ],
+      "higNotes": "Set textContentType(.password / .newPassword) to get Keychain AutoFill and Strong Password. Never store the bound string outside the Keychain. Pair with a username TextField using .username for proper credential association."
+    },
+    {
+      "id": "texteditor",
+      "title": "TextEditor",
+      "api": "TextEditor",
+      "summary": "A scrollable, multi-line editor for long-form text; on iOS 26 it also binds to AttributedString for rich text editing.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS"
+      ],
+      "minOS": "iOS 14.0 / iPadOS 14.0 / macOS 11.0 (AttributedString binding: iOS 26 / macOS 26)",
+      "properties": [
+        {
+          "name": "text",
+          "swiftType": "Binding<String>",
+          "control": "text",
+          "defaultValue": "\"This is some editable text…\"",
+          "notes": "Plain-text binding. iOS 26 adds an init(text: Binding<AttributedString>) for rich text."
+        },
+        {
+          "name": "font",
+          "swiftType": "Font",
+          "control": "picker",
+          "options": [
+            "body",
+            "callout",
+            "title3",
+            "headline",
+            "monospaced"
+          ],
+          "defaultValue": "body",
+          "notes": "Inherited from environment via .font(_:)."
+        },
+        {
+          "name": "foregroundColor",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": "primary",
+          "notes": ".foregroundStyle(_:)."
+        },
+        {
+          "name": "lineSpacing",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "defaultValue": "0",
+          "notes": "Range 0...20. .lineSpacing(_:)."
+        },
+        {
+          "name": "lineLimit",
+          "swiftType": "Int?",
+          "control": "stepper",
+          "defaultValue": "nil",
+          "notes": "Caps visible lines. .lineLimit(_:)."
+        },
+        {
+          "name": "multilineTextAlignment",
+          "swiftType": "TextAlignment",
+          "control": "segmented",
+          "options": [
+            "leading",
+            "center",
+            "trailing"
+          ],
+          "defaultValue": "leading",
+          "notes": ".multilineTextAlignment(_:)."
+        },
+        {
+          "name": "scrollContentBackground",
+          "swiftType": "Visibility",
+          "control": "segmented",
+          "options": [
+            "automatic",
+            "visible",
+            "hidden"
+          ],
+          "defaultValue": "automatic",
+          "notes": ".scrollContentBackground(.hidden) to apply a custom .background. iOS 16+."
+        },
+        {
+          "name": "findNavigatorEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": ".findNavigator(isPresented:) drives the find/replace UI. iOS 16+."
+        },
+        {
+          "name": "autocorrectionDisabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": ".autocorrectionDisabled(_:)."
+        },
+        {
+          "name": "disabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": ".disabled(_:)."
+        },
+        {
+          "name": "textEditorStyle",
+          "swiftType": "any TextEditorStyle",
+          "control": "segmented",
+          "options": [
+            "automatic",
+            "plain",
+            "roundedBorder"
+          ],
+          "defaultValue": "automatic",
+          "notes": "Missing from draft: .textEditorStyle(_:) (iOS 17+ / macOS 14+ / visionOS 1+). The draft's styles array is empty — TextEditor does have native styles via TextEditorStyle."
+        }
+      ],
+      "states": [
+        "default",
+        "focused",
+        "disabled",
+        "empty",
+        "longContent"
+      ],
+      "styles": [
+        "AutomaticTextEditorStyle (automatic)",
+        "PlainTextEditorStyle (plain)",
+        "RoundedBorderTextEditorStyle (roundedBorder)"
+      ],
+      "higNotes": "Use for composing notes, comments, or messages — not single-value entry (use TextField). Give it generous height, support find/replace on iPad/Mac, and respect Dynamic Type. On iOS 26 prefer the AttributedString binding for formatting toolbars."
+    },
+    {
+      "id": "link",
+      "title": "Link",
+      "api": "Link",
+      "summary": "A control that opens a URL — a Universal Link in its app, otherwise the default browser; overridable via OpenURLAction.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 14.0 / iPadOS 14.0 / macOS 11.0 / tvOS 14.0 / watchOS 7.0",
+      "properties": [
+        {
+          "name": "titleKey",
+          "swiftType": "LocalizedStringKey",
+          "control": "text",
+          "defaultValue": "\"View Our Terms of Service\"",
+          "notes": "Link label; can also be a custom view label."
+        },
+        {
+          "name": "destination",
+          "swiftType": "URL",
+          "control": "text",
+          "defaultValue": "URL(string: \"https://www.example.com\")!",
+          "notes": "Target URL opened on tap/click."
+        },
+        {
+          "name": "foregroundStyle",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": "accentColor",
+          "notes": "Style the Text label; default uses the accent/tint color."
+        },
+        {
+          "name": "font",
+          "swiftType": "Font",
+          "control": "picker",
+          "options": [
+            "body",
+            "callout",
+            "footnote",
+            "headline"
+          ],
+          "defaultValue": "body",
+          "notes": "Applied to a Text label."
+        },
+        {
+          "name": "openInApp",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Override behavior by setting \\.openURL with a custom OpenURLAction returning .handled / .systemAction."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled"
+      ],
+      "styles": [],
+      "higNotes": "Label links by purpose, not the raw URL. Keep tap targets at least 44pt. For external destinations consider opening in SafariView; for in-app navigation use the coordinator's Button + push, not Link."
+    },
+    {
+      "id": "sharelink",
+      "title": "ShareLink",
+      "api": "ShareLink",
+      "summary": "Presents the system share sheet for any Transferable item, with optional preview, subject, and message.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 16.0 / iPadOS 16.0 / macOS 13.0 / watchOS 9.0",
+      "properties": [
+        {
+          "name": "title",
+          "swiftType": "LocalizedStringKey",
+          "control": "text",
+          "defaultValue": "\"Share\"",
+          "notes": "Convenience initializer creates a Label for you; omit to get the system-standard appearance."
+        },
+        {
+          "name": "item",
+          "swiftType": "any Transferable",
+          "control": "text",
+          "defaultValue": "URL(string: \"https://developer.apple.com\")!",
+          "notes": "URL and String conform out of the box; custom types provide a TransferRepresentation."
+        },
+        {
+          "name": "subject",
+          "swiftType": "Text?",
+          "control": "text",
+          "defaultValue": "nil",
+          "notes": "Pre-fills the subject field for activities that support it (e.g. Mail)."
+        },
+        {
+          "name": "message",
+          "swiftType": "Text?",
+          "control": "text",
+          "defaultValue": "nil",
+          "notes": "Pre-fills the message body where supported."
+        },
+        {
+          "name": "hasPreview",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Provide a SharePreview(title, image:) for non-URL/non-string items, or to show an instant preview."
+        },
+        {
+          "name": "labelStyle",
+          "swiftType": "any LabelStyle",
+          "control": "segmented",
+          "options": [
+            "automatic",
+            "titleAndIcon",
+            "iconOnly",
+            "titleOnly"
+          ],
+          "defaultValue": "automatic",
+          "notes": "Customize when supplying a Label as the link content."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled"
+      ],
+      "styles": [],
+      "higNotes": "Place in a toolbar or near the content being shared. Use the default system appearance unless you have a reason to customize. Supply a SharePreview so the sheet shows meaningful content immediately; add a FileRepresentation if file-only services (AirDrop, Mail) should appear."
+    },
+    {
+      "id": "attributed-string",
+      "title": "AttributedString (in Text)",
+      "api": "AttributedString",
+      "summary": "A Unicode string with typed, run-based attributes — rendered by Text for mixed styling, Markdown, links, and per-run color.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 15.0 / iPadOS 15.0 / macOS 12.0 / tvOS 15.0 / watchOS 8.0",
+      "properties": [
+        {
+          "name": "markdown",
+          "swiftType": "String",
+          "control": "text",
+          "defaultValue": "\"_Hamlet_ by **William Shakespeare**\"",
+          "notes": "Initialize via AttributedString(markdown:) to parse inline Markdown into styled runs."
+        },
+        {
+          "name": "baseFont",
+          "swiftType": "Font",
+          "control": "picker",
+          "options": [
+            "body",
+            "callout",
+            "title3",
+            "headline",
+            "caption"
+          ],
+          "defaultValue": "body",
+          "notes": "SwiftUI font attribute applied to the whole string; per-run attributes take priority."
+        },
+        {
+          "name": "foregroundColor",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": "primary",
+          "notes": "Set the .foregroundColor attribute on the AttributeContainer or specific ranges."
+        },
+        {
+          "name": "inlinePresentationIntent",
+          "swiftType": "InlinePresentationIntent",
+          "control": "menu",
+          "options": [
+            "emphasized",
+            "stronglyEmphasized",
+            "code",
+            "strikethrough"
+          ],
+          "defaultValue": "emphasized",
+          "notes": "Apply to a range to mark italic / bold / code / strikethrough runs."
+        },
+        {
+          "name": "link",
+          "swiftType": "URL?",
+          "control": "text",
+          "defaultValue": "nil",
+          "notes": "Set the .link attribute on a run to make it tappable inside Text."
+        }
+      ],
+      "states": [
+        "default",
+        "longContent"
+      ],
+      "styles": [],
+      "higNotes": "Use AttributedString to style portions of localized text while keeping the whole string translatable via Text interpolation. Keep attribute use semantic (emphasis, links) rather than purely decorative so it survives localization and respects Dynamic Type."
+    }
+  ]
+}

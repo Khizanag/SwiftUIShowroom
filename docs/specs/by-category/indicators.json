@@ -1,0 +1,775 @@
+{
+  "category": "Indicators & Feedback",
+  "key": "indicators",
+  "folder": "Indicators",
+  "components": [
+    {
+      "id": "content-unavailable-view",
+      "title": "Content Unavailable View",
+      "api": "ContentUnavailableView",
+      "summary": "An empty-state interface with a label, description, and optional actions shown when content can't be displayed (no data, error, no network).",
+      "minOS": "iOS 17.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "summaryNote": "",
+      "properties": [
+        {
+          "name": "title",
+          "swiftType": "String",
+          "control": "text",
+          "defaultValue": "\"No Content\"",
+          "notes": "The headline shown below the icon. Convenience init ContentUnavailableView(_:systemImage:description:)."
+        },
+        {
+          "name": "systemImage",
+          "swiftType": "String",
+          "control": "text",
+          "defaultValue": "\"tray.fill\"",
+          "notes": "SF Symbol name shown above the title. Use a symbol that communicates the empty state (tray, magnifyingglass, wifi.slash, exclamationmark.triangle)."
+        },
+        {
+          "name": "description",
+          "swiftType": "Text?",
+          "control": "text",
+          "defaultValue": "\"Try again later.\"",
+          "notes": "Secondary descriptive text. Pass via the description: closure or the Text convenience parameter. Optional."
+        },
+        {
+          "name": "hasAction",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "When true, render a call-to-action Button in the actions closure. The actions closure is only available in the full label/description/actions builder init."
+        },
+        {
+          "name": "actionTitle",
+          "swiftType": "String",
+          "control": "text",
+          "defaultValue": "\"Refresh\"",
+          "notes": "Title of the CTA button shown when hasAction is true."
+        },
+        {
+          "name": "preset",
+          "swiftType": "Preset",
+          "control": "picker",
+          "options": [
+            "custom",
+            "search",
+            "searchText"
+          ],
+          "defaultValue": "custom",
+          "notes": "custom = builder init; search = ContentUnavailableView.search; searchText = ContentUnavailableView.search(text:) which interpolates the query into the default message."
+        }
+      ],
+      "states": [
+        "default",
+        "empty",
+        "error",
+        "longContent"
+      ],
+      "styles": [
+        "custom (label/description/actions builder)",
+        "ContentUnavailableView.search",
+        "ContentUnavailableView.search(text:)"
+      ],
+      "higNotes": "Use for genuinely empty or unreachable content, not transient loading (use ProgressView for that). Keep the title short, the description actionable, and provide a single clear recovery action. Pair with .searchable's empty results using the built-in .search variant. Place inside an .overlay { } over a List/ScrollView so it centers.",
+      "codeTemplate": "ContentUnavailableView {\n    Label(\"{title}\", systemImage: \"{systemImage}\")\n} description: {\n    Text(\"{description}\")\n} actions: {\n    if {hasAction} {\n        Button(\"{actionTitle}\") { /* recover */ }\n            .buttonStyle(.borderedProminent)\n    }\n}\n// Search preset: ContentUnavailableView.search(text: {searchText})"
+    },
+    {
+      "id": "progress-view",
+      "title": "Progress View",
+      "api": "ProgressView",
+      "summary": "Shows progress toward task completion: determinate (value/total), indeterminate (spinner), or time-based (timerInterval).",
+      "minOS": "iOS 14.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "mode",
+          "swiftType": "Mode",
+          "control": "segmented",
+          "options": [
+            "indeterminate",
+            "determinate",
+            "timer"
+          ],
+          "defaultValue": "determinate",
+          "notes": "indeterminate = ProgressView(); determinate = ProgressView(value:total:); timer = ProgressView(timerInterval:countsDown:)."
+        },
+        {
+          "name": "value",
+          "swiftType": "Double",
+          "control": "slider",
+          "range": "0...1",
+          "defaultValue": "0.5",
+          "notes": "Current progress for determinate mode. Bound 0...total. Nil makes it indeterminate."
+        },
+        {
+          "name": "total",
+          "swiftType": "Double",
+          "control": "stepper",
+          "range": "1...100",
+          "defaultValue": "1.0",
+          "notes": "The value representing completion. Defaults to 1.0."
+        },
+        {
+          "name": "label",
+          "swiftType": "String",
+          "control": "text",
+          "defaultValue": "\"Loading\"",
+          "notes": "Describes the task. Hidden by some styles (.circular on iOS shows it below the spinner)."
+        },
+        {
+          "name": "showsCurrentValueLabel",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "When true, render a currentValueLabel: closure (e.g. percentage). Only meaningful with .linear style on most platforms."
+        },
+        {
+          "name": "style",
+          "swiftType": "any ProgressViewStyle",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "linear",
+            "circular"
+          ],
+          "defaultValue": "automatic",
+          "notes": "On platforms other than macOS, .circular renders as an indeterminate spinner; determinate ring requires macOS or a custom style."
+        },
+        {
+          "name": "tint",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": ".accentColor",
+          "notes": "Applied via .tint(_:). Colors the bar fill or spinner."
+        },
+        {
+          "name": "countsDown",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Timer mode only: whether the fill depletes (true) or fills (false) over the interval."
+        }
+      ],
+      "states": [
+        "default",
+        "loading",
+        "longContent"
+      ],
+      "styles": [
+        "automatic (DefaultProgressViewStyle)",
+        "linear (LinearProgressViewStyle)",
+        "circular (CircularProgressViewStyle)"
+      ],
+      "higNotes": "Use determinate when you can estimate completion; indeterminate when you can't. Prefer a label so the task is clear. Don't combine a spinner with a separately drawn one. On watchOS prefer circular. Bare full-screen indeterminate spinners read as stalls; show a skeleton for content-heavy screens.",
+      "codeTemplate": "ProgressView(value: {value}, total: {total}) {\n    Text(\"{label}\")\n} currentValueLabel: {\n    if {showsCurrentValueLabel} {\n        Text({value} / {total}, format: .percent)\n    }\n}\n.progressViewStyle(.{style})\n.tint({tint})\n// Indeterminate: ProgressView(\"{label}\")\n// Timer: ProgressView(timerInterval: range, countsDown: {countsDown})"
+    },
+    {
+      "id": "gauge",
+      "title": "Gauge",
+      "api": "Gauge",
+      "summary": "Displays a value within a finite range (like a fuel or BPM gauge) with optional current, minimum, and maximum value labels.",
+      "minOS": "iOS 16.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "value",
+          "swiftType": "Double",
+          "control": "slider",
+          "range": "0...170",
+          "defaultValue": "67.0",
+          "notes": "Current value mapped into the bounds. Drives the indicator position."
+        },
+        {
+          "name": "minValue",
+          "swiftType": "Double",
+          "control": "stepper",
+          "range": "0...100",
+          "defaultValue": "0.0",
+          "notes": "Lower bound of the gauge's range (in:). Shown by minimumValueLabel."
+        },
+        {
+          "name": "maxValue",
+          "swiftType": "Double",
+          "control": "stepper",
+          "range": "1...300",
+          "defaultValue": "170.0",
+          "notes": "Upper bound of the gauge's range (in:). Shown by maximumValueLabel."
+        },
+        {
+          "name": "label",
+          "swiftType": "String",
+          "control": "text",
+          "defaultValue": "\"BPM\"",
+          "notes": "Describes the gauge's purpose. Can be a Text or an SF Symbol Image."
+        },
+        {
+          "name": "showsBoundsLabels",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "When true, render minimumValueLabel:/maximumValueLabel: closures. Ignored by accessory*Capacity styles."
+        },
+        {
+          "name": "showsCurrentValueLabel",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "When true, render a currentValueLabel: closure showing the live value."
+        },
+        {
+          "name": "style",
+          "swiftType": "any GaugeStyle",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "linear",
+            "linearCapacity",
+            "circular",
+            "accessoryCircular",
+            "accessoryCircularCapacity",
+            "accessoryLinear",
+            "accessoryLinearCapacity"
+          ],
+          "defaultValue": "automatic",
+          "notes": "accessory* styles are designed for compact contexts (watchOS complications, widgets). .circular and .accessoryCircularCapacity unavailable on tvOS; Gauge itself is unavailable on tvOS."
+        },
+        {
+          "name": "tint",
+          "swiftType": "Gradient",
+          "control": "colorPicker",
+          "defaultValue": ".accentColor",
+          "notes": "A Color, Gradient, or ShapeStyle passed to the style initializer (e.g. CircularGaugeStyle(tint:)) to color the track by value."
+        }
+      ],
+      "states": [
+        "default",
+        "longContent"
+      ],
+      "styles": [
+        "automatic (DefaultGaugeStyle)",
+        "linear (LinearGaugeStyle)",
+        "linearCapacity (LinearCapacityGaugeStyle)",
+        "circular (CircularGaugeStyle)",
+        "accessoryCircular (AccessoryCircularGaugeStyle)",
+        "accessoryCircularCapacity (AccessoryCircularCapacityGaugeStyle)",
+        "accessoryLinear (AccessoryLinearGaugeStyle)",
+        "accessoryLinearCapacity (AccessoryLinearCapacityGaugeStyle)"
+      ],
+      "higNotes": "Use a gauge for a value within known bounds where the relationship to the range matters (battery, speed, heart rate). For pure task progress use ProgressView instead. Use accessory styles in widgets and watch complications. Apply a value-mapped gradient tint so users read severity at a glance. Not available on tvOS.",
+      "codeTemplate": "Gauge(value: {value}, in: {minValue}...{maxValue}) {\n    Text(\"{label}\")\n} currentValueLabel: {\n    if {showsCurrentValueLabel} { Text(\"\\(Int({value}))\") }\n} minimumValueLabel: {\n    if {showsBoundsLabels} { Text(\"\\(Int({minValue}))\") }\n} maximumValueLabel: {\n    if {showsBoundsLabels} { Text(\"\\(Int({maxValue}))\") }\n}\n.gaugeStyle(.{style})\n.tint({tint})"
+    },
+    {
+      "id": "redaction-placeholder",
+      "title": "Redaction (Placeholder / Skeleton)",
+      "api": "View.redacted(reason:)",
+      "summary": "Replaces text and images with neutral placeholder shapes to build skeleton loading states without bespoke views.",
+      "minOS": "iOS 14.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "reason",
+          "swiftType": "RedactionReasons",
+          "control": "picker",
+          "options": [
+            "placeholder",
+            "privacy",
+            "invalidated",
+            "[] (none)"
+          ],
+          "defaultValue": "placeholder",
+          "notes": ".placeholder = skeleton; .privacy = obscure sensitive content; .invalidated (iOS 17+) = data no longer valid (Always-On / hidden). OptionSet, so reasons can combine."
+        },
+        {
+          "name": "isRedacted",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Drives whether the reason set is applied. Toggle to compare loading vs loaded layout. Apply empty reasons [] to disable."
+        },
+        {
+          "name": "unredactInteractive",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Apply .unredacted() to a child (e.g. a control) to keep it visible/interactive while the rest is redacted."
+        }
+      ],
+      "states": [
+        "default",
+        "loading"
+      ],
+      "styles": [
+        "placeholder",
+        "privacy",
+        "invalidated"
+      ],
+      "higNotes": "Skeleton-first: redact a real, populated layout so the placeholder matches the final size and prevents layout jumps. Read .redactionReasons from the environment in custom views to render bespoke placeholders. Redaction disables interaction by default; use .unredacted() for elements that must stay live. Don't reveal sections piecemeal.",
+      "codeTemplate": "CardView(item: placeholderItem)\n    .redacted(reason: {isRedacted} ? .{reason} : [])\n// Keep one control live:\n//   Button(\"Retry\") { }.unredacted()\n// Read in a custom view:\n//   @Environment(\\.redactionReasons) private var reasons"
+    },
+    {
+      "id": "privacy-sensitive",
+      "title": "Privacy Sensitive",
+      "api": "View.privacySensitive(_:)",
+      "summary": "Marks a view's content as private so the system redacts it automatically during screen sharing, recording, or the Always-On display.",
+      "minOS": "iOS 15.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "sensitive",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Whether the content is privacy-sensitive. The system applies .privacy redaction when the context demands it (screen capture, remote control, Always-On)."
+        },
+        {
+          "name": "demoForcePrivacy",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Showroom-only: apply .redacted(reason: .privacy) directly to preview how sensitive content looks when obscured, since real capture context can't be simulated live."
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [
+        "privacy"
+      ],
+      "higNotes": "Wrap account balances, health values, codes, and PII with .privacySensitive(). The system decides when to obscure (screen recording, AirPlay, watch Always-On). Combine with the .privacy redaction reason. Read \\.isSceneCaptured from the environment to react to active screen sharing.",
+      "codeTemplate": "Text(\"$\\(balance, specifier: \\\"%.2f\\\")\")\n    .privacySensitive({sensitive})\n// Preview obscured look:\n//   .redacted(reason: {demoForcePrivacy} ? .privacy : [])\n// React to capture:\n//   @Environment(\\.isSceneCaptured) private var isCaptured"
+    },
+    {
+      "id": "sensory-feedback",
+      "title": "Sensory Feedback (Haptics)",
+      "api": "View.sensoryFeedback(_:trigger:)",
+      "summary": "Plays haptic and/or audio feedback when a monitored Equatable value changes, with optional condition gating.",
+      "minOS": "iOS 17.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "feedback",
+          "swiftType": "SensoryFeedback",
+          "control": "picker",
+          "options": [
+            "success",
+            "warning",
+            "error",
+            "selection",
+            "increase",
+            "decrease",
+            "start",
+            "stop",
+            "alignment",
+            "levelChange",
+            "impact",
+            "impact(weight:intensity:)",
+            "impact(flexibility:intensity:)"
+          ],
+          "defaultValue": "selection",
+          "notes": "Semantic feedback type. success/warning/error map to notification haptics; impact is configurable by weight (.light/.medium/.heavy) or flexibility (.rigid/.solid/.soft) plus intensity."
+        },
+        {
+          "name": "impactWeight",
+          "swiftType": "SensoryFeedback.Weight",
+          "control": "segmented",
+          "options": [
+            "light",
+            "medium",
+            "heavy"
+          ],
+          "defaultValue": "medium",
+          "notes": "Only used when feedback is .impact(weight:intensity:)."
+        },
+        {
+          "name": "impactIntensity",
+          "swiftType": "Double",
+          "control": "slider",
+          "range": "0...1",
+          "defaultValue": "1.0",
+          "notes": "Strength multiplier for .impact variants. 0 = none, 1 = full."
+        },
+        {
+          "name": "triggerOnChange",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Showroom driver: tapping a button flips a monitored @State value to fire the feedback. The modifier plays only when trigger changes."
+        },
+        {
+          "name": "useCondition",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "When true, use sensoryFeedback(_:trigger:condition:) to gate playback on a predicate of (old, new) values."
+        }
+      ],
+      "states": [
+        "default",
+        "selected"
+      ],
+      "styles": [
+        "success",
+        "warning",
+        "error",
+        "selection",
+        "increase",
+        "decrease",
+        "start",
+        "stop",
+        "alignment",
+        "levelChange",
+        "impact"
+      ],
+      "higNotes": "Haptics confirm meaningful events, not every tap. Use semantic types (.success/.error) so the system maps to the right pattern and respects the user's haptics setting. Tie feedback to a state change you already model. No haptic engine on most macOS/tvOS hardware; the modifier is a no-op there. Don't overuse impact.",
+      "codeTemplate": "@State private var trigger = 0\n\nButton(\"Act\") { trigger += 1 }\n    .sensoryFeedback(.{feedback}, trigger: trigger)\n// Impact: .sensoryFeedback(.impact(weight: .{impactWeight}, intensity: {impactIntensity}), trigger: trigger)\n// Gated: .sensoryFeedback(.{feedback}, trigger: trigger) { old, new in new > old }"
+    },
+    {
+      "id": "badge",
+      "title": "Badge",
+      "api": "View.badge(_:)",
+      "summary": "Attaches a small count or short text badge to a view in a list row, tab item, toolbar item, or menu to convey supplementary status.",
+      "minOS": "iOS 15.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "visionOS"
+      ],
+      "summary_note": "No tvOS or watchOS support.",
+      "properties": [
+        {
+          "name": "kind",
+          "swiftType": "Kind",
+          "control": "segmented",
+          "options": [
+            "count",
+            "text",
+            "none"
+          ],
+          "defaultValue": "count",
+          "notes": "count = badge(Int) (hidden automatically when 0); text = badge(LocalizedStringKey)/badge(Text?); none = badge(nil) hides the badge."
+        },
+        {
+          "name": "count",
+          "swiftType": "Int",
+          "control": "stepper",
+          "defaultValue": "3",
+          "notes": "badge(_:Int). A value of 0 hides the badge automatically. Used by tab items and list rows."
+        },
+        {
+          "name": "label",
+          "swiftType": "String",
+          "control": "text",
+          "defaultValue": "\"New\"",
+          "notes": "badge(_:LocalizedStringKey) / badge(Text?). Keep it as short as possible per HIG."
+        },
+        {
+          "name": "prominence",
+          "swiftType": "BadgeProminence",
+          "control": "segmented",
+          "options": [
+            "standard",
+            "increased",
+            "decreased"
+          ],
+          "defaultValue": "standard",
+          "notes": "Applied via .badgeProminence(_:) on the enclosing container (e.g. List). increased renders the attention-grabbing red badge; decreased is the muted style."
+        }
+      ],
+      "states": [
+        "default",
+        "empty",
+        "longContent"
+      ],
+      "styles": [
+        "list row",
+        "tab item",
+        "toolbar item",
+        "menu"
+      ],
+      "higNotes": "Use a badge for optional, supplementary information. Keep contents short (a count or one word). A count of 0 hides the badge. Badges appear in list rows, tab bars, toolbar items, and menus. Control emphasis with .badgeProminence on the container, not on the badge itself.",
+      "codeTemplate": "List {\n    Label(\"Inbox\", systemImage: \"tray\")\n        .badge({count})\n    Label(\"Drafts\", systemImage: \"doc\")\n        .badge(\"{label}\")\n}\n.badgeProminence(.{prominence})\n// Tab badge: Tab(\"Inbox\", systemImage: \"tray\") { ... }.badge({count})"
+    },
+    {
+      "id": "symbol-effect",
+      "title": "Symbol Effect",
+      "api": "View.symbolEffect(_:options:value:)",
+      "summary": "Animates SF Symbols with built-in effects (bounce, pulse, variableColor, scale, appear/disappear, replace, wiggle, breathe, rotate) driven by a value change or an isActive flag.",
+      "minOS": "iOS 17.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "visionOS",
+        "watchOS"
+      ],
+      "summary_note": "Discrete effects (bounce) need value/isActive triggers; indefinite effects (pulse, variableColor) animate continuously. wiggle/breathe/rotate are iOS 18+.",
+      "properties": [
+        {
+          "name": "effect",
+          "swiftType": "any SymbolEffect",
+          "control": "picker",
+          "options": [
+            "bounce",
+            "pulse",
+            "variableColor",
+            "scale",
+            "appear",
+            "disappear",
+            "replace",
+            "wiggle",
+            "breathe",
+            "rotate"
+          ],
+          "defaultValue": "bounce",
+          "notes": "bounce/wiggle/rotate are discrete (need a trigger); pulse/variableColor/breathe are indefinite (run while active); scale/appear/disappear/replace are transition/state effects. wiggle, breathe, rotate require iOS 18 / macOS 15."
+        },
+        {
+          "name": "trigger",
+          "swiftType": "Mode",
+          "control": "segmented",
+          "options": [
+            "value",
+            "isActive"
+          ],
+          "defaultValue": "value",
+          "notes": "value = symbolEffect(_:options:value:) fires on each change of a monitored value; isActive = symbolEffect(_:options:isActive:) runs an indefinite effect while true."
+        },
+        {
+          "name": "isActive",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Drives indefinite effects (pulse/variableColor/breathe) when trigger is isActive."
+        },
+        {
+          "name": "options",
+          "swiftType": "SymbolEffectOptions",
+          "control": "picker",
+          "options": [
+            "default",
+            "repeating",
+            "repeat(_:)",
+            "nonRepeating",
+            "speed(_:)"
+          ],
+          "defaultValue": "default",
+          "notes": "Configure repeat behavior and speed, e.g. .repeating, .repeat(3), .speed(2)."
+        },
+        {
+          "name": "effectsRemoved",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "symbolEffectsRemoved(_:) clears inherited symbol effects from descendant symbols."
+        }
+      ],
+      "states": [
+        "default",
+        "selected",
+        "loading"
+      ],
+      "styles": [
+        "bounce",
+        "pulse",
+        "variableColor",
+        "scale",
+        "appear",
+        "disappear",
+        "replace",
+        "wiggle",
+        "breathe",
+        "rotate"
+      ],
+      "higNotes": "Use symbol effects to communicate state changes and draw attention without separate animation code. Match the effect to meaning: bounce for a confirmed action, pulse/variableColor for ongoing activity, replace for a value swap. Discrete effects need a trigger; don't loop indefinite effects without reason. Honor Reduce Motion.",
+      "codeTemplate": "Image(systemName: \"wifi\")\n    .symbolEffect(.{effect}, options: .{options}, value: triggerValue)\n// Indefinite while active:\n//   .symbolEffect(.pulse, isActive: {isActive})\n// Remove inherited effects:\n//   .symbolEffectsRemoved({effectsRemoved})"
+    },
+    {
+      "id": "alert",
+      "title": "Alert",
+      "api": "View.alert(_:isPresented:actions:message:)",
+      "summary": "Presents a modal system alert with a title, optional message, and action buttons for confirmations and critical errors that interrupt the user.",
+      "minOS": "iOS 15.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "visionOS",
+        "watchOS"
+      ],
+      "summary_note": "The modern data-driven alert API; the old Alert value type is deprecated.",
+      "properties": [
+        {
+          "name": "title",
+          "swiftType": "LocalizedStringKey",
+          "control": "text",
+          "defaultValue": "\"Delete Item?\"",
+          "notes": "Primary alert title. First parameter of the modifier."
+        },
+        {
+          "name": "message",
+          "swiftType": "String",
+          "control": "text",
+          "defaultValue": "\"This action cannot be undone.\"",
+          "notes": "Optional supporting text rendered by the message: closure."
+        },
+        {
+          "name": "isPresented",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Binding that drives presentation. There is also an item-driven variant alert(_:isPresented:presenting:actions:message:) carrying associated data."
+        },
+        {
+          "name": "buttonCount",
+          "swiftType": "Int",
+          "control": "stepper",
+          "range": "1...3",
+          "defaultValue": "2",
+          "notes": "Number of Button views in the actions: closure. SwiftUI lays out buttons automatically; a single default Cancel is synthesized if none provided."
+        },
+        {
+          "name": "hasDestructive",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "When true include a Button(role: .destructive). Rendered in red; placed appropriately by the system."
+        },
+        {
+          "name": "hasCancel",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "When true include a Button(role: .cancel). Bolded and positioned per platform."
+        }
+      ],
+      "states": [
+        "default",
+        "error",
+        "longContent"
+      ],
+      "styles": [
+        "title + actions",
+        "title + actions + message",
+        "item-driven (presenting:)"
+      ],
+      "higNotes": "Reserve alerts for essential, interruptive information that needs acknowledgement or a decision (destructive confirmation, critical error). Keep the title short and the message a single clear sentence. Use button roles (.destructive, .cancel) instead of styling. For non-critical choices over a control, prefer confirmationDialog. Don't use alerts for routine feedback.",
+      "codeTemplate": "someView\n    .alert(\"{title}\", isPresented: ${isPresented}) {\n        Button(\"Delete\", role: .destructive) { }\n        Button(\"Cancel\", role: .cancel) { }\n    } message: {\n        Text(\"{message}\")\n    }"
+    },
+    {
+      "id": "confirmation-dialog",
+      "title": "Confirmation Dialog",
+      "api": "View.confirmationDialog(_:isPresented:titleVisibility:actions:message:)",
+      "summary": "Presents an action sheet / popover of contextual choices anchored to the user's action, with optional destructive and cancel roles.",
+      "minOS": "iOS 15.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "visionOS",
+        "watchOS"
+      ],
+      "summary_note": "Renders as an action sheet on iPhone, a popover on iPad/Mac.",
+      "properties": [
+        {
+          "name": "title",
+          "swiftType": "LocalizedStringKey",
+          "control": "text",
+          "defaultValue": "\"Are you sure?\"",
+          "notes": "Dialog title. Visibility controlled by titleVisibility."
+        },
+        {
+          "name": "titleVisibility",
+          "swiftType": "Visibility",
+          "control": "segmented",
+          "options": [
+            "automatic",
+            "visible",
+            "hidden"
+          ],
+          "defaultValue": "automatic",
+          "notes": "automatic hides the title on compact iPhone sheets but shows it where space allows; force with .visible."
+        },
+        {
+          "name": "isPresented",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Binding driving presentation. An item-driven presenting: variant carries associated data."
+        },
+        {
+          "name": "buttonCount",
+          "swiftType": "Int",
+          "control": "stepper",
+          "range": "1...5",
+          "defaultValue": "3",
+          "notes": "Number of choice buttons in the actions: closure. Dialogs comfortably hold several options, unlike alerts."
+        },
+        {
+          "name": "hasDestructive",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Include a Button(role: .destructive) for the dangerous choice; rendered in red."
+        },
+        {
+          "name": "hasMessage",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "When true provide a message: closure with supporting context."
+        }
+      ],
+      "states": [
+        "default",
+        "longContent"
+      ],
+      "styles": [
+        "action sheet (compact)",
+        "popover (regular)",
+        "title + message"
+      ],
+      "higNotes": "Use a confirmation dialog to confirm a single action with multiple options, especially destructive ones, anchored to where the user tapped. Put the destructive action first with .destructive role; the system adds Cancel on iPhone. Prefer it over an alert when offering choices rather than acknowledging information. Keep options short and parallel.",
+      "codeTemplate": "someView\n    .confirmationDialog(\"{title}\", isPresented: ${isPresented}, titleVisibility: .{titleVisibility}) {\n        Button(\"Delete\", role: .destructive) { }\n        Button(\"Cancel\", role: .cancel) { }\n    } message: {\n        Text(\"Optional context\")\n    }"
+    }
+  ]
+}

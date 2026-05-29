@@ -1,0 +1,1647 @@
+{
+  "category": "Environment & Data Flow",
+  "key": "dataFlow",
+  "folder": "DataFlow",
+  "components": [
+    {
+      "id": "state",
+      "title": "@State",
+      "api": "State",
+      "summary": "A property wrapper for transient, view-owned source-of-truth value-type state that re-renders the view on change.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "summaryStyles": null,
+      "styles": [],
+      "states": [
+        "default",
+        "longContent"
+      ],
+      "higNotes": "Use @State only for transient UI state that the view itself owns (a toggle, a sheet flag, an editing string). Mark it private. For shared or model data use @Observable + @State-held reference, or pass a Binding. Never use @State to mirror a value that has another owner.",
+      "properties": [
+        {
+          "name": "wrappedValue",
+          "swiftType": "Value",
+          "control": "text",
+          "defaultValue": "\"\" (or false / 0 depending on type)",
+          "notes": "The stored source of truth. In a showroom expose a representative editable value (a Bool driven by toggle, an Int by stepper, a String by text)."
+        },
+        {
+          "name": "valueKind",
+          "swiftType": "enum",
+          "control": "picker",
+          "options": [
+            "Bool",
+            "Int",
+            "Double",
+            "String",
+            "Date",
+            "CustomStruct"
+          ],
+          "defaultValue": "Bool",
+          "notes": "Drives which demo control renders. Bool→Toggle, Int→Stepper, Double→Slider, String→TextField, Date→DatePicker."
+        },
+        {
+          "name": "isPrivate",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "House convention: @State should always be declared private. Toggle is documentation-only; emit `private` keyword when on."
+        },
+        {
+          "name": "initialValueExpression",
+          "swiftType": "String",
+          "control": "text",
+          "defaultValue": "false",
+          "notes": "Literal initializer used in the generated declaration; also usable with State(initialValue:) for computed defaults in init."
+        }
+      ],
+      "codeTemplate": "struct StateDemo: View {\n    @State {isPrivate} var value: {ValueType} = {initialValueExpression}\n\n    var body: some View {\n        Toggle(\"State value\", isOn: $value)\n    }\n}"
+    },
+    {
+      "id": "binding",
+      "title": "@Binding",
+      "api": "Binding",
+      "summary": "A two-way reference to a source of truth owned elsewhere, letting a child view read and mutate the parent's state.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "styles": [],
+      "states": [
+        "default",
+        "disabled"
+      ],
+      "higNotes": "Pass a Binding to a child when the child needs to mutate a value the parent owns. Obtain it with the $ projected value of @State/@Bindable/@Observed. Prefer passing a focused Binding to a single field over passing the whole model when only one property is edited.",
+      "properties": [
+        {
+          "name": "wrappedValue",
+          "swiftType": "Value",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "The value read/written through the binding; control type follows the wrapped value type."
+        },
+        {
+          "name": "source",
+          "swiftType": "enum",
+          "control": "picker",
+          "options": [
+            "fromState",
+            "constant",
+            "getSet",
+            "fromBindable",
+            "fromObservedObject"
+          ],
+          "defaultValue": "fromState",
+          "notes": "How the binding is constructed: $state projection, Binding.constant(_:), Binding(get:set:), or $bindable.property."
+        },
+        {
+          "name": "useConstant",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "When on, generate Binding.constant(value) for previews/disabled demos — read-only, writes are ignored."
+        },
+        {
+          "name": "animation",
+          "swiftType": "Animation?",
+          "control": "menu",
+          "options": [
+            "none",
+            "default",
+            "easeInOut",
+            "spring",
+            "bouncy"
+          ],
+          "defaultValue": "none",
+          "notes": "Use binding.animation(_:) to animate downstream changes triggered through the binding."
+        }
+      ],
+      "codeTemplate": "struct BindingDemo: View {\n    @Binding var value: {ValueType}\n\n    var body: some View {\n        Toggle(\"Bound value\", isOn: ${useConstant ? .constant(value) : value})\n    }\n}\n\n// Caller:\n// BindingDemo(value: $ownedState)"
+    },
+    {
+      "id": "observable-macro",
+      "title": "@Observable (Observation macro)",
+      "api": "Observable",
+      "summary": "A macro that makes a reference type observable so SwiftUI tracks per-property reads and updates only views that depend on changed properties.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 17.0 / iPadOS 17.0 / macOS 14.0 / tvOS 17.0 / watchOS 10.0",
+      "styles": [],
+      "states": [
+        "default",
+        "loading",
+        "empty",
+        "error"
+      ],
+      "higNotes": "Prefer @Observable over the legacy ObservableObject/@Published for all new model types. SwiftUI tracks individual property access, so views invalidate only on the specific properties they read. Hold the instance with @State for a view-owned model, @Environment for an injected one, or let for an external reference.",
+      "properties": [
+        {
+          "name": "ownershipPattern",
+          "swiftType": "enum",
+          "control": "picker",
+          "options": [
+            "stateOwned",
+            "environmentInjected",
+            "passedReference",
+            "globalSingleton"
+          ],
+          "defaultValue": "stateOwned",
+          "notes": "How the observable instance reaches the view: @State private var model = Model(); @Environment(Model.self); plain let model: Model; or Model.shared."
+        },
+        {
+          "name": "isMainActor",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "House convention: annotate UI-facing observable services @MainActor. Emits @MainActor before @Observable."
+        },
+        {
+          "name": "ignoredProperties",
+          "swiftType": "[String]",
+          "control": "text",
+          "defaultValue": "[]",
+          "notes": "Properties marked @ObservationIgnored are excluded from change tracking (caches, derived non-UI fields)."
+        },
+        {
+          "name": "trackedProperty",
+          "swiftType": "String",
+          "control": "text",
+          "defaultValue": "count",
+          "notes": "Demo property the view reads; mutating it invalidates only views observing it."
+        }
+      ],
+      "codeTemplate": "{isMainActor ? @MainActor : }\n@Observable\nfinal class DemoModel {\n    var {trackedProperty} = 0\n    @ObservationIgnored var cache: [String: Any] = [:]\n}\n\nstruct ObservableDemo: View {\n    @State private var model = DemoModel()\n\n    var body: some View {\n        Stepper(\"Count \\(model.{trackedProperty})\", value: $model.{trackedProperty})\n    }\n}"
+    },
+    {
+      "id": "bindable",
+      "title": "@Bindable",
+      "api": "Bindable",
+      "summary": "A property wrapper that creates bindings to the mutable properties of an @Observable object, including ones injected via @Environment.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 17.0 / iPadOS 17.0 / macOS 14.0 / tvOS 17.0 / watchOS 10.0",
+      "styles": [],
+      "states": [
+        "default",
+        "disabled"
+      ],
+      "higNotes": "Use @Bindable to get $-prefixed bindings into an Observable model's properties. As a stored property when the model is passed in, or as a local `@Bindable var x = x` inside body (or a ForEach element) to bind into a @State/@Environment-held observable. Don't use it to own the model — that's @State's job.",
+      "properties": [
+        {
+          "name": "usage",
+          "swiftType": "enum",
+          "control": "picker",
+          "options": [
+            "storedProperty",
+            "localInBody",
+            "fromEnvironment"
+          ],
+          "defaultValue": "storedProperty",
+          "notes": "@Bindable var model: Model (passed in); @Bindable var model = model (local); or bridging an @Environment(Model.self) value to bindings."
+        },
+        {
+          "name": "boundProperty",
+          "swiftType": "String",
+          "control": "text",
+          "defaultValue": "title",
+          "notes": "Which model property a control binds to via $model.<property>."
+        },
+        {
+          "name": "controlForProperty",
+          "swiftType": "enum",
+          "control": "picker",
+          "options": [
+            "TextField",
+            "Toggle",
+            "Slider",
+            "Stepper",
+            "Picker"
+          ],
+          "defaultValue": "TextField",
+          "notes": "Demo control wired to the bound property."
+        }
+      ],
+      "codeTemplate": "struct BindableDemo: View {\n    @Bindable var model: DemoModel   // or: @Environment(DemoModel.self) private var model\n\n    var body: some View {\n        // @Bindable var model = model  // when bridging from @Environment\n        TextField(\"Title\", text: $model.{boundProperty})\n    }\n}"
+    },
+    {
+      "id": "environment-value",
+      "title": "@Environment (key path)",
+      "api": "Environment",
+      "summary": "Reads a built-in or custom EnvironmentValues entry by key path, propagated implicitly down the view hierarchy.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "styles": [],
+      "states": [
+        "default"
+      ],
+      "higNotes": "Use @Environment to read ambient configuration (color scheme, dynamic type size, locale, dismiss action, scene phase) rather than threading it through initializers. Reading an environment value creates a dependency: the view invalidates when that value changes. Prefer the most specific built-in value over inventing a custom one.",
+      "properties": [
+        {
+          "name": "keyPath",
+          "swiftType": "KeyPath<EnvironmentValues, Value>",
+          "control": "menu",
+          "options": [
+            "\\.colorScheme",
+            "\\.dynamicTypeSize",
+            "\\.locale",
+            "\\.calendar",
+            "\\.timeZone",
+            "\\.layoutDirection",
+            "\\.dismiss",
+            "\\.openURL",
+            "\\.openWindow",
+            "\\.scenePhase",
+            "\\.isEnabled",
+            "\\.isFocused",
+            "\\.accessibilityReduceMotion",
+            "\\.accessibilityReduceTransparency",
+            "\\.sizeCategory",
+            "\\.horizontalSizeClass",
+            "\\.verticalSizeClass",
+            "\\.colorSchemeContrast",
+            "\\.displayScale",
+            "\\.pixelLength",
+            "\\.redactionReasons",
+            "\\.refresh",
+            "\\.modelContext",
+            "\\.managedObjectContext"
+          ],
+          "defaultValue": "\\.colorScheme",
+          "notes": "The environment key path to read. Showroom should let you pick any built-in EnvironmentValues key. Some are read-only actions (dismiss, openURL, refresh)."
+        },
+        {
+          "name": "readByType",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "iOS 17+: @Environment(Model.self) reads an injected Observable by type instead of by key path. When on, generate the type-based form."
+        },
+        {
+          "name": "observableType",
+          "swiftType": "String",
+          "control": "text",
+          "defaultValue": "DemoModel",
+          "notes": "Type used with @Environment(Type.self) when readByType is on. Optional variant @Environment(Type.self) yields Type? if not injected."
+        }
+      ],
+      "codeTemplate": "struct EnvironmentReadDemo: View {\n    @Environment({readByType ? observableType.self : keyPath}) private var value\n\n    var body: some View {\n        Text(\"\\(String(describing: value))\")\n    }\n}"
+    },
+    {
+      "id": "environment-values",
+      "title": "EnvironmentValues",
+      "api": "EnvironmentValues",
+      "summary": "The collection of all environment values flowing through a view hierarchy; the keyed store @Environment reads and the environment modifiers write.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "styles": [],
+      "states": [
+        "default"
+      ],
+      "higNotes": "Treat EnvironmentValues as the canonical place to look up ambient state. Extend it with @Entry for custom values. Don't overload the environment with model data better passed explicitly; reserve it for cross-cutting configuration consumed deep in the tree.",
+      "properties": [
+        {
+          "name": "builtInValueGroup",
+          "swiftType": "enum",
+          "control": "picker",
+          "options": [
+            "appearance",
+            "accessibility",
+            "layout",
+            "localization",
+            "actions",
+            "lifecycle",
+            "data"
+          ],
+          "defaultValue": "appearance",
+          "notes": "Categorizes the built-in values for browsing: appearance (colorScheme, tint), accessibility (reduceMotion, sizeCategory), layout (sizeClass, layoutDirection), localization (locale, calendar, timeZone), actions (dismiss, openURL, openWindow, refresh), lifecycle (scenePhase), data (modelContext, managedObjectContext)."
+        },
+        {
+          "name": "subscriptAccess",
+          "swiftType": "EnvironmentKey.Type",
+          "control": "text",
+          "defaultValue": "MyKey.self",
+          "notes": "Custom values read/written via values[MyKey.self] when not using @Entry."
+        }
+      ],
+      "codeTemplate": "// Inspecting the environment inside a custom modifier:\nstruct DumpEnvironment: ViewModifier {\n    @Environment(\\.self) private var env\n    func body(content: Content) -> some View {\n        content.onAppear { print(env) }\n    }\n}"
+    },
+    {
+      "id": "environment-modifier-keypath",
+      "title": ".environment(_:_:) (key path writer)",
+      "api": "View.environment(_:_:)",
+      "summary": "Sets a value for a writable EnvironmentValues key path on a view's subtree.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "styles": [],
+      "states": [
+        "default"
+      ],
+      "higNotes": "Override an environment value for a whole subtree from the container. Prefer purpose-built modifiers (.foregroundStyle, .font, .environment(\\.locale, ...)) where they exist. Setting at the right level avoids re-specifying configuration on every descendant.",
+      "properties": [
+        {
+          "name": "keyPath",
+          "swiftType": "WritableKeyPath<EnvironmentValues, V>",
+          "control": "menu",
+          "options": [
+            "\\.locale",
+            "\\.calendar",
+            "\\.timeZone",
+            "\\.layoutDirection",
+            "\\.colorScheme",
+            "\\.font",
+            "\\.lineSpacing",
+            "\\.multilineTextAlignment",
+            "\\.isEnabled",
+            "\\.dynamicTypeSize"
+          ],
+          "defaultValue": "\\.locale",
+          "notes": "Writable key path to override. Read-only action values (dismiss, openURL) cannot be set here."
+        },
+        {
+          "name": "value",
+          "swiftType": "V",
+          "control": "text",
+          "defaultValue": "Locale(identifier: \"en_US\")",
+          "notes": "The value to inject; type follows the key path's value type."
+        }
+      ],
+      "codeTemplate": "VStack {\n    childViews\n}\n.environment({keyPath}, {value})"
+    },
+    {
+      "id": "environment-modifier-observable",
+      "title": ".environment(_:) (Observable injector)",
+      "api": "View.environment(_:)",
+      "summary": "Injects an @Observable object into the environment so descendants read it by type with @Environment(Type.self).",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 17.0 / iPadOS 17.0 / macOS 14.0 / tvOS 17.0 / watchOS 10.0",
+      "styles": [],
+      "states": [
+        "default"
+      ],
+      "higNotes": "This is the modern replacement for .environmentObject. Inject Observable model objects at the root of the subtree that needs them. Reading by type keeps call sites clean and avoids fatal crashes from missing keys when you use the optional read form.",
+      "properties": [
+        {
+          "name": "object",
+          "swiftType": "Observable",
+          "control": "text",
+          "defaultValue": "DemoModel()",
+          "notes": "The Observable instance to inject. Hold it with @State at the injection site so it persists across body re-evaluations."
+        },
+        {
+          "name": "allowNilInjection",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Optional overload .environment(value as Model?) injects an optional, so descendants reading @Environment(Model.self) get nil instead of crashing when absent."
+        }
+      ],
+      "codeTemplate": "@State private var model = DemoModel()\n\nContentView()\n    .environment({allowNilInjection ? \"model as DemoModel?\" : \"model\"})"
+    },
+    {
+      "id": "transform-environment",
+      "title": ".transformEnvironment(_:transform:)",
+      "api": "View.transformEnvironment(_:transform:)",
+      "summary": "Mutates an existing environment value in place for a subtree, deriving the new value from the inherited one.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "styles": [],
+      "states": [
+        "default"
+      ],
+      "higNotes": "Use when the new value depends on the inherited one (append to a list, scale a number, clamp a size). Prefer .environment(_:_:) when you simply set an absolute value.",
+      "properties": [
+        {
+          "name": "keyPath",
+          "swiftType": "WritableKeyPath<EnvironmentValues, V>",
+          "control": "menu",
+          "options": [
+            "\\.dynamicTypeSize",
+            "\\.lineSpacing",
+            "\\.font"
+          ],
+          "defaultValue": "\\.lineSpacing",
+          "notes": "Key path of the value to transform."
+        },
+        {
+          "name": "transform",
+          "swiftType": "(inout V) -> Void",
+          "control": "text",
+          "defaultValue": "{ $0 += 4 }",
+          "notes": "Closure mutating the inherited value in place."
+        }
+      ],
+      "codeTemplate": "VStack { childViews }\n    .transformEnvironment({keyPath}) { value in\n        {transform}\n    }"
+    },
+    {
+      "id": "environment-key",
+      "title": "EnvironmentKey",
+      "api": "EnvironmentKey",
+      "summary": "The protocol that defines a custom environment value's default — backs custom EnvironmentValues entries (manual alternative to @Entry).",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "styles": [],
+      "states": [
+        "default"
+      ],
+      "higNotes": "Define custom environment values only for genuinely cross-cutting configuration consumed far from where it's set. Prefer the @Entry macro (iOS 13+) for new code — it generates the key and accessor for you. Use the manual EnvironmentKey conformance only when you need a named key type for reuse.",
+      "properties": [
+        {
+          "name": "defaultValue",
+          "swiftType": "Value",
+          "control": "text",
+          "defaultValue": "false",
+          "notes": "Required static defaultValue returned when no ancestor sets the value."
+        },
+        {
+          "name": "valueType",
+          "swiftType": "Any.Type",
+          "control": "text",
+          "defaultValue": "Bool",
+          "notes": "The associated Value type. Reference-type values should be sendable/immutable to be safe across the tree."
+        },
+        {
+          "name": "accessorName",
+          "swiftType": "String",
+          "control": "text",
+          "defaultValue": "isPremium",
+          "notes": "Computed property added to EnvironmentValues to expose the key by name."
+        }
+      ],
+      "codeTemplate": "private struct {AccessorKey}: EnvironmentKey {\n    static let defaultValue: {valueType} = {defaultValue}\n}\n\nextension EnvironmentValues {\n    var {accessorName}: {valueType} {\n        get { self[{AccessorKey}.self] }\n        set { self[{AccessorKey}.self] = newValue }\n    }\n}"
+    },
+    {
+      "id": "entry-macro",
+      "title": "@Entry",
+      "api": "Entry",
+      "summary": "A macro that generates a custom entry for EnvironmentValues, Transaction, ContainerValues, or FocusedValues in one line.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "styles": [],
+      "states": [
+        "default"
+      ],
+      "higNotes": "Preferred modern way to add custom environment/transaction/container/focused values. For EnvironmentValues/Transaction/ContainerValues you supply a default. For FocusedValues the type must be Optional and the default is always nil.",
+      "properties": [
+        {
+          "name": "targetStructure",
+          "swiftType": "enum",
+          "control": "segmented",
+          "options": [
+            "EnvironmentValues",
+            "Transaction",
+            "ContainerValues",
+            "FocusedValues"
+          ],
+          "defaultValue": "EnvironmentValues",
+          "notes": "Which value collection to extend. FocusedValues entries must be Optional with no explicit default."
+        },
+        {
+          "name": "name",
+          "swiftType": "String",
+          "control": "text",
+          "defaultValue": "isPremium",
+          "notes": "Name of the generated property."
+        },
+        {
+          "name": "valueType",
+          "swiftType": "Any.Type",
+          "control": "text",
+          "defaultValue": "Bool",
+          "notes": "Stored type. For FocusedValues must be an Optional."
+        },
+        {
+          "name": "defaultValue",
+          "swiftType": "Value",
+          "control": "text",
+          "defaultValue": "false",
+          "notes": "Default for Environment/Transaction/Container entries; omitted (always nil) for FocusedValues."
+        }
+      ],
+      "codeTemplate": "extension {targetStructure} {\n    @Entry var {name}: {valueType} = {defaultValue}\n}"
+    },
+    {
+      "id": "appstorage",
+      "title": "@AppStorage",
+      "api": "AppStorage",
+      "summary": "A property wrapper that reads and writes a UserDefaults value and re-renders the view when that default changes.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 14.0 / iPadOS 14.0 / macOS 11.0 / tvOS 14.0 / watchOS 7.0",
+      "styles": [],
+      "states": [
+        "default",
+        "empty"
+      ],
+      "higNotes": "Use @AppStorage for small, simple, app-wide preferences (theme, onboarding-seen, toggles). Never store sensitive data or large blobs in UserDefaults. House convention: model singleton services persist richer state via JSON in UserDefaults rather than scattering @AppStorage across views.",
+      "properties": [
+        {
+          "name": "key",
+          "swiftType": "String",
+          "control": "text",
+          "defaultValue": "\"hasSeenOnboarding\"",
+          "notes": "UserDefaults key. Keep keys namespaced and stable across releases."
+        },
+        {
+          "name": "wrappedValue",
+          "swiftType": "Value",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Default value if the key is absent. Supported: Bool, Int, Double, String, URL, Data, and RawRepresentable with Int/String raw value (plus their Optionals)."
+        },
+        {
+          "name": "valueType",
+          "swiftType": "enum",
+          "control": "picker",
+          "options": [
+            "Bool",
+            "Int",
+            "Double",
+            "String",
+            "URL",
+            "Data",
+            "RawRepresentableInt",
+            "RawRepresentableString",
+            "Optional"
+          ],
+          "defaultValue": "Bool",
+          "notes": "Constrains the supported storage types and which demo control renders."
+        },
+        {
+          "name": "store",
+          "swiftType": "UserDefaults?",
+          "control": "menu",
+          "options": [
+            "standard",
+            "appGroupSuite",
+            "custom"
+          ],
+          "defaultValue": "standard",
+          "notes": "Optional UserDefaults suite (e.g. App Group for widget sharing). Defaults to the value of .defaultAppStorage or .standard."
+        }
+      ],
+      "codeTemplate": "struct AppStorageDemo: View {\n    @AppStorage({key}{store == \"standard\" ? \"\" : \", store: \\(store)\"}) private var value: {ValueType} = {wrappedValue}\n\n    var body: some View {\n        Toggle(\"Persisted\", isOn: $value)\n    }\n}"
+    },
+    {
+      "id": "default-app-storage",
+      "title": ".defaultAppStorage(_:)",
+      "api": "View.defaultAppStorage(_:)",
+      "summary": "Sets the UserDefaults store that @AppStorage uses by default for a view subtree.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 14.0 / iPadOS 14.0 / macOS 11.0 / tvOS 14.0 / watchOS 7.0",
+      "styles": [],
+      "states": [
+        "default"
+      ],
+      "higNotes": "Use to point a subtree's @AppStorage at an App Group suite (shared with widgets/extensions) without specifying store: on every wrapper. Apply once near the root of the feature that shares defaults.",
+      "properties": [
+        {
+          "name": "store",
+          "swiftType": "UserDefaults",
+          "control": "menu",
+          "options": [
+            "standard",
+            "appGroupSuite",
+            "customSuite"
+          ],
+          "defaultValue": "appGroupSuite",
+          "notes": "The defaults suite to use for all descendant @AppStorage without an explicit store:."
+        }
+      ],
+      "codeTemplate": "SettingsView()\n    .defaultAppStorage(UserDefaults(suiteName: {suiteName})!)"
+    },
+    {
+      "id": "scenestorage",
+      "title": "@SceneStorage",
+      "api": "SceneStorage",
+      "summary": "A property wrapper for lightweight per-scene state that the system automatically saves and restores across app launches.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 14.0 / iPadOS 14.0 / macOS 11.0 / tvOS 14.0 / watchOS 7.0",
+      "styles": [],
+      "states": [
+        "default",
+        "empty"
+      ],
+      "higNotes": "Use @SceneStorage for UI restoration state scoped to a scene (selected tab, scroll position, draft text). Each scene has its own storage; data isn't shared between scenes and is destroyed when the scene is. Keep it lightweight — never store model data or sensitive data here.",
+      "properties": [
+        {
+          "name": "key",
+          "swiftType": "String",
+          "control": "text",
+          "defaultValue": "\"selectedTab\"",
+          "notes": "Identifier unique within the scene's storage."
+        },
+        {
+          "name": "wrappedValue",
+          "swiftType": "Value",
+          "control": "text",
+          "defaultValue": "0",
+          "notes": "Default value; supported types match AppStorage (Bool, Int, Double, String, URL, Data, RawRepresentable Int/String, and Optionals)."
+        },
+        {
+          "name": "valueType",
+          "swiftType": "enum",
+          "control": "picker",
+          "options": [
+            "Bool",
+            "Int",
+            "Double",
+            "String",
+            "URL",
+            "Data",
+            "RawRepresentableInt",
+            "RawRepresentableString",
+            "Optional"
+          ],
+          "defaultValue": "Int",
+          "notes": "Constrains storable types and the demo control."
+        }
+      ],
+      "codeTemplate": "struct SceneStorageDemo: View {\n    @SceneStorage({key}) private var value: {ValueType} = {wrappedValue}\n\n    var body: some View {\n        TabView(selection: $value) { tabs }\n    }\n}"
+    },
+    {
+      "id": "focus-state",
+      "title": "@FocusState",
+      "api": "FocusState",
+      "summary": "A property wrapper that reads and programmatically moves keyboard/system focus among focusable views in a scene.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 15.0 / iPadOS 15.0 / macOS 12.0 / tvOS 15.0 / watchOS 8.0",
+      "styles": [],
+      "states": [
+        "default",
+        "focused",
+        "disabled"
+      ],
+      "higNotes": "Use @FocusState to drive and observe focus: advance fields on submit, focus the first invalid field on validation, or dismiss the keyboard by setting it to nil/false. The wrapped value must be Bool or an Optional Hashable. Avoid binding the same value to two fields (ambiguous) — use distinct enum cases.",
+      "properties": [
+        {
+          "name": "valueShape",
+          "swiftType": "enum",
+          "control": "segmented",
+          "options": [
+            "Bool",
+            "OptionalHashable"
+          ],
+          "defaultValue": "OptionalHashable",
+          "notes": "Bool form for a single focusable view; Optional Hashable (often an enum) to track which of several fields is focused."
+        },
+        {
+          "name": "fieldEnum",
+          "swiftType": "Hashable",
+          "control": "text",
+          "defaultValue": "Field (username, password)",
+          "notes": "The Hashable type enumerating focusable targets when using the optional form."
+        },
+        {
+          "name": "boundModifier",
+          "swiftType": "enum",
+          "control": "segmented",
+          "options": [
+            "focused(_:)",
+            "focused(_:equals:)"
+          ],
+          "defaultValue": "focused(_:equals:)",
+          "notes": "focused(_:) binds a Bool to whether the view (or a descendant) has focus; focused(_:equals:) matches a specific enum case for granular control."
+        },
+        {
+          "name": "programmaticFocus",
+          "swiftType": "Value",
+          "control": "menu",
+          "options": [
+            "none/nil",
+            "username",
+            "password"
+          ],
+          "defaultValue": "none/nil",
+          "notes": "Set the wrapped value to move focus; set to nil/false to resign focus and dismiss the keyboard."
+        }
+      ],
+      "codeTemplate": "struct FocusStateDemo: View {\n    enum Field: Hashable { case username, password }\n    @State private var username = \"\"\n    @State private var password = \"\"\n    @FocusState private var focusedField: {valueShape == \"Bool\" ? \"Bool\" : \"Field?\"}\n\n    var body: some View {\n        Form {\n            TextField(\"Username\", text: $username)\n                .{boundModifier == \"focused(_:)\" ? \"focused($focusedField)\" : \"focused($focusedField, equals: .username)\"}\n            SecureField(\"Password\", text: $password)\n                .focused($focusedField, equals: .password)\n            Button(\"Next\") { focusedField = {programmaticFocus} }\n        }\n    }\n}"
+    },
+    {
+      "id": "focused-modifier",
+      "title": ".focused(_:) / .focused(_:equals:)",
+      "api": "View.focused(_:equals:)",
+      "summary": "Modifiers that associate a focusable view with a @FocusState binding, by Boolean presence or by matching a specific value.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 15.0 / iPadOS 15.0 / macOS 12.0 / tvOS 15.0 / watchOS 8.0",
+      "styles": [],
+      "states": [
+        "default",
+        "focused",
+        "disabled"
+      ],
+      "higNotes": "Attach .focused(_:equals:) to each field with its distinct case for multi-field forms; use .focused(_:) with a Bool for a single field or to observe whether a container or its descendants hold focus.",
+      "properties": [
+        {
+          "name": "binding",
+          "swiftType": "FocusState<Value>.Binding",
+          "control": "text",
+          "defaultValue": "$focusedField",
+          "notes": "Projected value of a @FocusState property."
+        },
+        {
+          "name": "equalsValue",
+          "swiftType": "Value",
+          "control": "menu",
+          "options": [
+            "username",
+            "password",
+            "n/a (Bool form)"
+          ],
+          "defaultValue": "username",
+          "notes": "The value this view's focus corresponds to; omitted in the Bool overload."
+        }
+      ],
+      "codeTemplate": "TextField(\"Field\", text: $text)\n    .focused({binding}, equals: {equalsValue})"
+    },
+    {
+      "id": "is-focused-environment",
+      "title": "\\.isFocused (Environment)",
+      "api": "EnvironmentValues.isFocused",
+      "summary": "A read-only environment value indicating whether the nearest focusable ancestor currently has focus.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 15.0 / iPadOS 15.0 / macOS 12.0 / tvOS 15.0 / watchOS 8.0",
+      "styles": [],
+      "states": [
+        "default",
+        "focused"
+      ],
+      "higNotes": "Read \\.isFocused to restyle a control (highlight, scale) based on whether its focus scope is active — common on tvOS for focus-driven UI and on macOS/iPad with hardware keyboards.",
+      "properties": [
+        {
+          "name": "isFocused",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Read-only; reflects focus of the enclosing focusable region. Pair with .focusable() to define the region."
+        }
+      ],
+      "codeTemplate": "struct FocusReactiveRow: View {\n    @Environment(\\.isFocused) private var isFocused\n\n    var body: some View {\n        Text(\"Row\")\n            .padding()\n            .background(isFocused ? Color.accentColor.opacity(0.2) : Color.clear)\n    }\n}"
+    },
+    {
+      "id": "focused-value",
+      "title": "@FocusedValue",
+      "api": "FocusedValue",
+      "summary": "Reads a value published by the currently focused view or an ancestor, reflecting the value closest to focus.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 14.0 / iPadOS 14.0 / macOS 11.0 / tvOS 14.0 / watchOS 7.0",
+      "styles": [],
+      "states": [
+        "default",
+        "empty"
+      ],
+      "higNotes": "Use @FocusedValue (with .focusedValue/.focusedSceneValue) to wire commands, menu bar items, and toolbar actions to whatever document or selection is focused — central to macOS multi-window apps. The wrapped value is always Optional (nil when nothing focused publishes the key).",
+      "properties": [
+        {
+          "name": "keyPath",
+          "swiftType": "KeyPath<FocusedValues, Value?>",
+          "control": "menu",
+          "options": [
+            "\\.selectedDocument",
+            "\\.activeEditor",
+            "\\.currentSelection"
+          ],
+          "defaultValue": "\\.selectedDocument",
+          "notes": "Custom FocusedValues entry (declared with @Entry, Optional type). iOS 17+/macOS 14+ also support @FocusedValue(MyType.self)."
+        },
+        {
+          "name": "readByType",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Type-based read @FocusedValue(Type.self) introduced alongside the @Entry-driven keying; otherwise read by key path."
+        }
+      ],
+      "codeTemplate": "extension FocusedValues {\n    @Entry var selectedDocument: Document?\n}\n\nstruct DocumentCommands: View {\n    @FocusedValue({readByType ? \"Document.self\" : keyPath}) private var document\n\n    var body: some View {\n        Button(\"Export\") { document?.export() }\n            .disabled(document == nil)\n    }\n}"
+    },
+    {
+      "id": "focused-binding",
+      "title": "@FocusedBinding",
+      "api": "FocusedBinding",
+      "summary": "Reads a Binding published by the focused view, unwrapping it so commands can both read and write the focused view's value.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 14.0 / iPadOS 14.0 / macOS 11.0 / tvOS 14.0 / watchOS 7.0",
+      "styles": [],
+      "states": [
+        "default",
+        "empty"
+      ],
+      "higNotes": "Use @FocusedBinding when a command needs to mutate (not just read) a value owned by the focused view — e.g. a menu toggle that flips a property of the focused document. Publish with .focusedSceneValue(_:) passing a Binding.",
+      "properties": [
+        {
+          "name": "keyPath",
+          "swiftType": "KeyPath<FocusedValues, Binding<Value>?>",
+          "control": "menu",
+          "options": [
+            "\\.documentTitle",
+            "\\.isEditing",
+            "\\.zoomLevel"
+          ],
+          "defaultValue": "\\.documentTitle",
+          "notes": "FocusedValues entry whose value is a Binding. The wrapper unwraps it to an Optional Value with two-way access."
+        }
+      ],
+      "codeTemplate": "struct TitleCommand: View {\n    @FocusedBinding({keyPath}) private var title\n\n    var body: some View {\n        TextField(\"Title\", text: Binding($title) ?? .constant(\"\"))\n    }\n}"
+    },
+    {
+      "id": "focused-scene-value-modifier",
+      "title": ".focusedValue / .focusedSceneValue",
+      "api": "View.focusedSceneValue(_:_:)",
+      "summary": "Publishes a value or binding into FocusedValues so focused-value readers (commands, menus) can observe it.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 14.0 / iPadOS 14.0 / macOS 11.0 / tvOS 14.0 / watchOS 7.0",
+      "styles": [],
+      "states": [
+        "default"
+      ],
+      "higNotes": "Use .focusedValue when the value should be observed only while the modified view is focused; use .focusedSceneValue to publish at scene scope (the active window), which is what menu-bar commands typically read.",
+      "properties": [
+        {
+          "name": "scope",
+          "swiftType": "enum",
+          "control": "segmented",
+          "options": [
+            "focusedValue",
+            "focusedSceneValue"
+          ],
+          "defaultValue": "focusedSceneValue",
+          "notes": "View-focus scope vs. scene (active-window) scope."
+        },
+        {
+          "name": "keyPath",
+          "swiftType": "WritableKeyPath<FocusedValues, Value?>",
+          "control": "menu",
+          "options": [
+            "\\.selectedDocument",
+            "\\.documentTitle"
+          ],
+          "defaultValue": "\\.selectedDocument",
+          "notes": "FocusedValues entry to publish into."
+        },
+        {
+          "name": "value",
+          "swiftType": "Value",
+          "control": "text",
+          "defaultValue": "document",
+          "notes": "Value (or Binding) to publish. Pass $binding when paired with @FocusedBinding readers."
+        }
+      ],
+      "codeTemplate": "DocumentView()\n    .{scope}({keyPath}, {value})"
+    },
+    {
+      "id": "preference-key",
+      "title": "PreferenceKey",
+      "api": "PreferenceKey",
+      "summary": "A protocol defining a typed value that flows up the view tree from descendants to ancestors, with a reduce strategy for conflicts.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "styles": [],
+      "states": [
+        "default",
+        "empty"
+      ],
+      "higNotes": "Use a PreferenceKey to report data from children to a container (measured sizes, a title, a list of section anchors). Provide a defaultValue and a reduce(value:nextValue:) that merges contributions from multiple subviews. Prefer built-in mechanisms (navigationTitle, layout) when they exist.",
+      "properties": [
+        {
+          "name": "valueType",
+          "swiftType": "Any.Type",
+          "control": "text",
+          "defaultValue": "CGFloat",
+          "notes": "The Value associated type. Common: CGFloat (max width), [Anchor<CGRect>], String."
+        },
+        {
+          "name": "defaultValue",
+          "swiftType": "Value",
+          "control": "text",
+          "defaultValue": "0",
+          "notes": "Value used when no view sets the preference."
+        },
+        {
+          "name": "reduceStrategy",
+          "swiftType": "enum",
+          "control": "picker",
+          "options": [
+            "takeLast",
+            "max",
+            "min",
+            "sum",
+            "append",
+            "first"
+          ],
+          "defaultValue": "takeLast",
+          "notes": "How reduce(value:nextValue:) combines multiple subview contributions."
+        }
+      ],
+      "codeTemplate": "struct {KeyName}: PreferenceKey {\n    static let defaultValue: {valueType} = {defaultValue}\n    static func reduce(value: inout {valueType}, nextValue: () -> {valueType}) {\n        {reduceStrategy == \"max\" ? \"value = max(value, nextValue())\" : reduceStrategy == \"sum\" ? \"value += nextValue()\" : \"value = nextValue()\"}\n    }\n}"
+    },
+    {
+      "id": "preference-modifier",
+      "title": ".preference(key:value:)",
+      "api": "View.preference(key:value:)",
+      "summary": "Sets a value for a custom PreferenceKey on a view, contributing it upward to ancestor readers.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "styles": [],
+      "states": [
+        "default"
+      ],
+      "higNotes": "Attach .preference to the descendant that knows the value (often inside a background GeometryReader for sizes). Multiple contributions get merged by the key's reduce.",
+      "properties": [
+        {
+          "name": "key",
+          "swiftType": "PreferenceKey.Type",
+          "control": "text",
+          "defaultValue": "WidthKey.self",
+          "notes": "The preference key type."
+        },
+        {
+          "name": "value",
+          "swiftType": "K.Value",
+          "control": "text",
+          "defaultValue": "geo.size.width",
+          "notes": "Value to contribute. Frequently derived from a GeometryReader in a background."
+        }
+      ],
+      "codeTemplate": "Text(\"Item\")\n    .background(\n        GeometryReader { geo in\n            Color.clear.preference(key: {key}, value: {value})\n        }\n    )"
+    },
+    {
+      "id": "on-preference-change",
+      "title": ".onPreferenceChange(_:perform:)",
+      "api": "View.onPreferenceChange(_:perform:)",
+      "summary": "Runs a closure in the container whenever the reduced value for a PreferenceKey changes.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "styles": [],
+      "states": [
+        "default"
+      ],
+      "higNotes": "Read aggregated child preferences in the parent here, typically copying into @State to drive layout. Avoid heavy work in the closure; the Value must be Equatable. Beware update loops if the state you set changes the preference.",
+      "properties": [
+        {
+          "name": "key",
+          "swiftType": "PreferenceKey.Type",
+          "control": "text",
+          "defaultValue": "WidthKey.self",
+          "notes": "The key to observe (its Value must be Equatable)."
+        },
+        {
+          "name": "perform",
+          "swiftType": "(K.Value) -> Void",
+          "control": "text",
+          "defaultValue": "{ maxWidth = $0 }",
+          "notes": "Closure receiving the new reduced value; usually stores it into @State."
+        }
+      ],
+      "codeTemplate": "VStack { rows }\n    .onPreferenceChange({key}) { newValue in\n        {perform}\n    }"
+    },
+    {
+      "id": "transform-preference",
+      "title": ".transformPreference(_:_:)",
+      "api": "View.transformPreference(_:_:)",
+      "summary": "Modifies the value of a PreferenceKey in place as it propagates up, deriving it from the current value.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "styles": [],
+      "states": [
+        "default"
+      ],
+      "higNotes": "Use to adjust a preference contribution mid-tree (offset a measured value, tag an entry) without replacing it outright. Prefer .preference when setting an absolute value.",
+      "properties": [
+        {
+          "name": "key",
+          "swiftType": "PreferenceKey.Type",
+          "control": "text",
+          "defaultValue": "AnchorsKey.self",
+          "notes": "Key whose propagating value to transform."
+        },
+        {
+          "name": "transform",
+          "swiftType": "(inout K.Value) -> Void",
+          "control": "text",
+          "defaultValue": "{ $0.append(id) }",
+          "notes": "In-place mutation of the inherited preference value."
+        }
+      ],
+      "codeTemplate": "content\n    .transformPreference({key}) { value in\n        {transform}\n    }"
+    },
+    {
+      "id": "anchor-preference",
+      "title": ".anchorPreference(key:value:transform:)",
+      "api": "View.anchorPreference(key:value:transform:)",
+      "summary": "Reports a geometric Anchor (bounds, point) up the tree via a PreferenceKey, resolved later in a coordinate space.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "styles": [],
+      "states": [
+        "default"
+      ],
+      "higNotes": "Use anchor preferences for overlays/backgrounds that must align to a descendant's frame regardless of layout nesting (tooltips, selection highlights, connecting lines). Resolve the Anchor with a GeometryProxy in overlayPreferenceValue/backgroundPreferenceValue.",
+      "properties": [
+        {
+          "name": "key",
+          "swiftType": "PreferenceKey.Type",
+          "control": "text",
+          "defaultValue": "BoundsKey.self",
+          "notes": "Preference key whose Value holds Anchor data."
+        },
+        {
+          "name": "anchorSource",
+          "swiftType": "Anchor<V>.Source",
+          "control": "picker",
+          "options": [
+            ".bounds",
+            ".center",
+            ".topLeading",
+            ".bottomTrailing",
+            ".point(_)",
+            ".rect(_)"
+          ],
+          "defaultValue": ".bounds",
+          "notes": "Which geometry to capture as the anchor."
+        },
+        {
+          "name": "transform",
+          "swiftType": "(Anchor<A>) -> K.Value",
+          "control": "text",
+          "defaultValue": "{ [$0] }",
+          "notes": "Maps the captured anchor into the key's Value (often wrapping in an array or dictionary)."
+        }
+      ],
+      "codeTemplate": "RowView()\n    .anchorPreference(key: {key}, value: {anchorSource}) { anchor in\n        {transform}\n    }"
+    },
+    {
+      "id": "overlay-preference-value",
+      "title": ".overlayPreferenceValue / .backgroundPreferenceValue",
+      "api": "View.overlayPreferenceValue(_:_:)",
+      "summary": "Builds an overlay or background using the reduced value of a PreferenceKey, with a GeometryProxy to resolve anchors.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0 (alignment overload: iOS 18.0+)",
+      "styles": [],
+      "states": [
+        "default"
+      ],
+      "higNotes": "Use these to draw decorations positioned from child anchors collected via preferences — selection rings, callouts, badges. Resolve Anchor values with proxy[anchor]. The iOS 18 alignment overloads let you align the generated layer.",
+      "properties": [
+        {
+          "name": "layer",
+          "swiftType": "enum",
+          "control": "segmented",
+          "options": [
+            "overlay",
+            "background"
+          ],
+          "defaultValue": "overlay",
+          "notes": "Whether the generated content sits above (overlay) or below (background) the view."
+        },
+        {
+          "name": "key",
+          "swiftType": "PreferenceKey.Type",
+          "control": "text",
+          "defaultValue": "BoundsKey.self",
+          "notes": "Key whose reduced value feeds the builder."
+        },
+        {
+          "name": "alignment",
+          "swiftType": "Alignment",
+          "control": "picker",
+          "options": [
+            "n/a",
+            "center",
+            "topLeading",
+            "bottom",
+            "trailing"
+          ],
+          "defaultValue": "n/a",
+          "notes": "Available on the iOS 18+ alignment overloads to position the generated layer."
+        },
+        {
+          "name": "content",
+          "swiftType": "(K.Value) -> some View",
+          "control": "text",
+          "defaultValue": "{ value in GeometryReader { proxy in ... } }",
+          "notes": "View builder receiving the preference value; use a GeometryReader/proxy to resolve anchors to rects."
+        }
+      ],
+      "codeTemplate": "ContainerView()\n    .{layer}PreferenceValue({key}) { value in\n        GeometryReader { proxy in\n            let rect = proxy[value]\n            RoundedRectangle(cornerRadius: 8)\n                .stroke()\n                .frame(width: rect.width, height: rect.height)\n                .offset(x: rect.minX, y: rect.minY)\n        }\n    }"
+    },
+    {
+      "id": "on-change",
+      "title": ".onChange(of:initial:_:)",
+      "api": "View.onChange(of:initial:_:)",
+      "summary": "Runs an action when an observed Equatable value changes, optionally firing once on initial appearance, with old/new values.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 17.0 / iPadOS 17.0 / macOS 14.0 / tvOS 17.0 / watchOS 10.0 (current two-parameter form)",
+      "styles": [],
+      "states": [
+        "default"
+      ],
+      "higNotes": "Use onChange to react to value changes — but prefer deriving state during body or using task(id:) for async work. The iOS 17 form gives both old and new values; the zero/two-parameter and initial: variants replaced the deprecated single-parameter API.",
+      "properties": [
+        {
+          "name": "value",
+          "swiftType": "Equatable",
+          "control": "text",
+          "defaultValue": "selection",
+          "notes": "The value to observe; must be Equatable."
+        },
+        {
+          "name": "initial",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "When true, fires the action once when the view first appears, in addition to on change."
+        },
+        {
+          "name": "closureShape",
+          "swiftType": "enum",
+          "control": "segmented",
+          "options": [
+            "noParams",
+            "oldNew"
+          ],
+          "defaultValue": "oldNew",
+          "notes": "Action signature: () -> Void or (oldValue, newValue) -> Void."
+        }
+      ],
+      "codeTemplate": "TextField(\"Query\", text: $query)\n    .onChange(of: {value}, initial: {initial}) { {closureShape == \"oldNew\" ? \"oldValue, newValue\" : \"\"} in\n        performSearch()\n    }"
+    },
+    {
+      "id": "on-receive",
+      "title": ".onReceive(_:perform:)",
+      "api": "View.onReceive(_:perform:)",
+      "summary": "Runs an action when a Combine Publisher emits a value, bridging external event streams into a view.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "styles": [],
+      "states": [
+        "default"
+      ],
+      "higNotes": "Use onReceive to respond to Combine publishers — timers, NotificationCenter, system notifications. For modern Swift concurrency prefer .task with an AsyncSequence where possible. Keep the closure light and route work to a model.",
+      "properties": [
+        {
+          "name": "publisher",
+          "swiftType": "Publisher",
+          "control": "menu",
+          "options": [
+            "Timer.publish",
+            "NotificationCenter.default.publisher",
+            "customSubject",
+            "willEnterForeground"
+          ],
+          "defaultValue": "Timer.publish",
+          "notes": "Any Combine Publisher with Failure == Never."
+        },
+        {
+          "name": "perform",
+          "swiftType": "(P.Output) -> Void",
+          "control": "text",
+          "defaultValue": "{ now = $0 }",
+          "notes": "Closure receiving each emitted element."
+        }
+      ],
+      "codeTemplate": "Text(now, style: .time)\n    .onReceive({publisher}) { output in\n        {perform}\n    }"
+    },
+    {
+      "id": "state-object",
+      "title": "@StateObject (legacy)",
+      "api": "StateObject",
+      "summary": "A property wrapper that instantiates and owns an ObservableObject for a view's lifetime — the pre-Observation way to own reference model data.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 14.0 / iPadOS 14.0 / macOS 11.0 / tvOS 14.0 / watchOS 7.0",
+      "styles": [],
+      "states": [
+        "default",
+        "loading"
+      ],
+      "higNotes": "Legacy: for new code prefer @Observable + @State. Use @StateObject only when interoperating with existing ObservableObject types. It guarantees a single instance across body re-evaluations (unlike @ObservedObject).",
+      "properties": [
+        {
+          "name": "wrappedValue",
+          "swiftType": "ObjectType",
+          "control": "text",
+          "defaultValue": "ViewModel()",
+          "notes": "The owned ObservableObject; constructed in an autoclosure so it's created exactly once."
+        },
+        {
+          "name": "publishedDriver",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Demonstrates that @Published properties on the object trigger view updates."
+        }
+      ],
+      "codeTemplate": "struct StateObjectDemo: View {\n    @StateObject private var model = ViewModel()\n\n    var body: some View {\n        Text(model.title)\n    }\n}"
+    },
+    {
+      "id": "observed-object",
+      "title": "@ObservedObject (legacy)",
+      "api": "ObservedObject",
+      "summary": "Observes an externally-owned ObservableObject passed into a view — the pre-Observation way to receive a reference model.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "styles": [],
+      "states": [
+        "default",
+        "disabled"
+      ],
+      "higNotes": "Legacy: prefer passing an @Observable object as a plain let in new code. @ObservedObject does not own its object — never initialize the source of truth here, or it will be recreated on each parent update. Use $ to derive bindings to its @Published properties.",
+      "properties": [
+        {
+          "name": "wrappedValue",
+          "swiftType": "ObjectType",
+          "control": "text",
+          "defaultValue": "passed-in ViewModel",
+          "notes": "The observed object, owned elsewhere (typically a @StateObject upstream)."
+        },
+        {
+          "name": "bindingProperty",
+          "swiftType": "String",
+          "control": "text",
+          "defaultValue": "isOn",
+          "notes": "A @Published property to bind via $model.<property>."
+        }
+      ],
+      "codeTemplate": "struct ObservedObjectDemo: View {\n    @ObservedObject var model: ViewModel\n\n    var body: some View {\n        Toggle(\"Flag\", isOn: $model.{bindingProperty})\n    }\n}"
+    },
+    {
+      "id": "environment-object",
+      "title": "@EnvironmentObject / .environmentObject(_:) (legacy)",
+      "api": "EnvironmentObject",
+      "summary": "Reads an ObservableObject injected into the environment by type — the pre-Observation counterpart to @Environment(Type.self).",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0",
+      "styles": [],
+      "states": [
+        "default",
+        "error"
+      ],
+      "higNotes": "Legacy: prefer .environment(_:) + @Environment(Type.self) with @Observable. @EnvironmentObject crashes at runtime if no ancestor injected the object via .environmentObject(_:) — always inject before reading. Useful only when bridging existing ObservableObject code.",
+      "properties": [
+        {
+          "name": "objectType",
+          "swiftType": "ObservableObject.Type",
+          "control": "text",
+          "defaultValue": "Session",
+          "notes": "The ObservableObject type read from the environment."
+        },
+        {
+          "name": "injected",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "States: when no ancestor injects the object, reading it crashes — the 'error' state demonstrates this requirement."
+        }
+      ],
+      "codeTemplate": "struct EnvObjectDemo: View {\n    @EnvironmentObject private var session: {objectType}\n\n    var body: some View {\n        Text(session.username)\n    }\n}\n\n// Inject upstream:\n// ContentView().environmentObject(session)"
+    },
+    {
+      "id": "scaled-metric",
+      "title": "@ScaledMetric",
+      "api": "ScaledMetric",
+      "summary": "A dynamic property that scales a numeric value relative to the current Dynamic Type size, keeping custom dimensions (icon sizes, paddings) proportional to the user's text-size setting.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS",
+        "visionOS"
+      ],
+      "minOS": "iOS 14.0 / iPadOS 14.0 / macOS 11.0 / tvOS 14.0 / watchOS 7.0 / Mac Catalyst 14.0 / visionOS 1.0",
+      "styles": [],
+      "states": [
+        "default"
+      ],
+      "higNotes": "Use @ScaledMetric to make custom layout dimensions honor Dynamic Type — e.g. a thumbnail size or spacing that grows with the user's preferred text size. Optionally anchor the scaling to a specific text style with relativeTo:. It reads \\.dynamicTypeSize from the environment, so it belongs in the data-flow story alongside @Environment. Prefer it over hardcoded CGFloats whenever a dimension should track text size for accessibility.",
+      "properties": [
+        {
+          "name": "wrappedValue",
+          "swiftType": "Value",
+          "control": "slider",
+          "defaultValue": "24",
+          "notes": "The base value at the default text size (Value: BinaryFloatingPoint, typically CGFloat). The wrapper returns this scaled to the current Dynamic Type size."
+        },
+        {
+          "name": "relativeTo",
+          "swiftType": "Font.TextStyle",
+          "control": "picker",
+          "options": [
+            "body",
+            "largeTitle",
+            "title",
+            "headline",
+            "subheadline",
+            "callout",
+            "footnote",
+            "caption"
+          ],
+          "defaultValue": "body",
+          "notes": "Optional text style the scaling is relative to. Omit for default body-relative scaling; supply to match a specific style's scale curve."
+        }
+      ],
+      "codeTemplate": "struct ScaledMetricDemo: View {\n    @ScaledMetric(relativeTo: .{relativeTo}) private var iconSize: CGFloat = {wrappedValue}\n\n    var body: some View {\n        Image(systemName: \"star.fill\")\n            .resizable()\n            .frame(width: iconSize, height: iconSize)\n    }\n}"
+    },
+    {
+      "id": "gesture-state",
+      "title": "@GestureState",
+      "api": "GestureState",
+      "summary": "A property wrapper that holds transient state while a gesture is active and automatically resets to its initial value when the gesture ends.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS",
+        "visionOS"
+      ],
+      "minOS": "iOS 13.0 / iPadOS 13.0 / macOS 10.15 / tvOS 13.0 / watchOS 6.0 / Mac Catalyst 13.0 / visionOS 1.0",
+      "styles": [],
+      "states": [
+        "default"
+      ],
+      "higNotes": "Use @GestureState for state that should exist only for the duration of a gesture (drag translation, is-pressing flag). Update it via the gesture's updating(_:body:) callback; it auto-resets when the gesture becomes inactive, so you never write reset logic. For state that must persist after the gesture ends, use @State instead and update it in onEnded.",
+      "properties": [
+        {
+          "name": "wrappedValue",
+          "swiftType": "Value",
+          "control": "text",
+          "defaultValue": "false",
+          "notes": "Initial value the property resets to when the gesture is inactive. Common types: Bool (is-pressing), CGSize (drag translation), CGFloat (magnification)."
+        },
+        {
+          "name": "valueKind",
+          "swiftType": "enum",
+          "control": "picker",
+          "options": [
+            "Bool",
+            "CGSize",
+            "CGFloat"
+          ],
+          "defaultValue": "Bool",
+          "notes": "Shape of the transient value: Bool for press detection, CGSize for drag offset, CGFloat for magnify/rotate amount."
+        }
+      ],
+      "codeTemplate": "struct GestureStateDemo: View {\n    @GestureState private var isPressing = {wrappedValue}\n\n    var body: some View {\n        Circle()\n            .fill(isPressing ? .green : .gray)\n            .frame(width: 80, height: 80)\n            .gesture(\n                LongPressGesture(minimumDuration: 1)\n                    .updating($isPressing) { current, state, _ in state = current }\n            )\n    }\n}"
+    },
+    {
+      "id": "namespace",
+      "title": "@Namespace",
+      "api": "Namespace",
+      "summary": "A dynamic property that vends a stable namespace ID tied to the view's persistent identity, used to link views across transitions (matchedGeometryEffect, glassEffectID).",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS",
+        "visionOS"
+      ],
+      "minOS": "iOS 14.0 / iPadOS 14.0 / macOS 11.0 / tvOS 14.0 / watchOS 7.0 / Mac Catalyst 14.0 / visionOS 1.0",
+      "styles": [],
+      "states": [
+        "default"
+      ],
+      "higNotes": "Declare @Namespace to obtain a Namespace.ID, then pass it to matchedGeometryEffect(id:in:) on the source and destination views so SwiftUI animates a shared element between layouts. The same namespace is used by glassEffectID (iOS 26) for morphing glass. The namespace is part of view data flow: it's created once per view identity and propagated to children.",
+      "properties": [
+        {
+          "name": "namespaceID",
+          "swiftType": "Namespace.ID",
+          "control": "text",
+          "defaultValue": "namespace",
+          "notes": "The projected ID value, read as the wrapped value. Pass it into matchedGeometryEffect(id:in:) (the `in:` argument)."
+        },
+        {
+          "name": "matchID",
+          "swiftType": "String",
+          "control": "text",
+          "defaultValue": "hero",
+          "notes": "The id: passed to matchedGeometryEffect on both endpoints so they are recognized as the same element."
+        }
+      ],
+      "codeTemplate": "struct NamespaceDemo: View {\n    @Namespace private var namespace\n    @State private var expanded = false\n\n    var body: some View {\n        if expanded {\n            RoundedRectangle(cornerRadius: 24)\n                .matchedGeometryEffect(id: \"{matchID}\", in: namespace)\n                .frame(width: 300, height: 300)\n                .onTapGesture { expanded.toggle() }\n        } else {\n            RoundedRectangle(cornerRadius: 12)\n                .matchedGeometryEffect(id: \"{matchID}\", in: namespace)\n                .frame(width: 100, height: 100)\n                .onTapGesture { expanded.toggle() }\n        }\n    }\n}"
+    },
+    {
+      "id": "focused-object",
+      "title": "@FocusedObject (legacy)",
+      "api": "FocusedObject",
+      "summary": "Reads an ObservableObject published by the focused view or an ancestor — the pre-Observation counterpart to @FocusedValue for reference-type models.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS",
+        "visionOS"
+      ],
+      "minOS": "iOS 16.0 / iPadOS 16.0 / macOS 13.0 / tvOS 16.0 / watchOS 9.0 / Mac Catalyst 16.0 / visionOS 1.0",
+      "styles": [],
+      "states": [
+        "default",
+        "empty"
+      ],
+      "higNotes": "Legacy: prefer @FocusedValue with @Observable models or @Entry-keyed FocusedValues in new code. Use @FocusedObject only when wiring menu-bar commands or toolbar actions to an existing ObservableObject owned by the focused scene/view (published via .focusedSceneObject(_:) / .focusedObject(_:)). The wrapped value is always Optional — nil when no focused view publishes the object.",
+      "properties": [
+        {
+          "name": "objectType",
+          "swiftType": "ObservableObject.Type",
+          "control": "text",
+          "defaultValue": "DocumentModel",
+          "notes": "The ObservableObject type to read from the focused view. The wrapped value is Optional (nil when nothing focused publishes it)."
+        },
+        {
+          "name": "publishScope",
+          "swiftType": "enum",
+          "control": "segmented",
+          "options": [
+            "focusedObject",
+            "focusedSceneObject"
+          ],
+          "defaultValue": "focusedSceneObject",
+          "notes": "How the object is published upstream: .focusedObject(_:) (view-focus scope) or .focusedSceneObject(_:) (active-window scope, typical for menu commands)."
+        }
+      ],
+      "codeTemplate": "struct ExportCommand: View {\n    @FocusedObject private var document: {objectType}?\n\n    var body: some View {\n        Button(\"Export\") { document?.export() }\n            .disabled(document == nil)\n    }\n}\n\n// Publish upstream:\n// DocumentView().focusedSceneObject(model)"
+    }
+  ]
+}

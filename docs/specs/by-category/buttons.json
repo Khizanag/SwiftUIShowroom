@@ -1,0 +1,991 @@
+{
+  "category": "Buttons & Actions",
+  "key": "buttons",
+  "folder": "Buttons",
+  "components": [
+    {
+      "id": "button",
+      "title": "Button",
+      "api": "Button",
+      "summary": "A control that initiates an action when tapped, clicked, or activated.",
+      "minOS": "iOS 13.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "summaryLong": "The fundamental action control. Combine with a role, a button style (including the iOS 26 .glass / .glassProminent), tint, controlSize, buttonBorderShape, and buttonSizing to cover every native variant.",
+      "properties": [
+        {
+          "name": "title",
+          "swiftType": "LocalizedStringKey",
+          "control": "text",
+          "defaultValue": "\"Sign In\"",
+          "notes": "Text label. Prefer the title+systemImage initializer so the button can adapt icon/title rendering per container (toolbar, menu) and for VoiceOver."
+        },
+        {
+          "name": "systemImage",
+          "swiftType": "String",
+          "control": "text",
+          "defaultValue": "\"arrow.up\"",
+          "notes": "SF Symbol name. Optional. Enables iconOnly rendering in toolbars while preserving an accessibility title."
+        },
+        {
+          "name": "role",
+          "swiftType": "ButtonRole?",
+          "control": "picker",
+          "options": [
+            "none",
+            "destructive",
+            "cancel",
+            "confirm",
+            "close"
+          ],
+          "defaultValue": "none",
+          "notes": ".destructive renders red; .cancel/.confirm/.close gain semantic styling in dialogs and sheets. .confirm and .close are iOS 26+."
+        },
+        {
+          "name": "style",
+          "swiftType": "any PrimitiveButtonStyle",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "plain",
+            "borderless",
+            "bordered",
+            "borderedProminent",
+            "glass",
+            "glassProminent"
+          ],
+          "defaultValue": "automatic",
+          "notes": "Applied via .buttonStyle(_:). .glass and .glassProminent are iOS 26 Liquid Glass styles. .borderedProminent is the standard call-to-action."
+        },
+        {
+          "name": "tint",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": ".accentColor",
+          "notes": "Applied via .tint(_:). Drives accent for bordered/prominent/glass styles. Use design-system accent, never raw white/black."
+        },
+        {
+          "name": "controlSize",
+          "swiftType": "ControlSize",
+          "control": "segmented",
+          "options": [
+            "mini",
+            "small",
+            "regular",
+            "large",
+            "extraLarge"
+          ],
+          "defaultValue": "regular",
+          "notes": "Applied via .controlSize(_:). .extraLarge is iOS 26+. Affects padding and height across button-like controls."
+        },
+        {
+          "name": "buttonBorderShape",
+          "swiftType": "ButtonBorderShape",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "capsule",
+            "roundedRectangle",
+            "circle",
+            "buttonBorder"
+          ],
+          "defaultValue": "automatic",
+          "notes": "Applied via .buttonBorderShape(_:). .circle is iOS 26+. Only affects bordered/glass styles."
+        },
+        {
+          "name": "buttonSizing",
+          "swiftType": "ButtonSizing",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "fitted",
+            "flexible"
+          ],
+          "defaultValue": "automatic",
+          "notes": "iOS 26+. Applied via .buttonSizing(_:). .flexible expands to fill available width; .fitted hugs content."
+        },
+        {
+          "name": "repeatBehavior",
+          "swiftType": "ButtonRepeatBehavior",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "enabled",
+            "disabled"
+          ],
+          "defaultValue": "automatic",
+          "notes": "Applied via .buttonRepeatBehavior(_:). .enabled fires the action repeatedly while held. iOS 17+."
+        },
+        {
+          "name": "isEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Driven by .disabled(!isEnabled). Disabled buttons dim and stop receiving input."
+        },
+        {
+          "name": "labelStyle",
+          "swiftType": "any LabelStyle",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "titleAndIcon",
+            "titleOnly",
+            "iconOnly"
+          ],
+          "defaultValue": "automatic",
+          "notes": "Applied via .labelStyle(_:). .iconOnly keeps the title for VoiceOver while hiding it visually."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled",
+        "focused",
+        "longContent"
+      ],
+      "styles": [
+        "automatic",
+        "plain",
+        "borderless",
+        "bordered",
+        "borderedProminent",
+        "glass",
+        "glassProminent"
+      ],
+      "higNotes": "Use a clear verb for the title. One prominent (call-to-action) button per screen region. Reserve .destructive red for irreversible actions and pair with a confirmation. Maintain a 44pt minimum tap target. On tvOS prefer .card style.",
+      "codeTemplate": "Button(\"{title}\", systemImage: \"{systemImage}\"{role}) {\n    // action\n}\n.buttonStyle(.{style})\n.controlSize(.{controlSize})\n.buttonBorderShape(.{buttonBorderShape})\n.buttonSizing(.{buttonSizing})\n.buttonRepeatBehavior(.{repeatBehavior})\n.labelStyle(.{labelStyle})\n.tint({tint})\n.disabled({isDisabled})"
+    },
+    {
+      "id": "button-role",
+      "title": "Button Role",
+      "api": "ButtonRole",
+      "summary": "A semantic value describing a button's purpose, driving system styling.",
+      "minOS": "iOS 15.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "role",
+          "swiftType": "ButtonRole?",
+          "control": "picker",
+          "options": [
+            "none",
+            "destructive",
+            "cancel",
+            "confirm",
+            "close"
+          ],
+          "defaultValue": "destructive",
+          "notes": ".destructive and .cancel are iOS 15+. .confirm and .close are iOS 26+ and gain glass-era semantic treatment in sheets and dialogs."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled"
+      ],
+      "styles": [],
+      "higNotes": "Roles let the system place and color buttons correctly automatically. In a confirmationDialog, mark the dangerous option .destructive and the safe escape .cancel so the system orders and emphasizes them per platform conventions.",
+      "codeTemplate": "Button(\"{title}\", role: .{role}) {\n    // action\n}"
+    },
+    {
+      "id": "menu",
+      "title": "Menu",
+      "api": "Menu",
+      "summary": "A control that presents a menu of actions, optionally with a primary action.",
+      "minOS": "iOS 14.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS"
+      ],
+      "properties": [
+        {
+          "name": "title",
+          "swiftType": "LocalizedStringKey",
+          "control": "text",
+          "defaultValue": "\"Actions\"",
+          "notes": "Menu label. Can also be a Label with systemImage for icon+title."
+        },
+        {
+          "name": "systemImage",
+          "swiftType": "String",
+          "control": "text",
+          "defaultValue": "\"ellipsis.circle\"",
+          "notes": "Optional SF Symbol for the menu's label."
+        },
+        {
+          "name": "menuStyle",
+          "swiftType": "any MenuStyle",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "button",
+            "borderlessButton"
+          ],
+          "defaultValue": "automatic",
+          "notes": "Applied via .menuStyle(_:). .button renders the menu trigger as a button; .borderlessButton (macOS) is borderless. Deprecated bordered/borderlessButton variants exist."
+        },
+        {
+          "name": "hasPrimaryAction",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "When true, use the primaryAction: initializer: tap fires the primary action; menu opens on long-press / indicator click."
+        },
+        {
+          "name": "useSections",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Group items with Section to create visually separated blocks within the menu."
+        },
+        {
+          "name": "useNestedMenu",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Nest a Menu inside the content closure to create a submenu."
+        },
+        {
+          "name": "menuOrder",
+          "swiftType": "MenuOrder",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "priority",
+            "fixed"
+          ],
+          "defaultValue": "automatic",
+          "notes": "Applied via .menuOrder(_:). .fixed keeps declared order top-to-bottom; .priority surfaces the first item nearest the trigger. iOS 16+."
+        },
+        {
+          "name": "menuIndicator",
+          "swiftType": "Visibility",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "visible",
+            "hidden"
+          ],
+          "defaultValue": "automatic",
+          "notes": "Applied via .menuIndicator(_:). Controls the disclosure chevron. iOS 15+."
+        },
+        {
+          "name": "controlSize",
+          "swiftType": "ControlSize",
+          "control": "segmented",
+          "options": [
+            "mini",
+            "small",
+            "regular",
+            "large",
+            "extraLarge"
+          ],
+          "defaultValue": "regular",
+          "notes": "Applies when the menu adopts a button style."
+        },
+        {
+          "name": "isEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Driven by .disabled(!isEnabled)."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled",
+        "selected",
+        "longContent"
+      ],
+      "styles": [
+        "automatic",
+        "button",
+        "borderlessButton"
+      ],
+      "higNotes": "Group related items with Section and dividers. Put the most common action first. Use a primaryAction when one action dominates but advanced options should stay one gesture away. Avoid deep nesting beyond one submenu level. Mark destructive items with role: .destructive.",
+      "codeTemplate": "Menu {\n    Button(\"Duplicate\", systemImage: \"plus.square.on.square\") { }\n    Button(\"Rename\", systemImage: \"pencil\") { }\n    Menu(\"Copy\") {\n        Button(\"Copy\") { }\n        Button(\"Copy Path\") { }\n    }\n    Section {\n        Button(\"Delete\", role: .destructive) { }\n    }\n} label: {\n    Label(\"{title}\", systemImage: \"{systemImage}\")\n} primaryAction: {\n    // primary action when hasPrimaryAction\n}\n.menuStyle(.{menuStyle})\n.menuOrder(.{menuOrder})\n.menuIndicator(.{menuIndicator})\n.controlSize(.{controlSize})\n.disabled({isDisabled})"
+    },
+    {
+      "id": "toggle",
+      "title": "Toggle",
+      "api": "Toggle",
+      "summary": "A control that switches between on and off states bound to a Boolean.",
+      "minOS": "iOS 13.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "title",
+          "swiftType": "LocalizedStringKey",
+          "control": "text",
+          "defaultValue": "\"Vibrate on Ring\"",
+          "notes": "Describes what the toggle controls. A second Text in the label closure becomes a subtitle."
+        },
+        {
+          "name": "systemImage",
+          "swiftType": "String",
+          "control": "text",
+          "defaultValue": "\"dot.radiowaves.left.and.right\"",
+          "notes": "Optional SF Symbol via the title+systemImage initializer."
+        },
+        {
+          "name": "isOn",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "The bound state. In a showroom, drive the live value directly."
+        },
+        {
+          "name": "toggleStyle",
+          "swiftType": "any ToggleStyle",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "switch",
+            "button",
+            "checkbox"
+          ],
+          "defaultValue": "automatic",
+          "notes": "Applied via .toggleStyle(_:). .switch is the iOS default; .button renders an on/off pill (great in toolbars); .checkbox is macOS-only."
+        },
+        {
+          "name": "tint",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": ".accentColor",
+          "notes": "Applied via .tint(_:). Colors the 'on' track of the switch and the filled state of the button style."
+        },
+        {
+          "name": "controlSize",
+          "swiftType": "ControlSize",
+          "control": "segmented",
+          "options": [
+            "mini",
+            "small",
+            "regular",
+            "large",
+            "extraLarge"
+          ],
+          "defaultValue": "regular",
+          "notes": "Most impactful on macOS and with the .button style."
+        },
+        {
+          "name": "isEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Driven by .disabled(!isEnabled)."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled",
+        "selected",
+        "focused"
+      ],
+      "styles": [
+        "automatic",
+        "switch",
+        "button",
+        "checkbox"
+      ],
+      "higNotes": "Use a toggle for an immediate, reversible binary setting (no Apply step). Label states clearly; the label should read as the thing being enabled, not as a question. The .button style suits toolbars; .checkbox belongs to macOS forms. Keep the 'on' tint consistent with the app accent.",
+      "codeTemplate": "Toggle(\"{title}\", systemImage: \"{systemImage}\", isOn: ${isOn})\n    .toggleStyle(.{toggleStyle})\n    .controlSize(.{controlSize})\n    .tint({tint})\n    .disabled({isDisabled})"
+    },
+    {
+      "id": "stepper",
+      "title": "Stepper",
+      "api": "Stepper",
+      "summary": "A control that increments and decrements a value via plus/minus buttons.",
+      "minOS": "iOS 13.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "title",
+          "swiftType": "LocalizedStringKey",
+          "control": "text",
+          "defaultValue": "\"Quantity\"",
+          "notes": "Label shown beside the stepper controls."
+        },
+        {
+          "name": "value",
+          "swiftType": "Int",
+          "control": "stepper",
+          "defaultValue": "0",
+          "notes": "Bound value. Use the value:in:step: initializer to clamp to a range."
+        },
+        {
+          "name": "range",
+          "swiftType": "ClosedRange<Int>",
+          "control": "text",
+          "defaultValue": "0...10",
+          "notes": "Bounds passed to in:. Buttons auto-disable at the limits."
+        },
+        {
+          "name": "step",
+          "swiftType": "Int",
+          "control": "slider",
+          "options": [
+            "1",
+            "5",
+            "10"
+          ],
+          "defaultValue": "1",
+          "notes": "Increment per tap. Pass to step:."
+        },
+        {
+          "name": "controlSize",
+          "swiftType": "ControlSize",
+          "control": "segmented",
+          "options": [
+            "mini",
+            "small",
+            "regular",
+            "large",
+            "extraLarge"
+          ],
+          "defaultValue": "regular",
+          "notes": "Affects the +/- glyph footprint, most visible on macOS."
+        },
+        {
+          "name": "isEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Driven by .disabled(!isEnabled)."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled",
+        "focused"
+      ],
+      "styles": [],
+      "higNotes": "Use a stepper for small, discrete adjustments where exact values matter and the range is narrow. For wide ranges prefer a Slider. Always show the current value next to the control. Not available on tvOS.",
+      "codeTemplate": "Stepper(value: ${value}, in: {range}, step: {step}) {\n    Text(\"{title}: \\(value)\")\n}\n.controlSize(.{controlSize})\n.disabled({isDisabled})"
+    },
+    {
+      "id": "edit-button",
+      "title": "EditButton",
+      "api": "EditButton",
+      "summary": "A button that toggles the editMode environment value for an editable container.",
+      "minOS": "iOS 13.0",
+      "platforms": [
+        "iOS",
+        "iPadOS"
+      ],
+      "properties": [
+        {
+          "name": "placement",
+          "swiftType": "ToolbarItemPlacement",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "topBarTrailing",
+            "topBarLeading",
+            "navigationBarTrailing"
+          ],
+          "defaultValue": "automatic",
+          "notes": "Typically placed in a toolbar. The button auto-switches its title between Edit and Done."
+        },
+        {
+          "name": "isEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Driven by .disabled(!isEnabled)."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled",
+        "selected"
+      ],
+      "styles": [],
+      "higNotes": "Pair with a List/ForEach that declares onDelete and onMove so Edit mode reveals delete and reorder affordances. The button reflects state automatically (Edit ↔ Done) — never hardcode the title. iOS/iPadOS/Mac Catalyst only.",
+      "codeTemplate": "NavigationStack {\n    List {\n        ForEach(items, id: \\.self) { Text($0) }\n            .onDelete { items.remove(atOffsets: $0) }\n            .onMove { items.move(fromOffsets: $0, toOffset: $1) }\n    }\n    .toolbar {\n        ToolbarItem(placement: .{placement}) {\n            EditButton()\n                .disabled({isDisabled})\n        }\n    }\n}"
+    },
+    {
+      "id": "rename-button",
+      "title": "RenameButton",
+      "api": "RenameButton",
+      "summary": "A button that triggers a rename action registered via the renameAction modifier.",
+      "minOS": "iOS 16.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS"
+      ],
+      "properties": [
+        {
+          "name": "context",
+          "swiftType": "View",
+          "control": "menu",
+          "options": [
+            "contextMenu",
+            "toolbar",
+            "focusedValue"
+          ],
+          "defaultValue": "contextMenu",
+          "notes": "Commonly placed in a contextMenu or toolbar. Activation calls the nearest .renameAction { } in the environment."
+        },
+        {
+          "name": "isEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Driven by .disabled(!isEnabled)."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled"
+      ],
+      "styles": [],
+      "higNotes": "RenameButton has no closure of its own — it dispatches to the enclosing .renameAction(_:). Use it so the system supplies the correct localized label and triggers inline rename (e.g. a focused TextField). Pair with @FocusState to begin editing.",
+      "codeTemplate": "Text(name)\n    .contextMenu {\n        RenameButton()\n            .disabled({isDisabled})\n    }\n    .renameAction {\n        isRenaming = true\n    }"
+    },
+    {
+      "id": "paste-button",
+      "title": "PasteButton",
+      "api": "PasteButton",
+      "summary": "A system button that reads Transferable items from the pasteboard into a closure.",
+      "minOS": "iOS 16.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS"
+      ],
+      "properties": [
+        {
+          "name": "payloadType",
+          "swiftType": "Transferable.Type",
+          "control": "picker",
+          "options": [
+            "String.self",
+            "URL.self",
+            "Image.self",
+            "Data.self"
+          ],
+          "defaultValue": "String.self",
+          "notes": "The Transferable type the button accepts; the closure receives an array of that type."
+        },
+        {
+          "name": "tint",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": ".accentColor",
+          "notes": "Applied via .tint(_:). One of the few customizations the system button allows."
+        },
+        {
+          "name": "buttonBorderShape",
+          "swiftType": "ButtonBorderShape",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "capsule",
+            "roundedRectangle",
+            "circle"
+          ],
+          "defaultValue": "automatic",
+          "notes": "Applied via .buttonBorderShape(_:)."
+        },
+        {
+          "name": "labelStyle",
+          "swiftType": "any LabelStyle",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "titleAndIcon",
+            "iconOnly",
+            "titleOnly"
+          ],
+          "defaultValue": "automatic",
+          "notes": "Applied via .labelStyle(_:). The label text is system-provided and localized."
+        },
+        {
+          "name": "isEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "On iOS the button auto-validates/invalidates against pasteboard contents; on macOS it does not."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled",
+        "empty"
+      ],
+      "styles": [],
+      "higNotes": "Use PasteButton instead of a custom paste control so the system grants pasteboard access without a permission prompt (privacy-preserving paste). The system supplies the label and icon — do not relabel. iOS auto-disables it when the pasteboard has no matching content.",
+      "codeTemplate": "PasteButton(payloadType: {payloadType}) { items in\n    // handle items\n}\n.buttonBorderShape(.{buttonBorderShape})\n.labelStyle(.{labelStyle})\n.tint({tint})\n.disabled({isDisabled})"
+    },
+    {
+      "id": "control-group",
+      "title": "ControlGroup",
+      "api": "ControlGroup",
+      "summary": "A container that lays out semantically related controls in a context-appropriate cluster.",
+      "minOS": "iOS 15.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS"
+      ],
+      "properties": [
+        {
+          "name": "label",
+          "swiftType": "LocalizedStringKey",
+          "control": "text",
+          "defaultValue": "\"Format\"",
+          "notes": "Used when the group collapses into a toolbar overflow menu. Often a Label with systemImage."
+        },
+        {
+          "name": "controlGroupStyle",
+          "swiftType": "any ControlGroupStyle",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "navigation",
+            "palette",
+            "menu",
+            "compactMenu"
+          ],
+          "defaultValue": "automatic",
+          "notes": "Applied via .controlGroupStyle(_:). .palette shows a row of icon buttons; .compactMenu collapses into a single menu. .navigation/.compactMenu are iOS 16+."
+        },
+        {
+          "name": "controlSize",
+          "swiftType": "ControlSize",
+          "control": "segmented",
+          "options": [
+            "mini",
+            "small",
+            "regular",
+            "large",
+            "extraLarge"
+          ],
+          "defaultValue": "regular",
+          "notes": "Sizes the clustered controls together."
+        },
+        {
+          "name": "tint",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": ".accentColor",
+          "notes": "Applied via .tint(_:) to color the grouped controls uniformly."
+        },
+        {
+          "name": "isEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Driven by .disabled(!isEnabled) on the whole group."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled",
+        "longContent"
+      ],
+      "styles": [
+        "automatic",
+        "navigation",
+        "palette",
+        "menu",
+        "compactMenu"
+      ],
+      "higNotes": "Group only controls that belong together (e.g. share + favorite + delete). The group adopts the right look per context — segmented in a toolbar, an overflow menu when space is tight. Provide a label so the overflow menu has a name. Not available on watchOS.",
+      "codeTemplate": "ControlGroup {\n    Button(\"Media\", systemImage: \"photo\") { }\n    Button(\"Chart\", systemImage: \"chart.bar\") { }\n    Button(\"Graph\", systemImage: \"point.topleft.down.curvedto.point.bottomright.up\") { }\n} label: {\n    Label(\"{label}\", systemImage: \"plus\")\n}\n.controlGroupStyle(.{controlGroupStyle})\n.controlSize(.{controlSize})\n.tint({tint})\n.disabled({isDisabled})"
+    },
+    {
+      "id": "link",
+      "title": "Link",
+      "api": "Link",
+      "summary": "A control that navigates to a URL, opening it via the system or the app's openURL handler.",
+      "minOS": "iOS 14.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "title",
+          "swiftType": "LocalizedStringKey",
+          "control": "text",
+          "defaultValue": "\"View Our Terms\"",
+          "notes": "The visible label for the link."
+        },
+        {
+          "name": "destination",
+          "swiftType": "URL",
+          "control": "text",
+          "defaultValue": "URL(string: \"https://apple.com\")!",
+          "notes": "Target URL. Opens in the default handler unless intercepted by an openURL environment action."
+        },
+        {
+          "name": "style",
+          "swiftType": "any PrimitiveButtonStyle",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "plain",
+            "bordered",
+            "borderedProminent",
+            "glass"
+          ],
+          "defaultValue": "automatic",
+          "notes": "Link is button-like and honors .buttonStyle(_:)."
+        },
+        {
+          "name": "tint",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": ".accentColor",
+          "notes": "Applied via .tint(_:)."
+        },
+        {
+          "name": "isEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Driven by .disabled(!isEnabled)."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled",
+        "focused"
+      ],
+      "styles": [
+        "automatic",
+        "plain",
+        "bordered",
+        "borderedProminent",
+        "glass",
+        "borderless",
+        "glassProminent"
+      ],
+      "higNotes": "Use Link for navigation to external URLs, not for in-app routing (use a coordinator-driven Button for that). Override behavior app-wide with the openURL environment value to handle deep links.",
+      "codeTemplate": "Link(\"{title}\", destination: {destination})\n    .buttonStyle(.{style})\n    .tint({tint})\n    .disabled({isDisabled})"
+    },
+    {
+      "id": "share-link",
+      "title": "ShareLink",
+      "api": "ShareLink",
+      "summary": "A button that presents the system share sheet for one or more Transferable items.",
+      "minOS": "iOS 16.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "item",
+          "swiftType": "Transferable",
+          "control": "text",
+          "defaultValue": "URL(string: \"https://apple.com\")!",
+          "notes": "The item(s) to share. Any Transferable: URL, String, Image, custom type."
+        },
+        {
+          "name": "label",
+          "swiftType": "LocalizedStringKey",
+          "control": "text",
+          "defaultValue": "\"Share\"",
+          "notes": "Optional custom label. Default is a localized Share label with the share icon."
+        },
+        {
+          "name": "subject",
+          "swiftType": "Text?",
+          "control": "text",
+          "defaultValue": "nil",
+          "notes": "Optional subject line passed to share targets like Mail."
+        },
+        {
+          "name": "message",
+          "swiftType": "Text?",
+          "control": "text",
+          "defaultValue": "nil",
+          "notes": "Optional default message body for the share sheet."
+        },
+        {
+          "name": "style",
+          "swiftType": "any PrimitiveButtonStyle",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "bordered",
+            "borderedProminent",
+            "glass",
+            "plain"
+          ],
+          "defaultValue": "automatic",
+          "notes": "ShareLink honors .buttonStyle(_:)."
+        },
+        {
+          "name": "isEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Driven by .disabled(!isEnabled)."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled"
+      ],
+      "styles": [
+        "automatic",
+        "bordered",
+        "borderedProminent",
+        "glass",
+        "plain"
+      ],
+      "higNotes": "Prefer ShareLink over presenting UIActivityViewController manually — it adapts the label per platform and supplies SharePreview for rich previews. Provide a SharePreview when sharing images or files so recipients see a thumbnail and title.",
+      "codeTemplate": "ShareLink(item: {item}, subject: Text(\"{subject}\"), message: Text(\"{message}\")) {\n    Label(\"{label}\", systemImage: \"square.and.arrow.up\")\n}\n.buttonStyle(.{style})\n.disabled({isDisabled})"
+    },
+    {
+      "id": "help-link",
+      "title": "HelpLink",
+      "api": "HelpLink",
+      "summary": "A button with a system-standard help appearance (the circled question mark) that opens documentation relevant to its context. macOS-only.",
+      "minOS": "macOS 14.0",
+      "platforms": [
+        "macOS"
+      ],
+      "properties": [
+        {
+          "name": "anchor",
+          "swiftType": "String",
+          "control": "text",
+          "defaultValue": "\"accountSetupHelp\"",
+          "notes": "Help-book anchor opened on activation. Use the anchor: initializer for documentation, or the action closure initializer for a custom action (open a URL / window)."
+        },
+        {
+          "name": "useAction",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "When true, use the HelpLink { } action initializer instead of anchor: to perform an arbitrary action such as openURL."
+        },
+        {
+          "name": "isEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Driven by .disabled(!isEnabled)."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled"
+      ],
+      "styles": [],
+      "higNotes": "HelpLink has a fixed standard appearance — do not relabel or restyle it. The system places it automatically: top-trailing in an alert or confirmationDialog, lower-leading in a sheet toolbar. macOS only; gate with #if os(macOS).",
+      "codeTemplate": "HelpLink(anchor: \"{anchor}\")\n    .disabled({isDisabled})"
+    },
+    {
+      "id": "text-field-link",
+      "title": "TextFieldLink",
+      "api": "TextFieldLink",
+      "summary": "A watchOS control that presents the system text-input interface (scribble / dictation / keyboard) when pressed and returns the entered text. watchOS-only.",
+      "minOS": "watchOS 9.0",
+      "platforms": [
+        "watchOS"
+      ],
+      "properties": [
+        {
+          "name": "prompt",
+          "swiftType": "Text?",
+          "control": "text",
+          "defaultValue": "\"Enter name\"",
+          "notes": "Optional prompt shown in the text-input interface."
+        },
+        {
+          "name": "label",
+          "swiftType": "LocalizedStringKey",
+          "control": "text",
+          "defaultValue": "\"Add Comment\"",
+          "notes": "The button label. Can also be a Label with systemImage."
+        },
+        {
+          "name": "isEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Driven by .disabled(!isEnabled)."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled"
+      ],
+      "styles": [],
+      "higNotes": "Use on watchOS to collect short text without a custom keyboard. The system supplies the input UI (dictation, scribble, emoji). watchOS only; gate with #if os(watchOS).",
+      "codeTemplate": "TextFieldLink(prompt: Text(\"{prompt}\")) {\n    Text(\"{label}\")\n} onSubmit: { text in\n    // handle entered text\n}\n.disabled({isDisabled})"
+    },
+    {
+      "id": "new-document-button",
+      "title": "NewDocumentButton",
+      "api": "NewDocumentButton",
+      "summary": "A button for the document launch experience that creates a new document, optionally via a template picker. Lives in a DocumentGroupLaunchScene. Not available on tvOS or watchOS.",
+      "minOS": "iOS 18.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "visionOS"
+      ],
+      "properties": [
+        {
+          "name": "label",
+          "swiftType": "LocalizedStringKey",
+          "control": "text",
+          "defaultValue": "\"Start Writing…\"",
+          "notes": "Custom label text. Omit to get the system default \"Create Document\" label."
+        },
+        {
+          "name": "usesTemplate",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "When true, use the for:Document.self initializer with an async closure to present a template picker before creating the document."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled"
+      ],
+      "styles": [],
+      "higNotes": "Only valid inside a DocumentGroupLaunchScene. Provide one button for a blank document and optionally a second for a template chooser. iOS 18 / iPadOS 18 / macOS 15 / visionOS 2+.",
+      "codeTemplate": "DocumentGroupLaunchScene(\"My Documents\") {\n    NewDocumentButton(Text(\"{label}\"))\n}"
+    }
+  ]
+}

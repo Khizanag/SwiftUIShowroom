@@ -1,0 +1,1790 @@
+{
+  "category": "Effects & Styling iOS 26",
+  "key": "effects",
+  "folder": "Effects",
+  "components": [
+    {
+      "id": "glass-effect",
+      "title": "Glass Effect",
+      "api": "View.glassEffect(_:in:)",
+      "summary": "Applies the Liquid Glass material to a view, clipping it to a shape.",
+      "minOS": "iOS 26.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "summary_note": "",
+      "states": [
+        "default",
+        "selected",
+        "disabled",
+        "longContent"
+      ],
+      "styles": [
+        "regular",
+        "clear",
+        "identity"
+      ],
+      "higNotes": "Liquid Glass is for the navigation/control layer that floats above content — toolbars, custom controls, floating action elements. Do not stack glass on glass, and avoid using it for large background fills. Let content show through; keep glass elements compact.",
+      "properties": [
+        {
+          "name": "variant",
+          "swiftType": "Glass",
+          "control": "segmented",
+          "options": [
+            "regular",
+            "clear",
+            "identity"
+          ],
+          "defaultValue": "regular",
+          "notes": "Glass.regular adapts to its background; .clear is more transparent for media-rich backdrops; .identity is a no-op placeholder used to morph in/out within a container."
+        },
+        {
+          "name": "tint",
+          "swiftType": "Color?",
+          "control": "colorPicker",
+          "defaultValue": "nil",
+          "notes": "Applied via Glass.tint(_:). nil keeps the neutral system tint. Use sparingly for meaning, not decoration."
+        },
+        {
+          "name": "isInteractive",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Applied via Glass.interactive(_:). Adds touch-reactive scale/bounce/shimmer for tappable glass elements."
+        },
+        {
+          "name": "shape",
+          "swiftType": "any Shape",
+          "control": "picker",
+          "options": [
+            "Capsule",
+            "RoundedRectangle(cornerRadius:)",
+            "Circle",
+            "DefaultGlassEffectShape",
+            "Rectangle"
+          ],
+          "defaultValue": "DefaultGlassEffectShape (Capsule)",
+          "notes": "The clip shape for the glass. Default is a Capsule via DefaultGlassEffectShape."
+        },
+        {
+          "name": "cornerRadius",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "0",
+            "60"
+          ],
+          "defaultValue": "20",
+          "notes": "Only relevant when shape is RoundedRectangle(cornerRadius:)."
+        }
+      ],
+      "codeTemplate": "Text(\"Hello\")\n    .font(.title)\n    .padding()\n    .glassEffect(\n        .{variant}\n            .tint({tint})\n            .interactive({isInteractive}),\n        in: {shape}\n    )"
+    },
+    {
+      "id": "glass-effect-container",
+      "title": "Glass Effect Container",
+      "api": "GlassEffectContainer",
+      "summary": "Groups multiple glass shapes so they render together and morph/blend into one another.",
+      "minOS": "iOS 26.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default",
+        "longContent"
+      ],
+      "styles": [],
+      "higNotes": "Wrap clusters of glass elements (e.g. a toolbar row of glass buttons) in a single container so the system renders them as one optical layer and improves performance. Required for glassEffectID morphing and glassEffectUnion to work.",
+      "properties": [
+        {
+          "name": "spacing",
+          "swiftType": "CGFloat?",
+          "control": "slider",
+          "options": [
+            "0",
+            "80"
+          ],
+          "defaultValue": "20",
+          "notes": "Controls how soon adjacent glass shapes begin blending as they approach. Higher spacing = blending begins sooner / from farther apart."
+        }
+      ],
+      "codeTemplate": "GlassEffectContainer(spacing: {spacing}) {\n    HStack {\n        Image(systemName: \"star.fill\").padding().glassEffect()\n        Image(systemName: \"heart.fill\").padding().glassEffect()\n    }\n}"
+    },
+    {
+      "id": "glass-effect-id-morph",
+      "title": "Glass Effect ID (Morph)",
+      "api": "View.glassEffectID(_:in:)",
+      "summary": "Assigns a stable identity to a glass shape so it morphs smoothly as it appears, moves, or merges.",
+      "minOS": "iOS 26.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default",
+        "selected"
+      ],
+      "styles": [],
+      "higNotes": "Use to create fluid morph transitions between glass elements (e.g. a button expanding into a panel). Must be applied inside a GlassEffectContainer and paired with a @Namespace. Drive appearance/removal with withAnimation.",
+      "properties": [
+        {
+          "name": "id",
+          "swiftType": "(some Hashable & Sendable)?",
+          "control": "text",
+          "defaultValue": "\"primary\"",
+          "notes": "Stable identity matched across state changes. nil disables morphing for this element."
+        },
+        {
+          "name": "namespace",
+          "swiftType": "Namespace.ID",
+          "control": "text",
+          "defaultValue": "namespace",
+          "notes": "From @Namespace private var namespace. Shared across the views that morph into one another."
+        }
+      ],
+      "codeTemplate": "@Namespace private var namespace\n\nGlassEffectContainer {\n    Image(systemName: \"plus\")\n        .padding()\n        .glassEffect()\n        .glassEffectID({id}, in: {namespace})\n}"
+    },
+    {
+      "id": "glass-effect-union",
+      "title": "Glass Effect Union",
+      "api": "View.glassEffectUnion(id:namespace:)",
+      "summary": "Merges several glass shapes sharing an id into one continuous glass shape.",
+      "minOS": "iOS 26.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default",
+        "selected"
+      ],
+      "styles": [],
+      "higNotes": "Use when a group of adjacent glass elements should read as a single connected surface (e.g. a segmented cluster). Requires a GlassEffectContainer and a shared @Namespace.",
+      "properties": [
+        {
+          "name": "id",
+          "swiftType": "(some Hashable & Sendable)?",
+          "control": "text",
+          "defaultValue": "\"group\"",
+          "notes": "Elements sharing this id unify into one glass shape. nil opts the element out of the union."
+        },
+        {
+          "name": "namespace",
+          "swiftType": "Namespace.ID",
+          "control": "text",
+          "defaultValue": "namespace",
+          "notes": "Shared @Namespace.ID across the unioned elements."
+        }
+      ],
+      "codeTemplate": "@Namespace private var namespace\n\nGlassEffectContainer {\n    HStack {\n        ForEach(items) { item in\n            Image(systemName: item.icon)\n                .padding()\n                .glassEffect()\n                .glassEffectUnion(id: {id}, namespace: {namespace})\n        }\n    }\n}"
+    },
+    {
+      "id": "glass-effect-transition",
+      "title": "Glass Effect Transition",
+      "api": "View.glassEffectTransition(_:)",
+      "summary": "Controls how a glass shape animates as it is added to or removed from the hierarchy.",
+      "minOS": "iOS 26.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [
+        "identity",
+        "matchedGeometry",
+        "materialize"
+      ],
+      "higNotes": "Pair with glassEffectID inside a container for coordinated insert/remove animation. .materialize is the default 'liquid' appear/disappear; .matchedGeometry morphs from a matched element; .identity disables the transition.",
+      "properties": [
+        {
+          "name": "transition",
+          "swiftType": "GlassEffectTransition",
+          "control": "segmented",
+          "options": [
+            "materialize",
+            "matchedGeometry",
+            "identity"
+          ],
+          "defaultValue": "materialize",
+          "notes": "materialize = fluid scale+blur appear; matchedGeometry = morph from a matched-id element; identity = no transition."
+        }
+      ],
+      "codeTemplate": "Image(systemName: \"star.fill\")\n    .padding()\n    .glassEffect()\n    .glassEffectTransition(.{transition})"
+    },
+    {
+      "id": "glass-button-style",
+      "title": "Glass Button Style",
+      "api": "ButtonStyle.glass / .glassProminent",
+      "summary": "Renders a button with Liquid Glass border artwork, optionally prominent (accent-filled).",
+      "minOS": "iOS 26.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default",
+        "disabled",
+        "selected",
+        "focused"
+      ],
+      "styles": [
+        "glass",
+        "glassProminent"
+      ],
+      "higNotes": "Use .glass for standard floating actions and .glassProminent for the single primary action on a glass surface. Combine with .buttonBorderShape and .tint. Don't overuse prominent glass — one primary per context.",
+      "properties": [
+        {
+          "name": "style",
+          "swiftType": "PrimitiveButtonStyle",
+          "control": "segmented",
+          "options": [
+            "glass",
+            "glassProminent"
+          ],
+          "defaultValue": "glass",
+          "notes": ".glass = neutral glass border; .glassProminent = tinted/filled glass for the primary action."
+        },
+        {
+          "name": "tint",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": "Color.accentColor",
+          "notes": "Drives the prominent fill and interactive highlight via .tint(_:)."
+        },
+        {
+          "name": "buttonBorderShape",
+          "swiftType": "ButtonBorderShape",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "capsule",
+            "roundedRectangle",
+            "circle"
+          ],
+          "defaultValue": "automatic",
+          "notes": "Shapes the glass border artwork."
+        },
+        {
+          "name": "controlSize",
+          "swiftType": "ControlSize",
+          "control": "picker",
+          "options": [
+            "mini",
+            "small",
+            "regular",
+            "large",
+            "extraLarge"
+          ],
+          "defaultValue": "regular",
+          "notes": "Standard control sizing applied via .controlSize."
+        }
+      ],
+      "codeTemplate": "Button(\"Action\") { }\n    .buttonStyle(.{style})\n    .buttonBorderShape(.{buttonBorderShape})\n    .controlSize(.{controlSize})\n    .tint({tint})"
+    },
+    {
+      "id": "toolbar-spacer",
+      "title": "Toolbar Spacer",
+      "api": "ToolbarSpacer",
+      "summary": "Inserts fixed or flexible spacing between toolbar items, splitting them into separate glass groups.",
+      "minOS": "iOS 26.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [
+        "flexible",
+        "fixed"
+      ],
+      "higNotes": "Use to break a toolbar into distinct glass clusters (e.g. separate a destructive action from navigation actions). A .flexible spacer pushes groups to opposite edges; a .fixed spacer adds a measured gap within a group.",
+      "properties": [
+        {
+          "name": "sizing",
+          "swiftType": "SpacerSizing",
+          "control": "segmented",
+          "options": [
+            "flexible",
+            "fixed"
+          ],
+          "defaultValue": "flexible",
+          "notes": ".flexible expands to fill available space and separates glass groups; .fixed uses a precise width."
+        },
+        {
+          "name": "placement",
+          "swiftType": "ToolbarItemPlacement",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "primaryAction",
+            "topBarLeading",
+            "topBarTrailing",
+            "bottomBar",
+            "navigation"
+          ],
+          "defaultValue": "automatic",
+          "notes": "Where the spacer (and its surrounding group) sits in the toolbar."
+        }
+      ],
+      "codeTemplate": ".toolbar {\n    ToolbarItem(placement: .{placement}) {\n        Button(\"Edit\") { }\n    }\n    ToolbarSpacer(.{sizing}, placement: .{placement})\n    ToolbarItem(placement: .{placement}) {\n        Button(\"Done\") { }\n    }\n}"
+    },
+    {
+      "id": "scroll-edge-effect-style",
+      "title": "Scroll Edge Effect Style",
+      "api": "View.scrollEdgeEffectStyle(_:for:)",
+      "summary": "Configures the soft/hard blur-fade applied to scroll content meeting an edge under floating bars.",
+      "minOS": "iOS 26.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [
+        "automatic",
+        "soft",
+        "hard"
+      ],
+      "higNotes": "The scroll edge effect keeps content legible as it passes under translucent glass bars. Use .soft for a gradual fade under bars; .hard for a crisp cutoff when content must not bleed into a bar. Leave .automatic unless a specific layout demands otherwise.",
+      "properties": [
+        {
+          "name": "style",
+          "swiftType": "ScrollEdgeEffectStyle?",
+          "control": "segmented",
+          "options": [
+            "automatic",
+            "soft",
+            "hard"
+          ],
+          "defaultValue": "automatic",
+          "notes": "nil falls back to system automatic. .soft = gradual blur fade; .hard = sharp edge."
+        },
+        {
+          "name": "edges",
+          "swiftType": "Edge.Set",
+          "control": "picker",
+          "options": [
+            "all",
+            "top",
+            "bottom",
+            "leading",
+            "trailing",
+            "vertical",
+            "horizontal"
+          ],
+          "defaultValue": "all",
+          "notes": "Which edges receive the effect."
+        }
+      ],
+      "codeTemplate": "ScrollView {\n    LazyVStack { /* rows */ }\n}\n.scrollEdgeEffectStyle(.{style}, for: .{edges})"
+    },
+    {
+      "id": "scroll-edge-effect-hidden",
+      "title": "Scroll Edge Effect Hidden",
+      "api": "View.scrollEdgeEffectHidden(_:for:)",
+      "summary": "Hides the scroll edge blur-fade effect on specified edges.",
+      "minOS": "iOS 26.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Hide the edge effect only when content already provides its own visual separation from the bar (e.g. an opaque header). Otherwise keep it for legibility.",
+      "properties": [
+        {
+          "name": "isHidden",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "true removes the edge effect on the given edges."
+        },
+        {
+          "name": "edges",
+          "swiftType": "Edge.Set",
+          "control": "picker",
+          "options": [
+            "all",
+            "top",
+            "bottom",
+            "leading",
+            "trailing",
+            "vertical",
+            "horizontal"
+          ],
+          "defaultValue": "top",
+          "notes": "Which edges to hide the effect on."
+        }
+      ],
+      "codeTemplate": "ScrollView { /* content */ }\n    .scrollEdgeEffectHidden({isHidden}, for: .{edges})"
+    },
+    {
+      "id": "background-extension-effect",
+      "title": "Background Extension Effect",
+      "api": "View.backgroundExtensionEffect(isEnabled:)",
+      "summary": "Mirrors and blurs a view into surrounding safe-area regions for an immersive edge-to-edge backdrop.",
+      "minOS": "iOS 26.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Use sparingly on a single background element (commonly a banner in the detail column of a NavigationSplitView) so it extends under sidebar/inspector glass. Watch performance and visual clarity; never apply to interactive content.",
+      "properties": [
+        {
+          "name": "isEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Toggles the mirrored-blur extension. Use the isEnabled overload to gate it dynamically."
+        }
+      ],
+      "codeTemplate": "Image(\"banner\")\n    .resizable()\n    .scaledToFill()\n    .backgroundExtensionEffect(isEnabled: {isEnabled})"
+    },
+    {
+      "id": "implicit-animation",
+      "title": "Implicit Animation (animation:value:)",
+      "api": "View.animation(_:value:)",
+      "summary": "Animates view changes implicitly whenever a specified equatable value changes.",
+      "minOS": "iOS 15.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default",
+        "disabled"
+      ],
+      "styles": [],
+      "higNotes": "Prefer the value-scoped overload (animation(_:value:)) over the deprecated global form. Keep animations purposeful and brief. Always honor Reduce Motion by gating or swapping to a crossfade.",
+      "properties": [
+        {
+          "name": "animation",
+          "swiftType": "Animation?",
+          "control": "picker",
+          "options": [
+            "default",
+            "easeInOut",
+            "easeIn",
+            "easeOut",
+            "linear",
+            "spring",
+            "bouncy",
+            "smooth",
+            "snappy",
+            "interpolatingSpring",
+            "nil"
+          ],
+          "defaultValue": "default",
+          "notes": "nil removes animation for the change. Curve/spring family selected here."
+        },
+        {
+          "name": "duration",
+          "swiftType": "TimeInterval",
+          "control": "slider",
+          "options": [
+            "0.1",
+            "3.0"
+          ],
+          "defaultValue": "0.35",
+          "notes": "Only applies to timing-curve animations (easeInOut/linear/etc.); ignored by parameterless springs."
+        },
+        {
+          "name": "value",
+          "swiftType": "some Equatable",
+          "control": "stepper",
+          "defaultValue": "0",
+          "notes": "The observed value; the animation runs each time it changes."
+        }
+      ],
+      "codeTemplate": "circle\n    .scaleEffect(isBig ? 1.5 : 1.0)\n    .animation(.{animation}, value: {value})"
+    },
+    {
+      "id": "with-animation",
+      "title": "withAnimation",
+      "api": "withAnimation(_:_:)",
+      "summary": "Explicitly animates state changes performed inside its closure.",
+      "minOS": "iOS 13.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Use for event-driven changes (button taps, gestures). Use withAnimation(_:completion:) on iOS 17+ to run code after the animation finishes. Keep durations short; respect Reduce Motion.",
+      "properties": [
+        {
+          "name": "animation",
+          "swiftType": "Animation?",
+          "control": "picker",
+          "options": [
+            "default",
+            "easeInOut",
+            "easeIn",
+            "easeOut",
+            "linear",
+            "spring",
+            "bouncy",
+            "smooth",
+            "snappy",
+            "interpolatingSpring",
+            "nil"
+          ],
+          "defaultValue": "spring",
+          "notes": "nil performs the change without animation."
+        },
+        {
+          "name": "useCompletion",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Switches to withAnimation(_:completion:) (iOS 17+) to run a closure when the animation completes."
+        }
+      ],
+      "codeTemplate": "Button(\"Toggle\") {\n    withAnimation(.{animation}) {\n        isExpanded.toggle()\n    }\n}"
+    },
+    {
+      "id": "spring-bouncy-smooth-snappy",
+      "title": "Spring Animations (bouncy/smooth/snappy)",
+      "api": "Animation.spring / .bouncy / .smooth / .snappy",
+      "summary": "Physically based spring animation presets with tunable duration and bounce.",
+      "minOS": "iOS 17.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [
+        "spring",
+        "bouncy",
+        "smooth",
+        "snappy",
+        "interpolatingSpring"
+      ],
+      "higNotes": "Springs feel more natural than timing curves for UI motion. .smooth has no bounce, .snappy has a small bounce, .bouncy has more. Prefer the duration/bounce parameterization over raw stiffness/damping.",
+      "properties": [
+        {
+          "name": "preset",
+          "swiftType": "Animation",
+          "control": "segmented",
+          "options": [
+            "spring",
+            "bouncy",
+            "smooth",
+            "snappy",
+            "interpolatingSpring"
+          ],
+          "defaultValue": "smooth",
+          "notes": "Family of spring. interpolatingSpring is velocity-preserving for chained gestures."
+        },
+        {
+          "name": "duration",
+          "swiftType": "TimeInterval",
+          "control": "slider",
+          "options": [
+            "0.1",
+            "2.0"
+          ],
+          "defaultValue": "0.5",
+          "notes": "Perceptual settling duration of the spring."
+        },
+        {
+          "name": "bounce",
+          "swiftType": "Double",
+          "control": "slider",
+          "options": [
+            "0.0",
+            "1.0"
+          ],
+          "defaultValue": "0.2",
+          "notes": "0 = no overshoot (critically damped), higher = more bounce. Ignored by .smooth which is fixed at 0."
+        }
+      ],
+      "codeTemplate": "view\n    .offset(y: moved ? 120 : 0)\n    .animation(.{preset}(duration: {duration}, extraBounce: {bounce}), value: moved)"
+    },
+    {
+      "id": "phase-animator",
+      "title": "Phase Animator",
+      "api": "View.phaseAnimator(_:trigger:content:animation:)",
+      "summary": "Cycles a view through a sequence of discrete phases, animating between each.",
+      "minOS": "iOS 17.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Use for multi-step canned animations (e.g. tap feedback that scales then settles). The trigger overload runs the sequence once per change; the trigger-less overload loops continuously — gate looping with Reduce Motion.",
+      "properties": [
+        {
+          "name": "phases",
+          "swiftType": "some Sequence",
+          "control": "text",
+          "defaultValue": "[1.0, 1.2, 1.0]",
+          "notes": "Ordered phases the content interpolates through."
+        },
+        {
+          "name": "looping",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "false uses the trigger overload (one cycle per change); true uses the trigger-less continuously looping overload."
+        },
+        {
+          "name": "animation",
+          "swiftType": "Animation?",
+          "control": "picker",
+          "options": [
+            "default",
+            "easeInOut",
+            "linear",
+            "spring",
+            "bouncy",
+            "smooth",
+            "snappy"
+          ],
+          "defaultValue": "bouncy",
+          "notes": "Animation used between phases; can vary per phase."
+        },
+        {
+          "name": "trigger",
+          "swiftType": "some Equatable",
+          "control": "stepper",
+          "defaultValue": "0",
+          "notes": "Value whose change restarts the sequence (non-looping mode)."
+        }
+      ],
+      "codeTemplate": "Image(systemName: \"heart.fill\")\n    .phaseAnimator({phases}, trigger: {trigger}) { content, phase in\n        content.scaleEffect(phase)\n    } animation: { _ in\n        .{animation}\n    }"
+    },
+    {
+      "id": "keyframe-animator",
+      "title": "Keyframe Animator",
+      "api": "View.keyframeAnimator(initialValue:trigger:content:keyframes:)",
+      "summary": "Drives complex multi-track animations over time using independent keyframe tracks.",
+      "minOS": "iOS 17.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Use when multiple properties must animate on independent timelines (scale, rotation, offset). Each track uses CubicKeyframe/SpringKeyframe/LinearKeyframe/MoveKeyframe. Use the repeating overload only for ambient motion and gate with Reduce Motion.",
+      "properties": [
+        {
+          "name": "repeating",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "false uses the trigger overload; true loops indefinitely (initialValue/repeating overload)."
+        },
+        {
+          "name": "keyframeType",
+          "swiftType": "Keyframe",
+          "control": "picker",
+          "options": [
+            "LinearKeyframe",
+            "CubicKeyframe",
+            "SpringKeyframe",
+            "MoveKeyframe"
+          ],
+          "defaultValue": "SpringKeyframe",
+          "notes": "Interpolation type per keyframe segment."
+        },
+        {
+          "name": "trigger",
+          "swiftType": "some Equatable",
+          "control": "stepper",
+          "defaultValue": "0",
+          "notes": "Value change that restarts the timeline (non-repeating mode)."
+        },
+        {
+          "name": "duration",
+          "swiftType": "TimeInterval",
+          "control": "slider",
+          "options": [
+            "0.2",
+            "4.0"
+          ],
+          "defaultValue": "1.0",
+          "notes": "Per-keyframe segment durations sum to the total; this drives the template's keyframe durations."
+        }
+      ],
+      "codeTemplate": "Image(systemName: \"star.fill\")\n    .keyframeAnimator(initialValue: AnimationValues(), trigger: {trigger}) { content, value in\n        content\n            .scaleEffect(value.scale)\n            .rotationEffect(value.rotation)\n    } keyframes: { _ in\n        KeyframeTrack(\\.scale) {\n            {keyframeType}(1.2, duration: {duration})\n            {keyframeType}(1.0, duration: {duration})\n        }\n    }"
+    },
+    {
+      "id": "transition",
+      "title": "Transition",
+      "api": "View.transition(_:) / AnyTransition",
+      "summary": "Animates how a view is inserted into and removed from the hierarchy.",
+      "minOS": "iOS 13.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [
+        "opacity",
+        "slide",
+        "scale",
+        "move",
+        "push",
+        "blurReplace",
+        "offset",
+        "identity"
+      ],
+      "higNotes": "Transitions only animate when the insertion/removal is itself inside a withAnimation or an .animation scope. blurReplace (iOS 17+) is the modern crossfade-with-blur. Keep transitions consistent within a flow.",
+      "properties": [
+        {
+          "name": "transition",
+          "swiftType": "AnyTransition",
+          "control": "picker",
+          "options": [
+            "opacity",
+            "slide",
+            "scale",
+            "move(edge:)",
+            "push(from:)",
+            "blurReplace",
+            "offset",
+            "identity"
+          ],
+          "defaultValue": "opacity",
+          "notes": "Base transition. .scale and .move/.push take parameters."
+        },
+        {
+          "name": "edge",
+          "swiftType": "Edge",
+          "control": "segmented",
+          "options": [
+            "top",
+            "bottom",
+            "leading",
+            "trailing"
+          ],
+          "defaultValue": "bottom",
+          "notes": "Edge for .move(edge:) and .push(from:)."
+        },
+        {
+          "name": "scaleAnchor",
+          "swiftType": "UnitPoint",
+          "control": "picker",
+          "options": [
+            "center",
+            "top",
+            "bottom",
+            "leading",
+            "trailing",
+            "topLeading",
+            "bottomTrailing"
+          ],
+          "defaultValue": "center",
+          "notes": "Anchor for .scale(scale:anchor:)."
+        },
+        {
+          "name": "combineWithOpacity",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "When true, .combined(with: .opacity) is appended."
+        }
+      ],
+      "codeTemplate": "if isShown {\n    CardView()\n        .transition(.{transition})\n}\n// trigger inside: withAnimation { isShown.toggle() }"
+    },
+    {
+      "id": "asymmetric-transition",
+      "title": "Asymmetric Transition",
+      "api": "AnyTransition.asymmetric(insertion:removal:)",
+      "summary": "Uses different transitions for view insertion versus removal.",
+      "minOS": "iOS 13.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Use when entering and leaving should feel directional (e.g. slide up to appear, fade to dismiss). Keep the pairing intuitive so motion reinforces the spatial model.",
+      "properties": [
+        {
+          "name": "insertion",
+          "swiftType": "AnyTransition",
+          "control": "picker",
+          "options": [
+            "opacity",
+            "slide",
+            "scale",
+            "move(edge: .bottom)",
+            "push(from: .bottom)",
+            "blurReplace"
+          ],
+          "defaultValue": "move(edge: .bottom)",
+          "notes": "Transition used when the view appears."
+        },
+        {
+          "name": "removal",
+          "swiftType": "AnyTransition",
+          "control": "picker",
+          "options": [
+            "opacity",
+            "slide",
+            "scale",
+            "move(edge: .top)",
+            "push(from: .top)",
+            "blurReplace"
+          ],
+          "defaultValue": "opacity",
+          "notes": "Transition used when the view is removed."
+        }
+      ],
+      "codeTemplate": "if isShown {\n    BannerView()\n        .transition(.asymmetric(insertion: .{insertion}, removal: .{removal}))\n}"
+    },
+    {
+      "id": "matched-geometry-effect",
+      "title": "Matched Geometry Effect",
+      "api": "View.matchedGeometryEffect(id:in:properties:anchor:isSource:)",
+      "summary": "Animates a view morphing between two layouts by matching frame geometry across a namespace.",
+      "minOS": "iOS 14.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default",
+        "selected"
+      ],
+      "styles": [],
+      "higNotes": "Use for hero transitions (grid thumbnail expanding to detail). Exactly one source per id at a time; drive the swap with withAnimation. For SwiftUI navigation, consider matchedTransitionSource/navigationTransition on iOS 18+.",
+      "properties": [
+        {
+          "name": "id",
+          "swiftType": "some Hashable",
+          "control": "text",
+          "defaultValue": "\"hero\"",
+          "notes": "Matched identity shared by source and destination views."
+        },
+        {
+          "name": "namespace",
+          "swiftType": "Namespace.ID",
+          "control": "text",
+          "defaultValue": "namespace",
+          "notes": "From @Namespace, shared by both views."
+        },
+        {
+          "name": "properties",
+          "swiftType": "MatchedGeometryProperties",
+          "control": "picker",
+          "options": [
+            "frame",
+            "position",
+            "size"
+          ],
+          "defaultValue": "frame",
+          "notes": "Which geometry properties to match."
+        },
+        {
+          "name": "anchor",
+          "swiftType": "UnitPoint",
+          "control": "picker",
+          "options": [
+            "center",
+            "top",
+            "topLeading",
+            "bottomTrailing"
+          ],
+          "defaultValue": "center",
+          "notes": "Anchor used to align the matched geometry."
+        },
+        {
+          "name": "isSource",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Marks which view provides the authoritative geometry."
+        }
+      ],
+      "codeTemplate": "@Namespace private var namespace\n\nimage\n    .matchedGeometryEffect(id: {id}, in: {namespace}, properties: .{properties}, anchor: .{anchor}, isSource: {isSource})"
+    },
+    {
+      "id": "custom-transition",
+      "title": "Custom Transition",
+      "api": "Transition (protocol)",
+      "summary": "A user-defined transition implementing the Transition protocol for bespoke insert/remove motion.",
+      "minOS": "iOS 17.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Implement body(content:phase:) and switch on the TransitionPhase (willAppear/identity/didDisappear). Use .animation(_:) inside the transition to set its curve. Keep custom motion subtle and reversible.",
+      "properties": [
+        {
+          "name": "rotationDegrees",
+          "swiftType": "Double",
+          "control": "slider",
+          "options": [
+            "0",
+            "360"
+          ],
+          "defaultValue": "90",
+          "notes": "Example tunable: rotation applied during the non-identity phases."
+        },
+        {
+          "name": "scaleAmount",
+          "swiftType": "Double",
+          "control": "slider",
+          "options": [
+            "0.0",
+            "1.0"
+          ],
+          "defaultValue": "0.5",
+          "notes": "Example tunable: scale applied during the non-identity phases."
+        },
+        {
+          "name": "animation",
+          "swiftType": "Animation",
+          "control": "picker",
+          "options": [
+            "default",
+            "easeInOut",
+            "spring",
+            "bouncy",
+            "smooth"
+          ],
+          "defaultValue": "smooth",
+          "notes": "Curve applied to the custom transition."
+        }
+      ],
+      "codeTemplate": "struct TwirlTransition: Transition {\n    func body(content: Content, phase: TransitionPhase) -> some View {\n        content\n            .rotationEffect(.degrees(phase.isIdentity ? 0 : {rotationDegrees}))\n            .scaleEffect(phase.isIdentity ? 1 : {scaleAmount})\n            .opacity(phase.isIdentity ? 1 : 0)\n    }\n}\n\n// usage:\nview.transition(TwirlTransition().animation(.{animation}))"
+    },
+    {
+      "id": "symbol-effect",
+      "title": "Symbol Effect",
+      "api": "View.symbolEffect(_:options:value:)",
+      "summary": "Animates an SF Symbol with built-in effects like bounce, pulse, variableColor, or wiggle.",
+      "minOS": "iOS 17.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default",
+        "loading"
+      ],
+      "styles": [
+        "bounce",
+        "pulse",
+        "variableColor",
+        "scale",
+        "appear",
+        "disappear",
+        "replace",
+        "wiggle",
+        "breathe",
+        "rotate"
+      ],
+      "higNotes": "Use symbol effects for meaningful feedback, not decoration. wiggle/breathe/rotate were added in iOS 18. Use the value: overload for one-shot effects on change and isActive: for indefinite effects (e.g. a loading pulse).",
+      "properties": [
+        {
+          "name": "effect",
+          "swiftType": "SymbolEffect",
+          "control": "picker",
+          "options": [
+            "bounce",
+            "pulse",
+            "variableColor",
+            "variableColor.iterative",
+            "variableColor.cumulative",
+            "scale.up",
+            "scale.down",
+            "wiggle",
+            "breathe",
+            "rotate",
+            "appear",
+            "disappear",
+            "replace"
+          ],
+          "defaultValue": "bounce",
+          "notes": "Effect family. variableColor/breathe/rotate/wiggle suit indefinite states; bounce suits one-shot feedback."
+        },
+        {
+          "name": "trigger",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Discrete mode: switch chooses value: (one-shot per change) vs isActive: (indefinite while true)."
+        },
+        {
+          "name": "repeating",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Maps to SymbolEffectOptions.repeating for continuous playback."
+        },
+        {
+          "name": "repeatCount",
+          "swiftType": "Int",
+          "control": "stepper",
+          "options": [
+            "1",
+            "10"
+          ],
+          "defaultValue": "1",
+          "notes": "SymbolEffectOptions.repeat(_:) count; ignored when repeating is continuous."
+        },
+        {
+          "name": "speed",
+          "swiftType": "Double",
+          "control": "slider",
+          "options": [
+            "0.5",
+            "3.0"
+          ],
+          "defaultValue": "1.0",
+          "notes": "SymbolEffectOptions.speed(_:) multiplier."
+        }
+      ],
+      "codeTemplate": "Image(systemName: \"bell.fill\")\n    .symbolEffect(.{effect}, options: .repeat({repeatCount}).speed({speed}), value: {trigger})"
+    },
+    {
+      "id": "symbol-effects-removed",
+      "title": "Symbol Effects Removed",
+      "api": "View.symbolEffectsRemoved(_:)",
+      "summary": "Removes inherited symbol effects from a subtree so descendant symbols stay static.",
+      "minOS": "iOS 17.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Use to opt a specific symbol out of an effect applied by an ancestor (e.g. a static badge inside an animated group).",
+      "properties": [
+        {
+          "name": "isRemoved",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "true strips inherited effects from this view's symbols."
+        }
+      ],
+      "codeTemplate": "Image(systemName: \"star.fill\")\n    .symbolEffectsRemoved({isRemoved})"
+    },
+    {
+      "id": "content-transition",
+      "title": "Content Transition",
+      "api": "View.contentTransition(_:)",
+      "summary": "Animates content changes in place (numeric rolls, symbol replace, opacity, interpolation).",
+      "minOS": "iOS 16.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [
+        "identity",
+        "opacity",
+        "interpolate",
+        "numericText",
+        "symbolEffect"
+      ],
+      "higNotes": "Use .numericText(countsDown:) for animated counters and .symbolEffect for symbol swaps. Must be wrapped in an animation to take effect. Ideal for live-updating values.",
+      "properties": [
+        {
+          "name": "transition",
+          "swiftType": "ContentTransition",
+          "control": "segmented",
+          "options": [
+            "identity",
+            "opacity",
+            "interpolate",
+            "numericText",
+            "symbolEffect"
+          ],
+          "defaultValue": "numericText",
+          "notes": "numericText animates digit rolls; symbolEffect animates SF Symbol replacement."
+        },
+        {
+          "name": "countsDown",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "For .numericText(countsDown:) — direction of the digit roll."
+        }
+      ],
+      "codeTemplate": "Text(\"\\(count)\")\n    .contentTransition(.{transition})\n    .animation(.default, value: count)"
+    },
+    {
+      "id": "blur",
+      "title": "Blur",
+      "api": "View.blur(radius:opaque:)",
+      "summary": "Applies a Gaussian blur to a view.",
+      "minOS": "iOS 13.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default",
+        "loading"
+      ],
+      "styles": [],
+      "higNotes": "Use for de-emphasis (e.g. sensitive content behind an unlock prompt) or depth. Heavy blur is GPU-costly; prefer materials for translucency over manual blur.",
+      "properties": [
+        {
+          "name": "radius",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "0",
+            "40"
+          ],
+          "defaultValue": "8",
+          "notes": "Blur strength in points."
+        },
+        {
+          "name": "opaque",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "true blurs against an opaque background (no edge bleed transparency)."
+        }
+      ],
+      "codeTemplate": "image\n    .blur(radius: {radius}, opaque: {opaque})"
+    },
+    {
+      "id": "material-background",
+      "title": "Material Background",
+      "api": "ShapeStyle Material (.ultraThinMaterial …)",
+      "summary": "Applies a system blur material as a background for translucency and vibrancy.",
+      "minOS": "iOS 15.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [
+        "ultraThin",
+        "thin",
+        "regular",
+        "thick",
+        "ultraThick",
+        "bar"
+      ],
+      "higNotes": "On iOS 26 prefer glassEffect for floating control surfaces; reserve materials for legacy/secondary surfaces. Always provide an opaque fallback under Reduce Transparency.",
+      "properties": [
+        {
+          "name": "material",
+          "swiftType": "Material",
+          "control": "segmented",
+          "options": [
+            "ultraThinMaterial",
+            "thinMaterial",
+            "regularMaterial",
+            "thickMaterial",
+            "ultraThickMaterial",
+            "bar"
+          ],
+          "defaultValue": "regularMaterial",
+          "notes": "Thicker materials are more opaque and obscure more background."
+        },
+        {
+          "name": "shape",
+          "swiftType": "any Shape",
+          "control": "picker",
+          "options": [
+            "Rectangle",
+            "RoundedRectangle(cornerRadius:)",
+            "Capsule",
+            "Circle"
+          ],
+          "defaultValue": "RoundedRectangle(cornerRadius:)",
+          "notes": "Clip shape for the material background."
+        },
+        {
+          "name": "cornerRadius",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "0",
+            "48"
+          ],
+          "defaultValue": "16",
+          "notes": "Used when shape is RoundedRectangle."
+        }
+      ],
+      "codeTemplate": "content\n    .padding()\n    .background(.{material}, in: {shape})"
+    },
+    {
+      "id": "color-filter-effects",
+      "title": "Color Filter Effects",
+      "api": "View.hueRotation / .saturation / .brightness / .contrast / .grayscale / .colorMultiply",
+      "summary": "Per-pixel color adjustment filters applied to a view (hue, saturation, brightness, contrast, grayscale, color multiply).",
+      "minOS": "iOS 13.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "styles": [],
+      "states": [
+        "default"
+      ],
+      "higNotes": "Use color filters for de-emphasis, theming, or live photo-style adjustments. Stack them sparingly — each is GPU work. hueRotation/saturation/grayscale animate smoothly and are good for selection/dimming feedback. Prefer foregroundStyle/tint for semantic color; reserve filters for visual treatment of arbitrary content (images, snapshots).",
+      "properties": [
+        {
+          "name": "filter",
+          "swiftType": "enum",
+          "control": "segmented",
+          "options": [
+            "hueRotation",
+            "saturation",
+            "brightness",
+            "contrast",
+            "grayscale",
+            "colorMultiply"
+          ],
+          "defaultValue": "saturation",
+          "notes": "Which filter modifier to apply. hueRotation takes an Angle; brightness/contrast/saturation/grayscale take a Double; colorMultiply takes a Color."
+        },
+        {
+          "name": "amount",
+          "swiftType": "Double",
+          "control": "slider",
+          "options": [
+            "0.0",
+            "2.0"
+          ],
+          "defaultValue": "1.0",
+          "notes": "Drives the Double-valued filters: saturation (1 = normal), brightness (0 = normal, range -1...1), contrast (1 = normal), grayscale (0 = none, 1 = full)."
+        },
+        {
+          "name": "hueAngle",
+          "swiftType": "Angle",
+          "control": "slider",
+          "options": [
+            "0",
+            "360"
+          ],
+          "defaultValue": "0",
+          "notes": "Degrees of hue rotation; only used when filter is hueRotation."
+        },
+        {
+          "name": "multiplyColor",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": "Color.white",
+          "notes": "Multiplied into each pixel; only used when filter is colorMultiply. White is a no-op."
+        }
+      ],
+      "codeTemplate": "image\n    .saturation({amount})\n    .hueRotation(.degrees({hueAngle}))\n    .brightness({amount})\n    .contrast({amount})\n    .grayscale({amount})\n    .colorMultiply({multiplyColor})"
+    },
+    {
+      "id": "shadow",
+      "title": "Shadow",
+      "api": "View.shadow(color:radius:x:y:)",
+      "summary": "Draws a drop shadow behind a view with configurable color, blur radius, and offset.",
+      "minOS": "iOS 13.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "styles": [],
+      "states": [
+        "default"
+      ],
+      "higNotes": "Use shadows for elevation and depth, not decoration. Keep them soft and subtle; harsh shadows read as dated. For inner shadows or layered drop/inner shadows on filled shapes prefer ShapeStyle.shadow(_:) with ShadowStyle.drop/.inner. On Liquid Glass surfaces let the system provide elevation rather than stacking manual shadows.",
+      "properties": [
+        {
+          "name": "color",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": "Color.black.opacity(0.33)",
+          "notes": "Shadow color including its opacity. Default system shadow is a translucent black."
+        },
+        {
+          "name": "radius",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "0",
+            "40"
+          ],
+          "defaultValue": "10",
+          "notes": "Blur radius of the shadow. 0 is a crisp edge."
+        },
+        {
+          "name": "x",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "-40",
+            "40"
+          ],
+          "defaultValue": "0",
+          "notes": "Horizontal offset of the shadow."
+        },
+        {
+          "name": "y",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "-40",
+            "40"
+          ],
+          "defaultValue": "0",
+          "notes": "Vertical offset of the shadow."
+        },
+        {
+          "name": "shadowStyle",
+          "swiftType": "ShadowStyle",
+          "control": "segmented",
+          "options": [
+            "drop",
+            "inner"
+          ],
+          "defaultValue": "drop",
+          "notes": "When applied via .foregroundStyle(.shadow(.drop/.inner(...))) on a shape, selects a drop (outer) or inner shadow. iOS 16+."
+        }
+      ],
+      "codeTemplate": "RoundedRectangle(cornerRadius: 16)\n    .fill(.blue)\n    .shadow(color: {color}, radius: {radius}, x: {x}, y: {y})"
+    },
+    {
+      "id": "shader-effect",
+      "title": "Metal Shader Effect",
+      "api": "View.colorEffect / .layerEffect / .distortionEffect",
+      "summary": "Applies a custom Metal stitchable shader as a per-pixel color filter, full-layer effect, or geometric distortion.",
+      "minOS": "iOS 17.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "visionOS"
+      ],
+      "styles": [
+        "colorEffect",
+        "layerEffect",
+        "distortionEffect"
+      ],
+      "states": [
+        "default",
+        "disabled"
+      ],
+      "higNotes": "Shader effects require a Metal [[ stitchable ]] function in a .metal file referenced via ShaderLibrary. colorEffect modifies each pixel's color; layerEffect samples the rendered layer (for blur/displacement reading neighbors); distortionEffect remaps geometry. Not available on watchOS. Gate animated shaders with Reduce Motion and watch GPU cost. Pass uniforms as Shader arguments.",
+      "properties": [
+        {
+          "name": "effectKind",
+          "swiftType": "Shader.UsageType",
+          "control": "segmented",
+          "options": [
+            "colorEffect",
+            "layerEffect",
+            "distortionEffect"
+          ],
+          "defaultValue": "colorEffect",
+          "notes": "colorEffect: half4 fn(float2 pos, half4 color, args). layerEffect: half4 fn(float2 pos, SwiftUI::Layer layer, args). distortionEffect: float2 fn(float2 pos, args)."
+        },
+        {
+          "name": "maxSampleOffset",
+          "swiftType": "CGSize",
+          "control": "slider",
+          "options": [
+            "0",
+            "100"
+          ],
+          "defaultValue": "20",
+          "notes": "Required for layerEffect/distortionEffect — the maximum distance the shader samples/moves a pixel, so SwiftUI can size the render buffer. Ignored by colorEffect."
+        },
+        {
+          "name": "isEnabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Toggles the shader on/off without removing the modifier."
+        },
+        {
+          "name": "uniform",
+          "swiftType": "Float",
+          "control": "slider",
+          "options": [
+            "0.0",
+            "10.0"
+          ],
+          "defaultValue": "1.0",
+          "notes": "Example tunable uniform passed into the Shader via ShaderLibrary.default.myShader(.float(uniform))."
+        }
+      ],
+      "codeTemplate": "image\n    .colorEffect(\n        ShaderLibrary.default.myColorShader(.float({uniform})),\n        isEnabled: {isEnabled}\n    )\n// layerEffect / distortionEffect also take maxSampleOffset: CGSize(width: {maxSampleOffset}, height: {maxSampleOffset})"
+    },
+    {
+      "id": "mesh-gradient",
+      "title": "Mesh Gradient",
+      "api": "MeshGradient",
+      "summary": "A 2D grid of positioned colors interpolated into a smooth multi-color gradient surface.",
+      "minOS": "iOS 18.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "visionOS",
+        "watchOS"
+      ],
+      "styles": [],
+      "states": [
+        "default"
+      ],
+      "higNotes": "Use mesh gradients for rich, organic backgrounds and hero surfaces — they pair well with Liquid Glass floating controls layered on top. Animate the point positions for a living-gradient effect, gated by Reduce Motion. Keep contrast adequate for any foreground content/text.",
+      "properties": [
+        {
+          "name": "width",
+          "swiftType": "Int",
+          "control": "stepper",
+          "options": [
+            "2",
+            "5"
+          ],
+          "defaultValue": "3",
+          "notes": "Number of columns in the control-point grid."
+        },
+        {
+          "name": "height",
+          "swiftType": "Int",
+          "control": "stepper",
+          "options": [
+            "2",
+            "5"
+          ],
+          "defaultValue": "3",
+          "notes": "Number of rows in the control-point grid. points.count must equal width * height."
+        },
+        {
+          "name": "colorSpace",
+          "swiftType": "Gradient.ColorSpace",
+          "control": "segmented",
+          "options": [
+            "device",
+            "perceptual"
+          ],
+          "defaultValue": "device",
+          "notes": "Interpolation color space for blending between vertex colors."
+        },
+        {
+          "name": "smoothsColors",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "true uses cubic interpolation for smoother color transitions; false uses linear."
+        },
+        {
+          "name": "background",
+          "swiftType": "ShapeStyle",
+          "control": "colorPicker",
+          "defaultValue": "Color.clear",
+          "notes": "Color shown outside the mesh bounds."
+        }
+      ],
+      "codeTemplate": "MeshGradient(\n    width: {width},\n    height: {height},\n    points: [\n        .init(0,0), .init(0.5,0), .init(1,0),\n        .init(0,0.5), .init(0.5,0.5), .init(1,0.5),\n        .init(0,1), .init(0.5,1), .init(1,1),\n    ],\n    colors: [.red, .purple, .indigo, .orange, .white, .blue, .yellow, .green, .mint],\n    colorSpace: .{colorSpace},\n    smoothsColors: {smoothsColors}\n)"
+    },
+    {
+      "id": "scroll-transition",
+      "title": "Scroll Transition",
+      "api": "View.scrollTransition(_:axis:transition:)",
+      "summary": "Applies visual effects to a view as a function of its position within the containing scroll view.",
+      "minOS": "iOS 17.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "visionOS",
+        "watchOS"
+      ],
+      "styles": [],
+      "states": [
+        "default"
+      ],
+      "higNotes": "Use scroll transitions for subtle in/out emphasis as rows enter and leave the viewport (fade, scale, rotate). Keep effects light so content stays legible mid-scroll. The transition is symmetric across leading and trailing edges unless you use the topLeading/bottomTrailing overload. Honor Reduce Motion.",
+      "properties": [
+        {
+          "name": "configuration",
+          "swiftType": "ScrollTransitionConfiguration",
+          "control": "segmented",
+          "options": [
+            "interactive",
+            "animated",
+            "identity"
+          ],
+          "defaultValue": "interactive",
+          "notes": "interactive tracks scroll position continuously; animated snaps between phases with an animation; identity disables the transition."
+        },
+        {
+          "name": "axis",
+          "swiftType": "Axis?",
+          "control": "segmented",
+          "options": [
+            "horizontal",
+            "vertical",
+            "automatic"
+          ],
+          "defaultValue": "automatic",
+          "notes": "Which scroll axis drives the transition. nil/automatic uses the innermost scroll view's axis."
+        },
+        {
+          "name": "effect",
+          "swiftType": "enum",
+          "control": "segmented",
+          "options": [
+            "opacity",
+            "scale",
+            "blur",
+            "rotation3D"
+          ],
+          "defaultValue": "opacity",
+          "notes": "Example visual effect to apply per phase. The closure receives (EmptyVisualEffect, ScrollTransitionPhase)."
+        },
+        {
+          "name": "identityScale",
+          "swiftType": "Double",
+          "control": "slider",
+          "options": [
+            "0.5",
+            "1.0"
+          ],
+          "defaultValue": "0.8",
+          "notes": "Scale applied in the non-identity (entering/leaving) phases; 1.0 at the identity phase."
+        }
+      ],
+      "codeTemplate": "row\n    .scrollTransition(.{configuration}, axis: .{axis}) { content, phase in\n        content\n            .opacity(phase.isIdentity ? 1 : 0)\n            .scaleEffect(phase.isIdentity ? 1 : {identityScale})\n    }"
+    },
+    {
+      "id": "geometry-visual-effect",
+      "title": "Geometry-Driven Visual Effect",
+      "api": "View.visualEffect(_:)",
+      "summary": "Applies visual effects (offset, scale, blur, color filters) computed from the view's own geometry without affecting layout.",
+      "minOS": "iOS 17.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "visionOS",
+        "watchOS"
+      ],
+      "styles": [],
+      "states": [
+        "default"
+      ],
+      "higNotes": "visualEffect gives a closure access to the view's GeometryProxy so you can drive effects from frame/position (e.g. parallax, distance-based fade) without GeometryReader wrapping and without disturbing layout. Effects applied here are non-layout-affecting. Use visualEffect3D for depth on visionOS.",
+      "properties": [
+        {
+          "name": "effect",
+          "swiftType": "enum",
+          "control": "segmented",
+          "options": [
+            "offset",
+            "scaleEffect",
+            "blur",
+            "opacity",
+            "hueRotation"
+          ],
+          "defaultValue": "scaleEffect",
+          "notes": "Which non-layout visual effect to derive from geometry."
+        },
+        {
+          "name": "sourceMetric",
+          "swiftType": "enum",
+          "control": "segmented",
+          "options": [
+            "minY",
+            "midY",
+            "width",
+            "height"
+          ],
+          "defaultValue": "minY",
+          "notes": "Which GeometryProxy frame value feeds the effect (e.g. global midY for parallax)."
+        },
+        {
+          "name": "magnitude",
+          "swiftType": "Double",
+          "control": "slider",
+          "options": [
+            "0.0",
+            "1.0"
+          ],
+          "defaultValue": "0.5",
+          "notes": "Scales how strongly the geometry value maps into the chosen effect."
+        }
+      ],
+      "codeTemplate": "content\n    .visualEffect { effect, proxy in\n        effect\n            .scaleEffect(1 + proxy.frame(in: .global).minY / 1000 * {magnitude})\n    }"
+    },
+    {
+      "id": "safe-area-bar",
+      "title": "Safe Area Bar",
+      "api": "View.safeAreaBar(edge:alignment:spacing:content:)",
+      "summary": "Places a floating bar of content along an edge, inset into the safe area so scroll content flows under it with the scroll edge effect.",
+      "minOS": "iOS 26.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "styles": [],
+      "states": [
+        "default"
+      ],
+      "higNotes": "safeAreaBar is the iOS 26 companion to scroll edge effects: it reserves safe-area space for a floating glass bar (e.g. a bottom action bar) so content scrolls beneath it and gets the soft/hard edge treatment automatically. Prefer it over manual safeAreaInset for glass bars in iOS 26.",
+      "properties": [
+        {
+          "name": "edge",
+          "swiftType": "Edge",
+          "control": "segmented",
+          "options": [
+            "top",
+            "bottom",
+            "leading",
+            "trailing"
+          ],
+          "defaultValue": "bottom",
+          "notes": "Which edge the bar attaches to."
+        },
+        {
+          "name": "alignment",
+          "swiftType": "Alignment",
+          "control": "picker",
+          "options": [
+            "center",
+            "leading",
+            "trailing",
+            "top",
+            "bottom"
+          ],
+          "defaultValue": "center",
+          "notes": "Alignment of the bar content within the reserved region."
+        },
+        {
+          "name": "spacing",
+          "swiftType": "CGFloat?",
+          "control": "slider",
+          "options": [
+            "0",
+            "40"
+          ],
+          "defaultValue": "8",
+          "notes": "Spacing between the bar and the main content. nil uses the system default."
+        }
+      ],
+      "codeTemplate": "ScrollView {\n    LazyVStack { /* rows */ }\n}\n.safeAreaBar(edge: .{edge}, alignment: .{alignment}, spacing: {spacing}) {\n    Button(\"Action\") { }\n        .buttonStyle(.glassProminent)\n}"
+    }
+  ]
+}

@@ -1,0 +1,2221 @@
+{
+  "category": "Media & Shapes",
+  "key": "media",
+  "folder": "Media",
+  "components": [
+    {
+      "id": "image",
+      "title": "Image",
+      "api": "Image",
+      "summary": "Displays a bitmap, asset, system symbol, or rendered graphic with resizing, scaling, and rendering controls.",
+      "minOS": "iOS 13.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "summaryLong": "Image is the core view for static imagery. It supports asset catalog images, SF Symbols, CGImage/UIImage/NSImage sources, and decorative vs. labeled variants. The most-exposed showroom knobs are resizing mode, content mode (scaledToFit/scaledToFill), rendering mode, interpolation, and antialiasing.",
+      "states": [
+        "default",
+        "longContent"
+      ],
+      "styles": [],
+      "higNotes": "Always provide an accessibilityLabel for meaningful images; use Image(decorative:) for purely ornamental art so VoiceOver skips it. Use resizable() before applying frame; without it the image renders at intrinsic size. Prefer scaledToFit to avoid cropping content, scaledToFill inside a clipped container for edge-to-edge art.",
+      "properties": [
+        {
+          "name": "source",
+          "swiftType": "ImageSource",
+          "control": "picker",
+          "options": [
+            "asset",
+            "systemSymbol",
+            "decorative"
+          ],
+          "defaultValue": "systemSymbol",
+          "notes": "Drives which Image initializer is emitted: Image(\"name\"), Image(systemName:), or Image(decorative:)."
+        },
+        {
+          "name": "resizable",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Applies .resizable(). Required before frame() resizing has any effect on the rendered bitmap."
+        },
+        {
+          "name": "resizingMode",
+          "swiftType": "Image.ResizingMode",
+          "control": "segmented",
+          "options": [
+            "stretch",
+            "tile"
+          ],
+          "defaultValue": "stretch",
+          "notes": "Argument to resizable(resizingMode:). tile repeats the image; stretch scales it."
+        },
+        {
+          "name": "capInsets",
+          "swiftType": "EdgeInsets",
+          "control": "stepper",
+          "defaultValue": "EdgeInsets()",
+          "notes": "resizable(capInsets:) protects edge regions from stretching (9-slice). Expose four numeric steppers 0...100."
+        },
+        {
+          "name": "contentMode",
+          "swiftType": "ContentMode",
+          "control": "segmented",
+          "options": [
+            "fit",
+            "fill"
+          ],
+          "defaultValue": "fit",
+          "notes": "Emits .scaledToFit() or .scaledToFill(). fill usually needs a clipped frame."
+        },
+        {
+          "name": "renderingMode",
+          "swiftType": "Image.TemplateRenderingMode",
+          "control": "segmented",
+          "options": [
+            "original",
+            "template"
+          ],
+          "defaultValue": "original",
+          "notes": ".renderingMode(_:). template tints with foregroundStyle; original keeps source colors."
+        },
+        {
+          "name": "interpolation",
+          "swiftType": "Image.Interpolation",
+          "control": "picker",
+          "options": [
+            "none",
+            "low",
+            "medium",
+            "high"
+          ],
+          "defaultValue": "high",
+          "notes": ".interpolation(_:). Use none for pixel art to keep hard edges."
+        },
+        {
+          "name": "antialiased",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": ".antialiased(_:) smooths scaled edges."
+        },
+        {
+          "name": "foregroundStyle",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": ".accentColor",
+          "notes": "Tints template images and monochrome symbols."
+        },
+        {
+          "name": "frameWidth",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "20",
+            "400"
+          ],
+          "defaultValue": "120",
+          "notes": "Container width 20...400 to demonstrate fit vs fill."
+        },
+        {
+          "name": "frameHeight",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "20",
+            "400"
+          ],
+          "defaultValue": "120",
+          "notes": "Container height 20...400."
+        },
+        {
+          "name": "clipped",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": ".clipped() trims overflow; essential to make scaledToFill behave."
+        },
+        {
+          "name": "accessibilityLabel",
+          "swiftType": "String",
+          "control": "text",
+          "defaultValue": "\"Photo\"",
+          "notes": "VoiceOver label; omit only for decorative images."
+        },
+        {
+          "name": "imageSourceKind",
+          "swiftType": "ImageSource",
+          "control": "picker",
+          "options": [
+            "asset",
+            "systemSymbol",
+            "uiImage",
+            "cgImage",
+            "decorative"
+          ],
+          "defaultValue": "systemSymbol",
+          "notes": "Extends the existing 'source' picker: Image also initializes from a UIImage/NSImage (Image(uiImage:)) and a CGImage (Image(_:scale:orientation:label:)). The draft only lists asset/systemSymbol/decorative, omitting the platform-image and CGImage initializers."
+        }
+      ],
+      "codeTemplate": "Image({source})\n    {resizable}\n    .interpolation(.{interpolation})\n    .antialiased({antialiased})\n    .renderingMode(.{renderingMode})\n    .aspectRatio(contentMode: .{contentMode})\n    .foregroundStyle({foregroundStyle})\n    .frame(width: {frameWidth}, height: {frameHeight})\n    {clipped}\n    .accessibilityLabel(\"{accessibilityLabel}\")"
+    },
+    {
+      "id": "sf-symbol",
+      "title": "SF Symbol Image",
+      "api": "Image(systemName:)",
+      "summary": "Renders an SF Symbol with rendering mode, variable value, font sizing, and per-layer color palettes.",
+      "minOS": "iOS 13.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "summaryLong": "SF Symbols are vector glyphs that scale with Dynamic Type and align with text. Configure rendering mode (monochrome/hierarchical/palette/multicolor), variable value 0...1 for partial-fill symbols (wifi, speaker, battery), font weight and scale, and palette colors. Pairs with symbolEffect for animation and contentTransition(.symbolEffect) for swaps.",
+      "states": [
+        "default",
+        "selected",
+        "disabled"
+      ],
+      "styles": [
+        "monochrome",
+        "hierarchical",
+        "palette",
+        "multicolor"
+      ],
+      "higNotes": "Use the symbol that best matches the action's meaning; keep weight consistent with adjacent text. Hierarchical and palette modes convey depth without full color. Use variableValue to reflect a real measured quantity (signal, volume), not decoration. Always provide an accessibilityLabel since the glyph name is not spoken meaningfully.",
+      "properties": [
+        {
+          "name": "systemName",
+          "swiftType": "String",
+          "control": "text",
+          "defaultValue": "\"wifi\"",
+          "notes": "SF Symbol identifier. Variable-value symbols (wifi, speaker.wave.3, battery) react to variableValue."
+        },
+        {
+          "name": "variableValue",
+          "swiftType": "Double?",
+          "control": "slider",
+          "options": [
+            "0",
+            "1"
+          ],
+          "defaultValue": "0.6",
+          "notes": "Image(systemName:variableValue:). 0...1 drives partial fill on variable symbols. nil to omit."
+        },
+        {
+          "name": "symbolRenderingMode",
+          "swiftType": "SymbolRenderingMode",
+          "control": "segmented",
+          "options": [
+            "monochrome",
+            "hierarchical",
+            "palette",
+            "multicolor"
+          ],
+          "defaultValue": "monochrome",
+          "notes": ".symbolRenderingMode(_:). palette requires foregroundStyle with 1-3 colors."
+        },
+        {
+          "name": "primaryColor",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": ".accentColor",
+          "notes": "First foregroundStyle color (monochrome tint / palette layer 1 / hierarchical base)."
+        },
+        {
+          "name": "secondaryColor",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": ".secondary",
+          "notes": "Palette layer 2 (foregroundStyle(_:_:))."
+        },
+        {
+          "name": "tertiaryColor",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": ".gray",
+          "notes": "Palette layer 3 (foregroundStyle(_:_:_:))."
+        },
+        {
+          "name": "fontTextStyle",
+          "swiftType": "Font.TextStyle",
+          "control": "picker",
+          "options": [
+            "largeTitle",
+            "title",
+            "title2",
+            "title3",
+            "headline",
+            "body",
+            "callout",
+            "subheadline",
+            "footnote",
+            "caption"
+          ],
+          "defaultValue": "largeTitle",
+          "notes": ".font(.<style>) — symbols scale with Dynamic Type."
+        },
+        {
+          "name": "fontWeight",
+          "swiftType": "Font.Weight",
+          "control": "picker",
+          "options": [
+            "ultraLight",
+            "thin",
+            "light",
+            "regular",
+            "medium",
+            "semibold",
+            "bold",
+            "heavy",
+            "black"
+          ],
+          "defaultValue": "regular",
+          "notes": ".fontWeight(_:) controls symbol stroke weight."
+        },
+        {
+          "name": "imageScale",
+          "swiftType": "Image.Scale",
+          "control": "segmented",
+          "options": [
+            "small",
+            "medium",
+            "large"
+          ],
+          "defaultValue": "large",
+          "notes": ".imageScale(_:) relative size within the current font."
+        },
+        {
+          "name": "symbolVariant",
+          "swiftType": "SymbolVariant",
+          "control": "picker",
+          "options": [
+            "none",
+            "fill",
+            "circle",
+            "square",
+            "rectangle",
+            "slash"
+          ],
+          "defaultValue": "none",
+          "notes": ".symbolVariant(_:) swaps to the filled/enclosed variant when available."
+        },
+        {
+          "name": "accessibilityLabel",
+          "swiftType": "String",
+          "control": "text",
+          "defaultValue": "\"Wi-Fi signal\"",
+          "notes": "Spoken description of the symbol's meaning."
+        }
+      ],
+      "codeTemplate": "Image(systemName: {systemName}, variableValue: {variableValue})\n    .symbolRenderingMode(.{symbolRenderingMode})\n    .symbolVariant(.{symbolVariant})\n    .foregroundStyle({primaryColor}, {secondaryColor}, {tertiaryColor})\n    .font(.{fontTextStyle})\n    .fontWeight(.{fontWeight})\n    .imageScale(.{imageScale})\n    .accessibilityLabel(\"{accessibilityLabel}\")"
+    },
+    {
+      "id": "symbol-effect",
+      "title": "Symbol Effect",
+      "api": "View.symbolEffect(_:options:isActive:)",
+      "summary": "Animates an SF Symbol with bounce, pulse, variableColor, scale, breathe, rotate, wiggle, appear/disappear, or replace.",
+      "minOS": "iOS 17.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "summaryLong": "symbolEffect drives the Symbols framework animation engine. Discrete effects (bounce) fire on a value change; indefinite effects (pulse, variableColor, breathe, rotate, wiggle) animate while isActive is true. Effects expose submodifiers: byLayer/wholeSymbol scope, up/down direction, iterative/cumulative & reversing for variableColor, clockwise/counterClockwise for rotate. wiggle, breathe, rotate are iOS 18+. replace is a contentTransition used when swapping the symbol image.",
+      "states": [
+        "default",
+        "selected"
+      ],
+      "styles": [
+        "bounce",
+        "pulse",
+        "variableColor",
+        "scale",
+        "appear",
+        "disappear",
+        "breathe",
+        "rotate",
+        "wiggle",
+        "replace"
+      ],
+      "higNotes": "Use motion to communicate state change, not for decoration. Honor Reduce Motion — gate indefinite effects behind @Environment(\\.accessibilityReduceMotion). bounce confirms a tap; pulse signals ongoing activity; variableColor shows progress; replace animates a meaningful icon swap (play→pause).",
+      "properties": [
+        {
+          "name": "effect",
+          "swiftType": "SymbolEffect",
+          "control": "picker",
+          "options": [
+            "bounce",
+            "pulse",
+            "variableColor",
+            "scale",
+            "breathe",
+            "rotate",
+            "wiggle",
+            "appear",
+            "disappear"
+          ],
+          "defaultValue": "bounce",
+          "notes": "Which effect to apply. bounce/scale are discrete (use value:); the rest can run indefinitely (use isActive:)."
+        },
+        {
+          "name": "trigger",
+          "swiftType": "TriggerMode",
+          "control": "segmented",
+          "options": [
+            "isActive",
+            "value"
+          ],
+          "defaultValue": "isActive",
+          "notes": "Chooses the symbolEffect overload: isActive: Bool for indefinite, value: for discrete-on-change."
+        },
+        {
+          "name": "isActive",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "When trigger==isActive, runs the indefinite effect while true."
+        },
+        {
+          "name": "scope",
+          "swiftType": "SymbolEffectScope",
+          "control": "segmented",
+          "options": [
+            "byLayer",
+            "wholeSymbol"
+          ],
+          "defaultValue": "byLayer",
+          "notes": "Submodifier on the effect: animate each layer separately or as one."
+        },
+        {
+          "name": "direction",
+          "swiftType": "SymbolEffectDirection",
+          "control": "segmented",
+          "options": [
+            "up",
+            "down"
+          ],
+          "defaultValue": "up",
+          "notes": "bounce/scale direction submodifier."
+        },
+        {
+          "name": "variableColorMode",
+          "swiftType": "VariableColorMode",
+          "control": "picker",
+          "options": [
+            "iterative",
+            "cumulative"
+          ],
+          "defaultValue": "iterative",
+          "notes": "variableColor: iterative lights one layer at a time, cumulative keeps them lit."
+        },
+        {
+          "name": "variableColorReversing",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "variableColor .reversing vs .nonReversing submodifier."
+        },
+        {
+          "name": "rotateDirection",
+          "swiftType": "RotateDirection",
+          "control": "segmented",
+          "options": [
+            "clockwise",
+            "counterClockwise"
+          ],
+          "defaultValue": "clockwise",
+          "notes": "rotate effect direction (iOS 18+)."
+        },
+        {
+          "name": "repeating",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "options: .repeating vs .nonRepeating via SymbolEffectOptions."
+        },
+        {
+          "name": "speed",
+          "swiftType": "Double",
+          "control": "slider",
+          "options": [
+            "0.25",
+            "3.0"
+          ],
+          "defaultValue": "1.0",
+          "notes": "SymbolEffectOptions.speed(_:) multiplier 0.25...3.0."
+        },
+        {
+          "name": "repeatCount",
+          "swiftType": "Int",
+          "control": "stepper",
+          "options": [
+            "1",
+            "10"
+          ],
+          "defaultValue": "1",
+          "notes": "SymbolEffectOptions.repeat(_:) for a finite count of plays."
+        }
+      ],
+      "codeTemplate": "Image(systemName: \"heart.fill\")\n    .font(.largeTitle)\n    .symbolEffect(\n        .{effect},\n        options: .repeating.speed({speed}),\n        isActive: {isActive}\n    )"
+    },
+    {
+      "id": "async-image",
+      "title": "AsyncImage",
+      "api": "AsyncImage",
+      "summary": "Asynchronously loads and displays a remote image via URLSession, with placeholder and phase-based content.",
+      "minOS": "iOS 15.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "summaryLong": "AsyncImage loads from a URL on the shared URLSession. Three initializers: bare (url:scale:) with a default placeholder; (url:scale:content:placeholder:) for a custom placeholder and image transform; and (url:scale:transaction:content:) which receives an AsyncImagePhase (.empty, .success(Image), .failure(Error)) so you can render loading, success, and error states with an animated transaction.",
+      "states": [
+        "loading",
+        "empty",
+        "error",
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Show a sized placeholder (skeleton or ProgressView) so layout does not jump when the image arrives. Handle the .failure phase with a fallback rather than blank space. AsyncImage has no built-in caching beyond URLSession's cache — for heavy lists use a dedicated image loader. Animate the success transition with a transaction for a polished reveal.",
+      "properties": [
+        {
+          "name": "url",
+          "swiftType": "URL?",
+          "control": "text",
+          "defaultValue": "URL(string: \"https://picsum.photos/300\")",
+          "notes": "Remote image URL. nil renders the placeholder/empty phase."
+        },
+        {
+          "name": "scale",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "1",
+            "3"
+          ],
+          "defaultValue": "1",
+          "notes": "Pixel-to-point scale; 2 or 3 for @2x/@3x assets."
+        },
+        {
+          "name": "usePhaseContent",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Switches between the phase-driven init (handles error) and the simpler content+placeholder init."
+        },
+        {
+          "name": "contentMode",
+          "swiftType": "ContentMode",
+          "control": "segmented",
+          "options": [
+            "fit",
+            "fill"
+          ],
+          "defaultValue": "fill",
+          "notes": "Applied to the resizable success image inside content closure."
+        },
+        {
+          "name": "placeholderStyle",
+          "swiftType": "PlaceholderStyle",
+          "control": "picker",
+          "options": [
+            "progressView",
+            "skeleton",
+            "color"
+          ],
+          "defaultValue": "progressView",
+          "notes": "What to render while loading / on empty phase."
+        },
+        {
+          "name": "animateTransition",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Wraps the phase content in a Transaction with animation for a fade-in."
+        },
+        {
+          "name": "frameSize",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "80",
+            "320"
+          ],
+          "defaultValue": "200",
+          "notes": "Square frame so placeholder and image share footprint."
+        },
+        {
+          "name": "cornerRadius",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "0",
+            "60"
+          ],
+          "defaultValue": "16",
+          "notes": "clipShape(RoundedRectangle) radius."
+        }
+      ],
+      "codeTemplate": "AsyncImage(url: {url}, scale: {scale}, transaction: Transaction(animation: {animateTransition} ? .easeInOut : nil)) { phase in\n    switch phase {\n    case .success(let image):\n        image.resizable().aspectRatio(contentMode: .{contentMode})\n    case .failure:\n        Image(systemName: \"photo.badge.exclamationmark\").font(.largeTitle).foregroundStyle(.secondary)\n    case .empty:\n        ProgressView()\n    @unknown default:\n        EmptyView()\n    }\n}\n.frame(width: {frameSize}, height: {frameSize})\n.clipShape(RoundedRectangle(cornerRadius: {cornerRadius}))"
+    },
+    {
+      "id": "rectangle",
+      "title": "Rectangle",
+      "api": "Rectangle",
+      "summary": "A rectangular shape filling its frame, used for fills, strokes, dividers, and backgrounds.",
+      "minOS": "iOS 13.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "summaryLong": "Rectangle is the simplest Shape, aligned to its frame's edges. Drive fill style, stroke color/width, frame, opacity, rotation, and shadow. Combine with .fill, .stroke, .strokeBorder (inset stroke), and shape styles (Color, Gradient, Material).",
+      "states": [
+        "default"
+      ],
+      "styles": [
+        "fill",
+        "stroke",
+        "strokeBorder"
+      ],
+      "higNotes": "Use Rectangle for backgrounds and separators rather than drawing with Path. For rounded corners use RoundedRectangle, not a Rectangle with a clip. strokeBorder keeps the stroke inside the bounds so it isn't clipped by neighbors.",
+      "properties": [
+        {
+          "name": "renderStyle",
+          "swiftType": "ShapeRenderStyle",
+          "control": "segmented",
+          "options": [
+            "fill",
+            "stroke",
+            "strokeBorder"
+          ],
+          "defaultValue": "fill",
+          "notes": "Emits .fill(_:), .stroke(_:lineWidth:), or .strokeBorder(_:lineWidth:)."
+        },
+        {
+          "name": "fillStyle",
+          "swiftType": "ShapeStyleKind",
+          "control": "picker",
+          "options": [
+            "color",
+            "linearGradient",
+            "material",
+            "hierarchical"
+          ],
+          "defaultValue": "color",
+          "notes": "Which ShapeStyle fills the shape."
+        },
+        {
+          "name": "fillColor",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": ".accentColor",
+          "notes": "Color used when fillStyle == color or as gradient base."
+        },
+        {
+          "name": "lineWidth",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "0.5",
+            "20"
+          ],
+          "defaultValue": "2",
+          "notes": "Stroke width when renderStyle is stroke/strokeBorder."
+        },
+        {
+          "name": "width",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "40",
+            "320"
+          ],
+          "defaultValue": "200",
+          "notes": "Frame width."
+        },
+        {
+          "name": "height",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "40",
+            "320"
+          ],
+          "defaultValue": "120",
+          "notes": "Frame height."
+        },
+        {
+          "name": "opacity",
+          "swiftType": "Double",
+          "control": "slider",
+          "options": [
+            "0",
+            "1"
+          ],
+          "defaultValue": "1",
+          "notes": ".opacity(_:)."
+        },
+        {
+          "name": "rotation",
+          "swiftType": "Angle",
+          "control": "slider",
+          "options": [
+            "0",
+            "360"
+          ],
+          "defaultValue": "0",
+          "notes": ".rotationEffect(.degrees(_:)) in degrees."
+        }
+      ],
+      "codeTemplate": "Rectangle()\n    .{renderStyle}({fillColor}, lineWidth: {lineWidth})\n    .opacity({opacity})\n    .rotationEffect(.degrees({rotation}))\n    .frame(width: {width}, height: {height})"
+    },
+    {
+      "id": "rounded-rectangle",
+      "title": "RoundedRectangle",
+      "api": "RoundedRectangle",
+      "summary": "A rectangle with rounded corners, configurable via corner radius or width/height, with circular or continuous style.",
+      "minOS": "iOS 13.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "summaryLong": "RoundedRectangle(cornerRadius:style:) or (cornerSize:style:). The style is RoundedCornerStyle.circular or .continuous (Apple's squircle). It is the workhorse for cards, buttons, and clipShape. Pair with .fill/.stroke/.strokeBorder and shape styles.",
+      "states": [
+        "default"
+      ],
+      "styles": [
+        "fill",
+        "stroke",
+        "strokeBorder"
+      ],
+      "higNotes": "Prefer .continuous corner style for the smooth Apple squircle look on cards and large surfaces. Use a corner radius proportional to the element size. For clipping content use clipShape(RoundedRectangle(cornerRadius:style:)).",
+      "properties": [
+        {
+          "name": "cornerRadius",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "0",
+            "80"
+          ],
+          "defaultValue": "20",
+          "notes": "Corner radius in points."
+        },
+        {
+          "name": "cornerStyle",
+          "swiftType": "RoundedCornerStyle",
+          "control": "segmented",
+          "options": [
+            "circular",
+            "continuous"
+          ],
+          "defaultValue": "continuous",
+          "notes": "circular = quarter-circle corners; continuous = squircle."
+        },
+        {
+          "name": "renderStyle",
+          "swiftType": "ShapeRenderStyle",
+          "control": "segmented",
+          "options": [
+            "fill",
+            "stroke",
+            "strokeBorder"
+          ],
+          "defaultValue": "fill",
+          "notes": "fill / stroke / inset strokeBorder."
+        },
+        {
+          "name": "fillColor",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": ".accentColor",
+          "notes": "Primary shape style color."
+        },
+        {
+          "name": "lineWidth",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "0.5",
+            "20"
+          ],
+          "defaultValue": "2",
+          "notes": "Stroke width for stroke/strokeBorder."
+        },
+        {
+          "name": "width",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "40",
+            "320"
+          ],
+          "defaultValue": "220",
+          "notes": "Frame width."
+        },
+        {
+          "name": "height",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "40",
+            "320"
+          ],
+          "defaultValue": "120",
+          "notes": "Frame height."
+        }
+      ],
+      "codeTemplate": "RoundedRectangle(cornerRadius: {cornerRadius}, style: .{cornerStyle})\n    .{renderStyle}({fillColor}, lineWidth: {lineWidth})\n    .frame(width: {width}, height: {height})"
+    },
+    {
+      "id": "unevenrounded-rectangle",
+      "title": "UnevenRoundedRectangle",
+      "api": "UnevenRoundedRectangle",
+      "summary": "A rectangle with independently configurable corner radii per corner.",
+      "minOS": "iOS 16.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "summaryLong": "UnevenRoundedRectangle(topLeadingRadius:bottomLeadingRadius:bottomTrailingRadius:topTrailingRadius:style:) gives per-corner control for asymmetric cards, sheet tops, and grouped list cells. Honors RoundedCornerStyle.",
+      "states": [
+        "default"
+      ],
+      "styles": [
+        "fill",
+        "stroke",
+        "strokeBorder"
+      ],
+      "higNotes": "Use for surfaces that meet a screen edge or a neighbor on one side — round only the exposed corners. Keep continuous style consistent with sibling shapes.",
+      "properties": [
+        {
+          "name": "topLeadingRadius",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "0",
+            "60"
+          ],
+          "defaultValue": "20",
+          "notes": "Top-leading corner radius."
+        },
+        {
+          "name": "topTrailingRadius",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "0",
+            "60"
+          ],
+          "defaultValue": "20",
+          "notes": "Top-trailing corner radius."
+        },
+        {
+          "name": "bottomLeadingRadius",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "0",
+            "60"
+          ],
+          "defaultValue": "0",
+          "notes": "Bottom-leading corner radius."
+        },
+        {
+          "name": "bottomTrailingRadius",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "0",
+            "60"
+          ],
+          "defaultValue": "0",
+          "notes": "Bottom-trailing corner radius."
+        },
+        {
+          "name": "cornerStyle",
+          "swiftType": "RoundedCornerStyle",
+          "control": "segmented",
+          "options": [
+            "circular",
+            "continuous"
+          ],
+          "defaultValue": "continuous",
+          "notes": "Corner curve style."
+        },
+        {
+          "name": "fillColor",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": ".accentColor",
+          "notes": "Fill color."
+        },
+        {
+          "name": "width",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "40",
+            "320"
+          ],
+          "defaultValue": "220",
+          "notes": "Frame width."
+        },
+        {
+          "name": "height",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "40",
+            "320"
+          ],
+          "defaultValue": "140",
+          "notes": "Frame height."
+        }
+      ],
+      "codeTemplate": "UnevenRoundedRectangle(\n    topLeadingRadius: {topLeadingRadius},\n    bottomLeadingRadius: {bottomLeadingRadius},\n    bottomTrailingRadius: {bottomTrailingRadius},\n    topTrailingRadius: {topTrailingRadius},\n    style: .{cornerStyle}\n)\n.fill({fillColor})\n.frame(width: {width}, height: {height})"
+    },
+    {
+      "id": "capsule",
+      "title": "Capsule",
+      "api": "Capsule",
+      "summary": "A pill shape — a rectangle whose shorter dimension's ends are fully rounded.",
+      "minOS": "iOS 13.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "summaryLong": "Capsule(style:) rounds the ends along the shorter axis. It is the standard background for tags, chips, toggles, and prominent buttons. style picks circular or continuous end curvature.",
+      "states": [
+        "default",
+        "selected"
+      ],
+      "styles": [
+        "fill",
+        "stroke",
+        "strokeBorder"
+      ],
+      "higNotes": "Capsule is the canonical chip/tag background. Keep vertical padding generous so text isn't cramped against the rounded ends. Use continuous style for a softer pill.",
+      "properties": [
+        {
+          "name": "cornerStyle",
+          "swiftType": "RoundedCornerStyle",
+          "control": "segmented",
+          "options": [
+            "circular",
+            "continuous"
+          ],
+          "defaultValue": "continuous",
+          "notes": "End-cap curve style."
+        },
+        {
+          "name": "renderStyle",
+          "swiftType": "ShapeRenderStyle",
+          "control": "segmented",
+          "options": [
+            "fill",
+            "stroke",
+            "strokeBorder"
+          ],
+          "defaultValue": "fill",
+          "notes": "fill / stroke / strokeBorder."
+        },
+        {
+          "name": "fillColor",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": ".accentColor",
+          "notes": "Shape style color."
+        },
+        {
+          "name": "lineWidth",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "0.5",
+            "16"
+          ],
+          "defaultValue": "2",
+          "notes": "Stroke width."
+        },
+        {
+          "name": "width",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "60",
+            "320"
+          ],
+          "defaultValue": "160",
+          "notes": "Frame width."
+        },
+        {
+          "name": "height",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "28",
+            "120"
+          ],
+          "defaultValue": "48",
+          "notes": "Frame height (shorter axis drives the rounding)."
+        }
+      ],
+      "codeTemplate": "Capsule(style: .{cornerStyle})\n    .{renderStyle}({fillColor}, lineWidth: {lineWidth})\n    .frame(width: {width}, height: {height})"
+    },
+    {
+      "id": "circle",
+      "title": "Circle",
+      "api": "Circle",
+      "summary": "A circle inscribed in its frame, centered on the frame's center.",
+      "minOS": "iOS 13.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "summaryLong": "Circle fits the largest circle inside its frame. Used for avatars, badges, dots, and progress rings (with trim + stroke). Combine with strokeBorder for inset rings.",
+      "states": [
+        "default",
+        "selected"
+      ],
+      "styles": [
+        "fill",
+        "stroke",
+        "strokeBorder"
+      ],
+      "higNotes": "Use Circle for avatars and status dots. For ring/progress indicators combine Circle().trim(from:to:).stroke(style: StrokeStyle(lineCap: .round)). Size avatars with a square frame so the circle stays round.",
+      "properties": [
+        {
+          "name": "renderStyle",
+          "swiftType": "ShapeRenderStyle",
+          "control": "segmented",
+          "options": [
+            "fill",
+            "stroke",
+            "strokeBorder"
+          ],
+          "defaultValue": "fill",
+          "notes": "fill / stroke / strokeBorder."
+        },
+        {
+          "name": "fillColor",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": ".accentColor",
+          "notes": "Shape style color."
+        },
+        {
+          "name": "lineWidth",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "1",
+            "30"
+          ],
+          "defaultValue": "6",
+          "notes": "Stroke width for ring styles."
+        },
+        {
+          "name": "trimFrom",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "0",
+            "1"
+          ],
+          "defaultValue": "0",
+          "notes": ".trim(from:to:) start, for arcs/progress."
+        },
+        {
+          "name": "trimTo",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "0",
+            "1"
+          ],
+          "defaultValue": "1",
+          "notes": ".trim(from:to:) end."
+        },
+        {
+          "name": "lineCap",
+          "swiftType": "CGLineCap",
+          "control": "segmented",
+          "options": [
+            "butt",
+            "round",
+            "square"
+          ],
+          "defaultValue": "round",
+          "notes": "StrokeStyle line cap for trimmed arcs."
+        },
+        {
+          "name": "diameter",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "40",
+            "300"
+          ],
+          "defaultValue": "160",
+          "notes": "Square frame size."
+        }
+      ],
+      "codeTemplate": "Circle()\n    .trim(from: {trimFrom}, to: {trimTo})\n    .{renderStyle}({fillColor}, style: StrokeStyle(lineWidth: {lineWidth}, lineCap: .{lineCap}))\n    .frame(width: {diameter}, height: {diameter})"
+    },
+    {
+      "id": "ellipse",
+      "title": "Ellipse",
+      "api": "Ellipse",
+      "summary": "An ellipse inscribed in its frame, stretching with non-square dimensions.",
+      "minOS": "iOS 13.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "summaryLong": "Ellipse fits an ellipse to the frame's width and height. Unlike Circle it is not constrained to square. Useful for organic shapes, soft highlights, and decorative blobs.",
+      "states": [
+        "default"
+      ],
+      "styles": [
+        "fill",
+        "stroke",
+        "strokeBorder"
+      ],
+      "higNotes": "Use for decorative or organic accents. For circular content use Circle to guarantee roundness regardless of frame.",
+      "properties": [
+        {
+          "name": "renderStyle",
+          "swiftType": "ShapeRenderStyle",
+          "control": "segmented",
+          "options": [
+            "fill",
+            "stroke",
+            "strokeBorder"
+          ],
+          "defaultValue": "fill",
+          "notes": "fill / stroke / strokeBorder."
+        },
+        {
+          "name": "fillColor",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": ".accentColor",
+          "notes": "Shape style color."
+        },
+        {
+          "name": "lineWidth",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "0.5",
+            "20"
+          ],
+          "defaultValue": "2",
+          "notes": "Stroke width."
+        },
+        {
+          "name": "width",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "40",
+            "320"
+          ],
+          "defaultValue": "220",
+          "notes": "Frame width."
+        },
+        {
+          "name": "height",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "40",
+            "320"
+          ],
+          "defaultValue": "120",
+          "notes": "Frame height."
+        }
+      ],
+      "codeTemplate": "Ellipse()\n    .{renderStyle}({fillColor}, lineWidth: {lineWidth})\n    .frame(width: {width}, height: {height})"
+    },
+    {
+      "id": "path",
+      "title": "Path",
+      "api": "Path",
+      "summary": "A custom 2D outline built from move/line/curve/arc commands, fillable and strokable.",
+      "minOS": "iOS 13.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "summaryLong": "Path is the lowest-level vector primitive. Build it with a closure: move(to:), addLine(to:), addQuadCurve, addCurve, addArc, addRect, addEllipse, closeSubpath. Render with .fill or .stroke. Used for custom shapes, charts, and signature-style drawing. For reusable shapes wrap Path logic in a custom Shape conformance.",
+      "states": [
+        "default"
+      ],
+      "styles": [
+        "fill",
+        "stroke"
+      ],
+      "higNotes": "Reserve Path for shapes the built-in primitives can't express. Wrap nontrivial paths in a Shape struct so they animate and resize cleanly. Combine fill (even-odd or non-zero) and stroke deliberately; specify fillStyle for self-intersecting paths.",
+      "properties": [
+        {
+          "name": "preset",
+          "swiftType": "PathPreset",
+          "control": "picker",
+          "options": [
+            "triangle",
+            "star",
+            "wave",
+            "chevron",
+            "heart"
+          ],
+          "defaultValue": "triangle",
+          "notes": "Which sample path the showroom builds in the closure."
+        },
+        {
+          "name": "renderStyle",
+          "swiftType": "PathRenderStyle",
+          "control": "segmented",
+          "options": [
+            "fill",
+            "stroke"
+          ],
+          "defaultValue": "fill",
+          "notes": ".fill(_:) vs .stroke(_:style:)."
+        },
+        {
+          "name": "fillColor",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": ".accentColor",
+          "notes": "Fill / stroke color."
+        },
+        {
+          "name": "lineWidth",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "1",
+            "24"
+          ],
+          "defaultValue": "4",
+          "notes": "Stroke width."
+        },
+        {
+          "name": "lineJoin",
+          "swiftType": "CGLineJoin",
+          "control": "segmented",
+          "options": [
+            "miter",
+            "round",
+            "bevel"
+          ],
+          "defaultValue": "round",
+          "notes": "StrokeStyle line join."
+        },
+        {
+          "name": "fillRule",
+          "swiftType": "FillStyle",
+          "control": "segmented",
+          "options": [
+            "nonZero",
+            "evenOdd"
+          ],
+          "defaultValue": "nonZero",
+          "notes": "fill(style: FillStyle(eoFill:)) for self-intersecting paths like stars."
+        },
+        {
+          "name": "size",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "80",
+            "300"
+          ],
+          "defaultValue": "180",
+          "notes": "Drawing canvas square size."
+        }
+      ],
+      "codeTemplate": "Path { path in\n    // {preset} geometry inside a {size}x{size} box\n    path.move(to: CGPoint(x: {size}/2, y: 0))\n    path.addLine(to: CGPoint(x: {size}, y: {size}))\n    path.addLine(to: CGPoint(x: 0, y: {size}))\n    path.closeSubpath()\n}\n.{renderStyle}({fillColor}, style: StrokeStyle(lineWidth: {lineWidth}, lineJoin: .{lineJoin}))\n.frame(width: {size}, height: {size})"
+    },
+    {
+      "id": "canvas",
+      "title": "Canvas",
+      "api": "Canvas",
+      "summary": "Immediate-mode 2D drawing surface using GraphicsContext for high-performance custom graphics.",
+      "minOS": "iOS 15.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "summaryLong": "Canvas gives a GraphicsContext and CGSize in its renderer closure for immediate-mode drawing: fill/stroke paths, draw text, images, and resolved SwiftUI symbols, apply filters, blend modes, transforms, masks, and layers. The symbols variant init(opaque:colorMode:rendersAsynchronously:renderer:symbols:) lets you reference views by tag. No per-element accessibility or hit-testing — best for dense, dynamic visuals.",
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Use Canvas for complex/dynamic drawings that would be costly as a view tree. Provide an accessibilityLabel or representation since individual drawn elements aren't accessible. Honor Reduce Motion for animated canvases. Set opaque true when you draw a full background for better performance.",
+      "properties": [
+        {
+          "name": "opaque",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "init opaque: — true if the canvas fully covers its background (faster)."
+        },
+        {
+          "name": "colorMode",
+          "swiftType": "ColorRenderingMode",
+          "control": "segmented",
+          "options": [
+            "nonLinear",
+            "linear",
+            "extendedLinear"
+          ],
+          "defaultValue": "nonLinear",
+          "notes": "Color blending space for the canvas."
+        },
+        {
+          "name": "rendersAsynchronously",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Allow off-main-thread rendering; trades latency for throughput."
+        },
+        {
+          "name": "drawingPrimitive",
+          "swiftType": "CanvasDrawing",
+          "control": "picker",
+          "options": [
+            "strokedPath",
+            "filledPath",
+            "text",
+            "image",
+            "gradientFill"
+          ],
+          "defaultValue": "strokedPath",
+          "notes": "Which GraphicsContext operation the demo performs."
+        },
+        {
+          "name": "strokeColor",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": ".accentColor",
+          "notes": "GraphicsContext stroke/fill color."
+        },
+        {
+          "name": "lineWidth",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "1",
+            "24"
+          ],
+          "defaultValue": "4",
+          "notes": "Stroke width passed to context.stroke."
+        },
+        {
+          "name": "blendMode",
+          "swiftType": "GraphicsContext.BlendMode",
+          "control": "picker",
+          "options": [
+            "normal",
+            "multiply",
+            "screen",
+            "overlay",
+            "plusLighter"
+          ],
+          "defaultValue": "normal",
+          "notes": "context.blendMode for layered drawing."
+        },
+        {
+          "name": "canvasHeight",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "120",
+            "400"
+          ],
+          "defaultValue": "240",
+          "notes": "Frame height of the canvas."
+        }
+      ],
+      "codeTemplate": "Canvas(opaque: {opaque}, colorMode: .{colorMode}, rendersAsynchronously: {rendersAsynchronously}) { context, size in\n    context.blendMode = .{blendMode}\n    let path = Path(ellipseIn: CGRect(origin: .zero, size: size))\n    context.stroke(path, with: .color({strokeColor}), lineWidth: {lineWidth})\n}\n.frame(height: {canvasHeight})"
+    },
+    {
+      "id": "linear-gradient",
+      "title": "LinearGradient",
+      "api": "LinearGradient",
+      "summary": "A gradient that interpolates colors along a straight line between two unit points.",
+      "minOS": "iOS 13.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "summaryLong": "LinearGradient(colors:startPoint:endPoint:) or (gradient:startPoint:endPoint:) or (stops:...). Unit points (.top, .bottom, .leading, .topTrailing, UnitPoint(x:y:)) set direction. Use as a ShapeStyle for fill/background/foregroundStyle. Supports an explicit color space via Gradient(stops:)/colorSpace.",
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Keep gradients subtle for backgrounds; high-contrast gradients fight foreground text. For consistent perceptual blending across hues use a .perceptual or device color space. Avoid pure black-to-white over text.",
+      "properties": [
+        {
+          "name": "colorStart",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": ".blue",
+          "notes": "First gradient color."
+        },
+        {
+          "name": "colorEnd",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": ".purple",
+          "notes": "Last gradient color."
+        },
+        {
+          "name": "useThreeStops",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Insert a middle color for a 3-stop gradient."
+        },
+        {
+          "name": "colorMid",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": ".pink",
+          "notes": "Middle color when useThreeStops is on."
+        },
+        {
+          "name": "startPoint",
+          "swiftType": "UnitPoint",
+          "control": "picker",
+          "options": [
+            "top",
+            "bottom",
+            "leading",
+            "trailing",
+            "topLeading",
+            "topTrailing",
+            "bottomLeading",
+            "bottomTrailing",
+            "center"
+          ],
+          "defaultValue": "top",
+          "notes": "Gradient start UnitPoint."
+        },
+        {
+          "name": "endPoint",
+          "swiftType": "UnitPoint",
+          "control": "picker",
+          "options": [
+            "top",
+            "bottom",
+            "leading",
+            "trailing",
+            "topLeading",
+            "topTrailing",
+            "bottomLeading",
+            "bottomTrailing",
+            "center"
+          ],
+          "defaultValue": "bottom",
+          "notes": "Gradient end UnitPoint."
+        },
+        {
+          "name": "width",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "80",
+            "320"
+          ],
+          "defaultValue": "240",
+          "notes": "Frame width of the previewed swatch."
+        },
+        {
+          "name": "height",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "60",
+            "320"
+          ],
+          "defaultValue": "160",
+          "notes": "Frame height of the swatch."
+        }
+      ],
+      "codeTemplate": "LinearGradient(\n    colors: [{colorStart}, {colorEnd}],\n    startPoint: .{startPoint},\n    endPoint: .{endPoint}\n)\n.frame(width: {width}, height: {height})"
+    },
+    {
+      "id": "radial-gradient",
+      "title": "RadialGradient",
+      "api": "RadialGradient",
+      "summary": "A gradient that interpolates colors outward from a center point between a start and end radius.",
+      "minOS": "iOS 13.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "summaryLong": "RadialGradient(colors:center:startRadius:endRadius:). Colors blend in concentric rings from center. Use for spotlights, glows, and soft vignettes. A ShapeStyle usable in fill/background.",
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Great for a focal glow or vignette. Keep endRadius proportional to the frame; an undersized endRadius creates a hard ring. Center can be offset for directional light.",
+      "properties": [
+        {
+          "name": "colorCenter",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": ".yellow",
+          "notes": "Inner color."
+        },
+        {
+          "name": "colorEdge",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": ".orange",
+          "notes": "Outer color."
+        },
+        {
+          "name": "center",
+          "swiftType": "UnitPoint",
+          "control": "picker",
+          "options": [
+            "center",
+            "top",
+            "bottom",
+            "leading",
+            "trailing",
+            "topLeading",
+            "topTrailing",
+            "bottomLeading",
+            "bottomTrailing"
+          ],
+          "defaultValue": "center",
+          "notes": "Gradient origin."
+        },
+        {
+          "name": "startRadius",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "0",
+            "150"
+          ],
+          "defaultValue": "0",
+          "notes": "Inner radius where the first color sits."
+        },
+        {
+          "name": "endRadius",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "20",
+            "300"
+          ],
+          "defaultValue": "140",
+          "notes": "Outer radius where the last color sits."
+        },
+        {
+          "name": "size",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "80",
+            "320"
+          ],
+          "defaultValue": "220",
+          "notes": "Square frame size."
+        }
+      ],
+      "codeTemplate": "RadialGradient(\n    colors: [{colorCenter}, {colorEdge}],\n    center: .{center},\n    startRadius: {startRadius},\n    endRadius: {endRadius}\n)\n.frame(width: {size}, height: {size})"
+    },
+    {
+      "id": "angular-gradient",
+      "title": "AngularGradient",
+      "api": "AngularGradient",
+      "summary": "A gradient that sweeps colors around a center point (conic gradient).",
+      "minOS": "iOS 13.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "summaryLong": "AngularGradient(colors:center:) or (colors:center:startAngle:endAngle:) or (colors:center:angle:). Sweeps colors around the center; with a full 0...360 wrap it forms a color wheel. Use for conic progress rings and decorative sweeps.",
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Match start and end colors when sweeping a full circle to avoid a visible seam. Pair with Circle().trim + stroke for conic progress arcs.",
+      "properties": [
+        {
+          "name": "colorStart",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": ".red",
+          "notes": "First sweep color."
+        },
+        {
+          "name": "colorEnd",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": ".red",
+          "notes": "Last sweep color (match colorStart for seamless wheel)."
+        },
+        {
+          "name": "useRainbow",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Emit a full hue spectrum array instead of two colors."
+        },
+        {
+          "name": "center",
+          "swiftType": "UnitPoint",
+          "control": "picker",
+          "options": [
+            "center",
+            "top",
+            "bottom",
+            "leading",
+            "trailing"
+          ],
+          "defaultValue": "center",
+          "notes": "Sweep center."
+        },
+        {
+          "name": "startAngle",
+          "swiftType": "Angle",
+          "control": "slider",
+          "options": [
+            "0",
+            "360"
+          ],
+          "defaultValue": "0",
+          "notes": "Sweep start angle in degrees."
+        },
+        {
+          "name": "endAngle",
+          "swiftType": "Angle",
+          "control": "slider",
+          "options": [
+            "0",
+            "360"
+          ],
+          "defaultValue": "360",
+          "notes": "Sweep end angle in degrees."
+        },
+        {
+          "name": "size",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "80",
+            "320"
+          ],
+          "defaultValue": "220",
+          "notes": "Square frame size."
+        }
+      ],
+      "codeTemplate": "AngularGradient(\n    colors: [{colorStart}, {colorEnd}],\n    center: .{center},\n    startAngle: .degrees({startAngle}),\n    endAngle: .degrees({endAngle})\n)\n.frame(width: {size}, height: {size})"
+    },
+    {
+      "id": "elliptical-gradient",
+      "title": "EllipticalGradient",
+      "api": "EllipticalGradient",
+      "summary": "A radial-style gradient whose rings are elliptical, matching a non-square frame.",
+      "minOS": "iOS 15.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "summaryLong": "EllipticalGradient(colors:center:startRadiusFraction:endRadiusFraction:). Like RadialGradient but stretches to an ellipse, so the glow follows a wide/tall frame. Radii are fractions of the frame.",
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Prefer over RadialGradient when the surface isn't square so the falloff matches the frame's aspect. Keep endRadiusFraction near 0.5 for a centered glow.",
+      "properties": [
+        {
+          "name": "colorCenter",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": ".teal",
+          "notes": "Inner color."
+        },
+        {
+          "name": "colorEdge",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": ".indigo",
+          "notes": "Outer color."
+        },
+        {
+          "name": "center",
+          "swiftType": "UnitPoint",
+          "control": "picker",
+          "options": [
+            "center",
+            "top",
+            "bottom",
+            "leading",
+            "trailing"
+          ],
+          "defaultValue": "center",
+          "notes": "Gradient origin."
+        },
+        {
+          "name": "startRadiusFraction",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "0",
+            "1"
+          ],
+          "defaultValue": "0",
+          "notes": "Inner radius as a fraction of frame size."
+        },
+        {
+          "name": "endRadiusFraction",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "0.1",
+            "1"
+          ],
+          "defaultValue": "0.5",
+          "notes": "Outer radius as a fraction of frame size."
+        },
+        {
+          "name": "width",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "80",
+            "320"
+          ],
+          "defaultValue": "260",
+          "notes": "Frame width."
+        },
+        {
+          "name": "height",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "60",
+            "320"
+          ],
+          "defaultValue": "160",
+          "notes": "Frame height."
+        }
+      ],
+      "codeTemplate": "EllipticalGradient(\n    colors: [{colorCenter}, {colorEdge}],\n    center: .{center},\n    startRadiusFraction: {startRadiusFraction},\n    endRadiusFraction: {endRadiusFraction}\n)\n.frame(width: {width}, height: {height})"
+    },
+    {
+      "id": "mesh-gradient",
+      "title": "MeshGradient",
+      "api": "MeshGradient",
+      "summary": "A 2D grid of positioned colors interpolated across Bezier patches for rich multi-color blends.",
+      "minOS": "iOS 18.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "summaryLong": "MeshGradient(width:height:points:colors:background:smoothsColors:colorSpace:). Each grid vertex has a position (SIMD2<Float>) and a color; colors interpolate across a tessellated Bezier mesh. Animate vertex positions for a flowing background. width/height are the grid dimensions; points.count must equal width*height.",
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Animate vertex positions subtly for a living background; respect Reduce Motion by freezing the mesh. Keep colors within a harmonious palette — meshes amplify clashing hues. Use smoothsColors true for the softest transitions.",
+      "properties": [
+        {
+          "name": "gridWidth",
+          "swiftType": "Int",
+          "control": "stepper",
+          "options": [
+            "2",
+            "5"
+          ],
+          "defaultValue": "3",
+          "notes": "Columns in the mesh grid."
+        },
+        {
+          "name": "gridHeight",
+          "swiftType": "Int",
+          "control": "stepper",
+          "options": [
+            "2",
+            "5"
+          ],
+          "defaultValue": "3",
+          "notes": "Rows in the mesh grid."
+        },
+        {
+          "name": "cornerColorA",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": ".purple",
+          "notes": "Seeds one corner of the generated color matrix."
+        },
+        {
+          "name": "cornerColorB",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": ".pink",
+          "notes": "Seeds a second corner."
+        },
+        {
+          "name": "cornerColorC",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": ".orange",
+          "notes": "Seeds a third corner."
+        },
+        {
+          "name": "smoothsColors",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Cubic color interpolation for smoother transitions."
+        },
+        {
+          "name": "animateVertices",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Demo-only: jitter interior vertex positions over time (gate on Reduce Motion)."
+        },
+        {
+          "name": "size",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "120",
+            "360"
+          ],
+          "defaultValue": "280",
+          "notes": "Square frame size."
+        }
+      ],
+      "codeTemplate": "MeshGradient(\n    width: {gridWidth},\n    height: {gridHeight},\n    points: [\n        [0,0], [0.5,0], [1,0],\n        [0,0.5], [0.5,0.5], [1,0.5],\n        [0,1], [0.5,1], [1,1]\n    ],\n    colors: [\n        {cornerColorA}, .blue, {cornerColorB},\n        .green, .white, .yellow,\n        {cornerColorC}, .red, .mint\n    ],\n    smoothsColors: {smoothsColors}\n)\n.frame(width: {size}, height: {size})"
+    },
+    {
+      "id": "material",
+      "title": "Material (Blur)",
+      "api": "Material",
+      "summary": "A translucent blur backdrop (ultraThin to thick) used as a ShapeStyle for backgrounds and overlays.",
+      "minOS": "iOS 15.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "summaryLong": "Material is a ShapeStyle producing system blur with vibrancy: .ultraThinMaterial, .thinMaterial, .regularMaterial, .thickMaterial, .ultraThickMaterial, plus .bar. Apply via .background(_:) or as a fill. Text/symbols over a material should use .foregroundStyle(.secondary/.tertiary) or a vibrancy hierarchy. On iOS 26 prefer Liquid Glass (glassEffect) for floating controls; materials remain for static panels.",
+      "states": [
+        "default"
+      ],
+      "styles": [
+        "ultraThinMaterial",
+        "thinMaterial",
+        "regularMaterial",
+        "thickMaterial",
+        "ultraThickMaterial",
+        "bar"
+      ],
+      "higNotes": "Materials adapt to light/dark and the content behind them. Provide an opaque fallback when Reduce Transparency is enabled. Use thinner materials over vivid content, thicker over busy backgrounds for legibility. Don't stack materials on materials. On iOS 26, floating/interactive surfaces should adopt Liquid Glass instead.",
+      "properties": [
+        {
+          "name": "material",
+          "swiftType": "Material",
+          "control": "segmented",
+          "options": [
+            "ultraThinMaterial",
+            "thinMaterial",
+            "regularMaterial",
+            "thickMaterial",
+            "ultraThickMaterial",
+            "bar"
+          ],
+          "defaultValue": "regularMaterial",
+          "notes": "Which system material blur to apply as the background."
+        },
+        {
+          "name": "clipShape",
+          "swiftType": "ClipShapeKind",
+          "control": "picker",
+          "options": [
+            "roundedRectangle",
+            "capsule",
+            "circle",
+            "rectangle"
+          ],
+          "defaultValue": "roundedRectangle",
+          "notes": "Shape the material is clipped to."
+        },
+        {
+          "name": "cornerRadius",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "0",
+            "60"
+          ],
+          "defaultValue": "20",
+          "notes": "Radius when clipShape is roundedRectangle."
+        },
+        {
+          "name": "labelStyle",
+          "swiftType": "VibrancyLevel",
+          "control": "segmented",
+          "options": [
+            "primary",
+            "secondary",
+            "tertiary"
+          ],
+          "defaultValue": "secondary",
+          "notes": "foregroundStyle hierarchy for vibrant text over the material."
+        },
+        {
+          "name": "reduceTransparencyFallback",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Demo-only: swap to an opaque background when accessibilityReduceTransparency is true."
+        },
+        {
+          "name": "padding",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "8",
+            "40"
+          ],
+          "defaultValue": "20",
+          "notes": "Inner padding around the label content."
+        }
+      ],
+      "codeTemplate": "Text(\"Material\")\n    .foregroundStyle(.{labelStyle})\n    .padding({padding})\n    .background(.{material}, in: RoundedRectangle(cornerRadius: {cornerRadius}, style: .continuous))"
+    },
+    {
+      "id": "container-relative-shape",
+      "title": "ContainerRelativeShape",
+      "api": "ContainerRelativeShape",
+      "summary": "An adaptive shape that inherits its container's corner shape (e.g. widget or grouped background).",
+      "minOS": "iOS 14.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "summaryLong": "ContainerRelativeShape resolves to the concentric corner shape of the nearest containerShape ancestor — primarily for Home Screen/Lock Screen widgets and any view that sets .containerShape(_:). It keeps nested cards visually concentric with the container's rounded corners.",
+      "states": [
+        "default"
+      ],
+      "styles": [
+        "fill",
+        "stroke",
+        "strokeBorder"
+      ],
+      "higNotes": "Use inside widgets to keep inset content concentric with the widget's rounded corners. Set .containerShape on an ancestor to define the reference shape. Falls back to a rectangle when no container shape is defined.",
+      "properties": [
+        {
+          "name": "fillColor",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": ".accentColor",
+          "notes": "Fill color of the relative shape."
+        },
+        {
+          "name": "renderStyle",
+          "swiftType": "ShapeRenderStyle",
+          "control": "segmented",
+          "options": [
+            "fill",
+            "strokeBorder"
+          ],
+          "defaultValue": "fill",
+          "notes": "fill or inset strokeBorder."
+        },
+        {
+          "name": "inset",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "0",
+            "40"
+          ],
+          "defaultValue": "12",
+          "notes": "Padding from the container edge to show the concentric effect."
+        },
+        {
+          "name": "containerCornerRadius",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "0",
+            "60"
+          ],
+          "defaultValue": "32",
+          "notes": "Reference container corner radius set via .containerShape."
+        }
+      ],
+      "codeTemplate": "RoundedRectangle(cornerRadius: {containerCornerRadius}, style: .continuous)\n    .fill(.gray.opacity(0.3))\n    .containerShape(RoundedRectangle(cornerRadius: {containerCornerRadius}, style: .continuous))\n    .overlay {\n        ContainerRelativeShape()\n            .{renderStyle}({fillColor})\n            .padding({inset})\n    }"
+    },
+    {
+      "id": "video-player",
+      "title": "VideoPlayer",
+      "api": "VideoPlayer",
+      "summary": "VideoPlayer (AVKit) embeds an AVPlayer and renders Apple's standard playback controls. Two initializers: VideoPlayer(player:) and VideoPlayer(player:videoOverlay:) which layers SwiftUI content over the video. The player itself (AVPlayer) is created in a .task and held in @State so SwiftUI builds it once. This is the only video-media primitive in the Media & Shapes category and is currently absent from the draft.",
+      "minOS": "iOS 14.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS",
+        "visionOS"
+      ],
+      "states": [
+        "default",
+        "loading",
+        "empty"
+      ],
+      "styles": [],
+      "higNotes": "Create the AVPlayer lazily inside a .task and store it in @State so it is built once, not on every body evaluation (per Apple's own sample). Give the player a fixed aspect-correct frame (16:9 commonly) so layout does not jump before the asset loads. Provide an accessibilityLabel describing the video content; the transport controls are accessible but the content is not. Keep custom overlays out of the way of the system controls. Gate autoplay and looping behind user intent; honor the system mute switch and Now Playing where relevant.",
+      "properties": [
+        {
+          "name": "urlString",
+          "swiftType": "String",
+          "control": "text",
+          "defaultValue": "\"https://devstreaming-cdn.apple.com/videos/streaming/examples/bipbop_16x9/bipbop_16x9_variant.m3u8\"",
+          "notes": "Source media URL used to build AVPlayer(url:) inside a .task. Local bundle URL also valid."
+        },
+        {
+          "name": "autoplay",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Demo-only: call player.play() when the view appears."
+        },
+        {
+          "name": "showsOverlay",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Switches between VideoPlayer(player:) and VideoPlayer(player:videoOverlay:) to render SwiftUI content over the video."
+        },
+        {
+          "name": "overlayText",
+          "swiftType": "String",
+          "control": "text",
+          "defaultValue": "\"LIVE\"",
+          "notes": "Label rendered in the videoOverlay closure when showsOverlay is on."
+        },
+        {
+          "name": "width",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "160",
+            "360"
+          ],
+          "defaultValue": "320",
+          "notes": "Player frame width."
+        },
+        {
+          "name": "height",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "90",
+            "240"
+          ],
+          "defaultValue": "180",
+          "notes": "Player frame height; keep ~16:9 with width."
+        },
+        {
+          "name": "cornerRadius",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "0",
+            "40"
+          ],
+          "defaultValue": "12",
+          "notes": "clipShape(RoundedRectangle) radius applied to the player surface."
+        },
+        {
+          "name": "accessibilityLabel",
+          "swiftType": "String",
+          "control": "text",
+          "defaultValue": "\"Sample video\"",
+          "notes": "VoiceOver description of the video content."
+        }
+      ],
+      "codeTemplate": "VideoPlayer(player: player) {\n    if {showsOverlay} {\n        Text(\"{overlayText}\")\n            .font(.caption).bold()\n            .padding(6)\n            .background(.red, in: Capsule())\n            .padding()\n            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)\n    }\n}\n.frame(width: {width}, height: {height})\n.clipShape(RoundedRectangle(cornerRadius: {cornerRadius}, style: .continuous))\n.accessibilityLabel(\"{accessibilityLabel}\")\n.task {\n    let p = AVPlayer(url: URL(string: \"{urlString}\")!)\n    if {autoplay} { p.play() }\n    player = p\n}"
+    },
+    {
+      "id": "color-view",
+      "title": "Color (as View)",
+      "api": "Color",
+      "summary": "SwiftUI treats Color as a View, so it can be placed in a hierarchy where it expands to fill the space its frame defines — the simplest fill primitive. The category showcases all three gradients but omits the base case: a solid adaptive Color swatch. Color is also a ShapeStyle and resolves to concrete values per environment (light/dark, asset-catalog variants). Color exposes .opacity(_:), .gradient (auto-derived subtle gradient, iOS 16+), and named/system/custom RGB initializers.",
+      "minOS": "iOS 13.0",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS",
+        "visionOS"
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Color resolves context-dependently — define light/dark variants in an Asset Catalog rather than hardcoding hex so the swatch adapts automatically. A bare Color expands to fill all offered space, so constrain it with a frame. Prefer semantic system colors (.primary, .accentColor, Color(.systemBackground)) over raw RGB for adaptive, accessible UI. Use .gradient for a quick subtle sheen without authoring a LinearGradient.",
+      "properties": [
+        {
+          "name": "colorSource",
+          "swiftType": "ColorSourceKind",
+          "control": "picker",
+          "options": [
+            "system",
+            "custom",
+            "asset"
+          ],
+          "defaultValue": "system",
+          "notes": "Drives the initializer: a system color, Color(red:green:blue:), or Color(\"name\") from the asset catalog."
+        },
+        {
+          "name": "systemColor",
+          "swiftType": "Color",
+          "control": "colorPicker",
+          "defaultValue": ".accentColor",
+          "notes": "Selected color when colorSource is system/custom."
+        },
+        {
+          "name": "opacity",
+          "swiftType": "Double",
+          "control": "slider",
+          "options": [
+            "0",
+            "1"
+          ],
+          "defaultValue": "1",
+          "notes": ".opacity(_:) applied to the color."
+        },
+        {
+          "name": "asGradient",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Emit color.gradient (iOS 16+) for an auto-derived subtle gradient fill instead of a flat color."
+        },
+        {
+          "name": "clipShape",
+          "swiftType": "ClipShapeKind",
+          "control": "picker",
+          "options": [
+            "rectangle",
+            "roundedRectangle",
+            "capsule",
+            "circle"
+          ],
+          "defaultValue": "roundedRectangle",
+          "notes": "Shape the color swatch is clipped to."
+        },
+        {
+          "name": "cornerRadius",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "0",
+            "60"
+          ],
+          "defaultValue": "16",
+          "notes": "Radius when clipShape is roundedRectangle."
+        },
+        {
+          "name": "width",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "40",
+            "320"
+          ],
+          "defaultValue": "220",
+          "notes": "Swatch frame width."
+        },
+        {
+          "name": "height",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "40",
+            "320"
+          ],
+          "defaultValue": "140",
+          "notes": "Swatch frame height."
+        }
+      ],
+      "codeTemplate": "{systemColor}\n    .opacity({opacity})\n    .frame(width: {width}, height: {height})\n    .clipShape(RoundedRectangle(cornerRadius: {cornerRadius}, style: .continuous))"
+    }
+  ]
+}

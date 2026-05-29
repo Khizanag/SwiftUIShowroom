@@ -1,0 +1,1330 @@
+{
+  "category": "Presentation",
+  "key": "presentation",
+  "folder": "Presentation",
+  "components": [
+    {
+      "id": "sheet",
+      "title": "Sheet",
+      "api": "View.sheet(isPresented:onDismiss:content:)",
+      "summary": "Modally presents a view as a sheet that slides up from the bottom, resizable via detents on iPhone.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0 (detents iOS 16.0)",
+      "summaryLong": "The canonical modal presentation. Two flavors: isPresented-driven (Bool) and item-driven (Identifiable). Configure size with presentationDetents, chrome with presentationBackground/presentationCornerRadius/presentationDragIndicator, and dismissal with interactiveDismissDisabled.",
+      "properties": [
+        {
+          "name": "isPresented",
+          "swiftType": "Binding<Bool>",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Drives presentation. The showroom toggle presents/dismisses the sheet."
+        },
+        {
+          "name": "detents",
+          "swiftType": "Set<PresentationDetent>",
+          "control": "menu",
+          "options": [
+            ".medium",
+            ".large",
+            ".fraction(0.3)",
+            ".fraction(0.5)",
+            ".height(200)",
+            ".custom"
+          ],
+          "defaultValue": "[.large]",
+          "notes": "Multi-select set via .presentationDetents(_:). Multiple detents enable user resizing. iOS 16+."
+        },
+        {
+          "name": "selectedDetent",
+          "swiftType": "PresentationDetent",
+          "control": "picker",
+          "options": [
+            ".medium",
+            ".large"
+          ],
+          "defaultValue": ".large",
+          "notes": "Optional programmatic selection binding via .presentationDetents(_:selection:). iOS 16+."
+        },
+        {
+          "name": "dragIndicator",
+          "swiftType": "Visibility",
+          "control": "segmented",
+          "options": [
+            "automatic",
+            "visible",
+            "hidden"
+          ],
+          "defaultValue": "automatic",
+          "notes": ".presentationDragIndicator(_:). Shows the grabber. iOS 16+."
+        },
+        {
+          "name": "cornerRadius",
+          "swiftType": "CGFloat?",
+          "control": "slider",
+          "options": [
+            "0",
+            "60"
+          ],
+          "defaultValue": "nil",
+          "notes": ".presentationCornerRadius(_:). nil uses system default. iOS 16.4+."
+        },
+        {
+          "name": "background",
+          "swiftType": "ShapeStyle",
+          "control": "menu",
+          "options": [
+            ".regularMaterial",
+            ".thinMaterial",
+            ".ultraThinMaterial",
+            ".thickMaterial",
+            ".bar",
+            "Color.clear"
+          ],
+          "defaultValue": ".regularMaterial (system)",
+          "notes": ".presentationBackground(_:). iOS 16.4+. Use opaque fallback under Reduce Transparency."
+        },
+        {
+          "name": "backgroundInteraction",
+          "swiftType": "PresentationBackgroundInteraction",
+          "control": "menu",
+          "options": [
+            "automatic",
+            "enabled",
+            "enabled(upThrough:)",
+            "disabled"
+          ],
+          "defaultValue": "automatic",
+          "notes": ".presentationBackgroundInteraction(_:). Lets the content behind a non-full detent stay interactive. iOS 16.4+."
+        },
+        {
+          "name": "contentInteraction",
+          "swiftType": "PresentationContentInteraction",
+          "control": "segmented",
+          "options": [
+            "automatic",
+            "resizes",
+            "scrolls"
+          ],
+          "defaultValue": "automatic",
+          "notes": ".presentationContentInteraction(_:). Controls whether a swipe resizes the sheet or scrolls its content. iOS 16.4+."
+        },
+        {
+          "name": "compactAdaptation",
+          "swiftType": "PresentationAdaptation",
+          "control": "menu",
+          "options": [
+            "automatic",
+            "none",
+            "sheet",
+            "fullScreenCover",
+            "popover"
+          ],
+          "defaultValue": "automatic",
+          "notes": ".presentationCompactAdaptation(_:). Controls how the presentation adapts in compact size classes. iOS 16.4+."
+        },
+        {
+          "name": "interactiveDismissDisabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": ".interactiveDismissDisabled(_:). Blocks swipe-to-dismiss; force an explicit dismiss button."
+        },
+        {
+          "name": "sizing",
+          "swiftType": "PresentationSizing",
+          "control": "menu",
+          "options": [
+            "automatic",
+            "fitted",
+            "form",
+            "page"
+          ],
+          "defaultValue": "automatic",
+          "notes": ".presentationSizing(_:). Sizes the sheet to its content on macOS/iPad. iOS 18+, macOS 15+."
+        }
+      ],
+      "states": [
+        "default",
+        "longContent",
+        "disabled",
+        "focused"
+      ],
+      "styles": [],
+      "higNotes": "Use sheets for self-contained, non-immersive tasks. Default to .large with a visible drag indicator when multiple detents exist. Always provide an explicit Cancel/Done in the toolbar. Avoid forcing presentationDragIndicator(.visible) when the default already shows it.",
+      "codeTemplate": ".sheet(isPresented: ${isPresented}) {\n    SheetContentView()\n        .presentationDetents([${detents}], selection: ${selectedDetent})\n        .presentationDragIndicator(${dragIndicator})\n        .presentationCornerRadius(${cornerRadius})\n        .presentationBackground(${background})\n        .presentationBackgroundInteraction(${backgroundInteraction})\n        .presentationContentInteraction(${contentInteraction})\n        .presentationCompactAdaptation(${compactAdaptation})\n        .presentationSizing(${sizing})\n        .interactiveDismissDisabled(${interactiveDismissDisabled})\n}"
+    },
+    {
+      "id": "sheet-item",
+      "title": "Sheet (Item-driven)",
+      "api": "View.sheet(item:onDismiss:content:)",
+      "summary": "Presents a sheet bound to an Identifiable optional, rebuilding content whenever the item identity changes.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 13.0",
+      "properties": [
+        {
+          "name": "item",
+          "swiftType": "Binding<Item?>",
+          "control": "menu",
+          "options": [
+            "nil",
+            "Item.sample"
+          ],
+          "defaultValue": "nil",
+          "notes": "Item must conform to Identifiable. Setting non-nil presents; nil dismisses. Reidentifies content on identity change."
+        },
+        {
+          "name": "onDismiss",
+          "swiftType": "(() -> Void)?",
+          "control": "toggle",
+          "defaultValue": "nil",
+          "notes": "Closure run after dismissal. Toggle wires a logging closure in the showroom."
+        }
+      ],
+      "states": [
+        "default",
+        "longContent"
+      ],
+      "styles": [],
+      "higNotes": "Prefer the item-driven overload when the sheet content depends on a specific value; it avoids the stale-capture bug common with isPresented + separate state.",
+      "codeTemplate": ".sheet(item: ${item}, onDismiss: ${onDismiss}) { item in\n    DetailView(item: item)\n}"
+    },
+    {
+      "id": "full-screen-cover",
+      "title": "Full Screen Cover",
+      "api": "View.fullScreenCover(isPresented:onDismiss:content:)",
+      "summary": "Covers the entire screen with a modal view, used for immersive or onboarding flows.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 14.0",
+      "summaryLong": "Unlike a sheet, this covers the whole screen and is not swipe-dismissable; you must provide an explicit dismiss. Not available on macOS (use sheet/window instead). Both isPresented and item overloads exist.",
+      "properties": [
+        {
+          "name": "isPresented",
+          "swiftType": "Binding<Bool>",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Drives presentation."
+        },
+        {
+          "name": "item",
+          "swiftType": "Binding<Item?>",
+          "control": "menu",
+          "options": [
+            "nil",
+            "Item.sample"
+          ],
+          "defaultValue": "nil",
+          "notes": "Identifiable-driven overload."
+        },
+        {
+          "name": "onDismiss",
+          "swiftType": "(() -> Void)?",
+          "control": "toggle",
+          "defaultValue": "nil",
+          "notes": "Runs after the cover dismisses."
+        },
+        {
+          "name": "background",
+          "swiftType": "ShapeStyle",
+          "control": "menu",
+          "options": [
+            ".regularMaterial",
+            "Color.clear",
+            ".thinMaterial"
+          ],
+          "defaultValue": "system",
+          "notes": ".presentationBackground(_:) works here too. iOS 16.4+."
+        }
+      ],
+      "states": [
+        "default",
+        "longContent",
+        "loading"
+      ],
+      "styles": [],
+      "higNotes": "Reserve for content that needs the whole screen and a deliberate, explicit exit (onboarding, media, sign-in). Always include a clear dismiss control since there is no swipe-to-dismiss. Not on macOS.",
+      "codeTemplate": ".fullScreenCover(isPresented: ${isPresented}, onDismiss: ${onDismiss}) {\n    CoverContentView()\n        .presentationBackground(${background})\n}"
+    },
+    {
+      "id": "popover",
+      "title": "Popover",
+      "api": "View.popover(isPresented:attachmentAnchor:arrowEdge:content:)",
+      "summary": "Presents content in a popover anchored to the source view, adapting to a sheet in compact widths by default.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS"
+      ],
+      "minOS": "iOS 13.0",
+      "summaryLong": "Anchored transient presentation with an arrow. On iPhone (compact) it adapts to a sheet unless overridden with .presentationCompactAdaptation(.popover). Configure the anchor point and arrow direction.",
+      "properties": [
+        {
+          "name": "isPresented",
+          "swiftType": "Binding<Bool>",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Drives presentation. Item overload also available."
+        },
+        {
+          "name": "attachmentAnchor",
+          "swiftType": "PopoverAttachmentAnchor",
+          "control": "menu",
+          "options": [
+            ".rect(.bounds)",
+            ".rect(.rect(...))",
+            ".point(.center)",
+            ".point(.top)",
+            ".point(.bottom)"
+          ],
+          "defaultValue": ".rect(.bounds)",
+          "notes": "Where the popover attaches relative to the source view."
+        },
+        {
+          "name": "arrowEdge",
+          "swiftType": "Edge?",
+          "control": "picker",
+          "options": [
+            "nil (automatic)",
+            "top",
+            "bottom",
+            "leading",
+            "trailing"
+          ],
+          "defaultValue": "nil",
+          "notes": "Edge of the source the arrow points from. nil lets the system choose."
+        },
+        {
+          "name": "compactAdaptation",
+          "swiftType": "PresentationAdaptation",
+          "control": "menu",
+          "options": [
+            "automatic",
+            "none",
+            "popover",
+            "sheet",
+            "fullScreenCover"
+          ],
+          "defaultValue": "automatic",
+          "notes": "Use .presentationCompactAdaptation(.popover) to keep a true popover on iPhone. iOS 16.4+."
+        },
+        {
+          "name": "background",
+          "swiftType": "ShapeStyle",
+          "control": "menu",
+          "options": [
+            "system",
+            ".regularMaterial",
+            "Color.clear"
+          ],
+          "defaultValue": "system",
+          "notes": ".presentationBackground(_:) tints the popover body. iOS 16.4+."
+        },
+        {
+          "name": "breakthroughEffect",
+          "swiftType": "BreakthroughEffect",
+          "control": "segmented",
+          "options": [
+            "automatic",
+            "none",
+            "subtle",
+            "prominent"
+          ],
+          "defaultValue": "automatic",
+          "notes": ".presentationBreakthroughEffect(_:) controls how the popover breaks through occluding content. visionOS only."
+        }
+      ],
+      "states": [
+        "default",
+        "longContent"
+      ],
+      "styles": [],
+      "higNotes": "Use popovers on iPad/Mac for transient, contextual content tied to a control. On iPhone they adapt to sheets by default; only force .popover when the content is genuinely small. Keep popover content compact and dismiss on outside tap.",
+      "codeTemplate": ".popover(isPresented: ${isPresented}, attachmentAnchor: ${attachmentAnchor}, arrowEdge: ${arrowEdge}) {\n    PopoverContentView()\n        .presentationCompactAdaptation(${compactAdaptation})\n        .presentationBackground(${background})\n}"
+    },
+    {
+      "id": "alert",
+      "title": "Alert",
+      "api": "View.alert(_:isPresented:actions:message:)",
+      "summary": "Presents a modal alert with a title, optional message, action buttons (with roles), and optional text fields.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 15.0",
+      "summaryLong": "The modern alert API takes an actions builder and a message builder. Buttons carry roles (.destructive, .cancel) that style and position them. TextField/SecureField inside the actions builder add input (iOS 16+). An error-driven overload renders LocalizedError content automatically.",
+      "properties": [
+        {
+          "name": "title",
+          "swiftType": "LocalizedStringKey",
+          "control": "text",
+          "defaultValue": "\"Title\"",
+          "notes": "First positional argument. Keep short and action-oriented."
+        },
+        {
+          "name": "isPresented",
+          "swiftType": "Binding<Bool>",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Drives presentation."
+        },
+        {
+          "name": "message",
+          "swiftType": "Text?",
+          "control": "text",
+          "defaultValue": "\"\"",
+          "notes": "Message builder. Provide context not in the title."
+        },
+        {
+          "name": "primaryButtonRole",
+          "swiftType": "ButtonRole?",
+          "control": "picker",
+          "options": [
+            "nil",
+            "destructive",
+            "cancel"
+          ],
+          "defaultValue": "nil",
+          "notes": "Role styles the button (destructive = red, cancel = bold/bottom)."
+        },
+        {
+          "name": "includesCancel",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Adds a Button with role .cancel. A cancel button is auto-added if you provide none."
+        },
+        {
+          "name": "includesTextField",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Adds a TextField inside the actions builder for inline input. iOS 16+."
+        },
+        {
+          "name": "errorDriven",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Switch to alert(isPresented:error:actions:) which derives title/message from a LocalizedError."
+        }
+      ],
+      "states": [
+        "default",
+        "error"
+      ],
+      "styles": [],
+      "higNotes": "Alerts interrupt; use only for critical information requiring acknowledgement. Limit to two buttons when possible; three buttons stack vertically. Use .destructive for irreversible actions and .cancel for the safe default. Don't use alerts for routine confirmations - prefer confirmationDialog.",
+      "codeTemplate": ".alert(${title}, isPresented: ${isPresented}) {\n    Button(\"Confirm\", role: ${primaryButtonRole}) { confirm() }\n    Button(\"Cancel\", role: .cancel) { }\n} message: {\n    Text(${message})\n}"
+    },
+    {
+      "id": "confirmation-dialog",
+      "title": "Confirmation Dialog",
+      "api": "View.confirmationDialog(_:isPresented:titleVisibility:actions:message:)",
+      "summary": "Presents an action sheet of choices (bottom sheet on iPhone, popover on iPad), replacing the deprecated ActionSheet.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 15.0",
+      "summaryLong": "Modern replacement for ActionSheet. Multiple action buttons with roles; a cancel button is added automatically on iOS. titleVisibility controls whether the title text shows above the buttons.",
+      "properties": [
+        {
+          "name": "title",
+          "swiftType": "LocalizedStringKey",
+          "control": "text",
+          "defaultValue": "\"Are you sure?\"",
+          "notes": "First positional argument."
+        },
+        {
+          "name": "isPresented",
+          "swiftType": "Binding<Bool>",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Drives presentation."
+        },
+        {
+          "name": "titleVisibility",
+          "swiftType": "Visibility",
+          "control": "segmented",
+          "options": [
+            "automatic",
+            "visible",
+            "hidden"
+          ],
+          "defaultValue": "automatic",
+          "notes": "Whether the title appears above the buttons."
+        },
+        {
+          "name": "includesDestructive",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "Adds a Button with role .destructive (rendered red, at top of the action list)."
+        },
+        {
+          "name": "message",
+          "swiftType": "Text?",
+          "control": "text",
+          "defaultValue": "\"\"",
+          "notes": "Optional message builder shown under the title."
+        }
+      ],
+      "states": [
+        "default",
+        "longContent"
+      ],
+      "styles": [],
+      "higNotes": "Use for a short list of choices in response to a user action, especially destructive ones. The system supplies the Cancel button on iPhone; do not add your own. On iPad it appears as a popover anchored to the source.",
+      "codeTemplate": ".confirmationDialog(${title}, isPresented: ${isPresented}, titleVisibility: ${titleVisibility}) {\n    Button(\"Delete\", role: .destructive) { delete() }\n    Button(\"Cancel\", role: .cancel) { }\n} message: {\n    Text(${message})\n}"
+    },
+    {
+      "id": "inspector",
+      "title": "Inspector",
+      "api": "View.inspector(isPresented:content:)",
+      "summary": "Presents a context-sensitive detail pane as a trailing column on wide layouts and a sheet in compact widths.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS"
+      ],
+      "minOS": "iOS 17.0",
+      "summaryLong": "Shows supplementary detail/properties for the current selection. On large iPad and Mac it docks as a trailing column whose width is set via inspectorColumnWidth; in compact it adapts to a sheet.",
+      "properties": [
+        {
+          "name": "isPresented",
+          "swiftType": "Binding<Bool>",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Drives presentation of the inspector pane."
+        },
+        {
+          "name": "columnWidth",
+          "swiftType": "CGFloat",
+          "control": "slider",
+          "options": [
+            "200",
+            "500"
+          ],
+          "defaultValue": "270",
+          "notes": ".inspectorColumnWidth(_:) fixed width, or the min/ideal/max overload for a resizable column."
+        },
+        {
+          "name": "minWidth",
+          "swiftType": "CGFloat?",
+          "control": "slider",
+          "options": [
+            "150",
+            "400"
+          ],
+          "defaultValue": "200",
+          "notes": "Lower bound for .inspectorColumnWidth(min:ideal:max:)."
+        },
+        {
+          "name": "maxWidth",
+          "swiftType": "CGFloat?",
+          "control": "slider",
+          "options": [
+            "300",
+            "700"
+          ],
+          "defaultValue": "500",
+          "notes": "Upper bound for the resizable column overload."
+        }
+      ],
+      "states": [
+        "default",
+        "empty",
+        "longContent"
+      ],
+      "styles": [],
+      "higNotes": "Use an inspector for editable attributes of the current selection that should remain visible alongside content. It is not a navigation surface. Set a sensible default and bounded width so the main content stays usable.",
+      "codeTemplate": ".inspector(isPresented: ${isPresented}) {\n    InspectorContentView()\n        .inspectorColumnWidth(min: ${minWidth}, ideal: ${columnWidth}, max: ${maxWidth})\n}"
+    },
+    {
+      "id": "file-importer",
+      "title": "File Importer",
+      "api": "View.fileImporter(isPresented:allowedContentTypes:allowsMultipleSelection:onCompletion:)",
+      "summary": "Presents the system document picker to import one or more files of allowed UTTypes.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "visionOS"
+      ],
+      "minOS": "iOS 14.0",
+      "summaryLong": "Opens the Files document browser. Returns security-scoped URLs in a Result; call startAccessingSecurityScopedResource before reading. Overloads support single vs multiple selection and an onCancellation closure.",
+      "properties": [
+        {
+          "name": "isPresented",
+          "swiftType": "Binding<Bool>",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Drives presentation of the picker."
+        },
+        {
+          "name": "allowedContentTypes",
+          "swiftType": "[UTType]",
+          "control": "menu",
+          "options": [
+            ".pdf",
+            ".image",
+            ".plainText",
+            ".json",
+            ".item",
+            ".folder",
+            ".audio",
+            ".movie"
+          ],
+          "defaultValue": "[.item]",
+          "notes": "Restricts selectable file types. Import UniformTypeIdentifiers."
+        },
+        {
+          "name": "allowsMultipleSelection",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Multi-select overload returns [URL]; single returns URL."
+        }
+      ],
+      "states": [
+        "default",
+        "error",
+        "empty"
+      ],
+      "styles": [],
+      "higNotes": "Limit allowedContentTypes to what the app can actually handle. Begin security-scoped access immediately and copy needed data; the URL access is temporary. Handle the cancellation and error Result cases gracefully.",
+      "codeTemplate": ".fileImporter(\n    isPresented: ${isPresented},\n    allowedContentTypes: [${allowedContentTypes}],\n    allowsMultipleSelection: ${allowsMultipleSelection}\n) { result in\n    switch result {\n    case .success(let urls): handleImport(urls)\n    case .failure(let error): handleError(error)\n    }\n}"
+    },
+    {
+      "id": "file-exporter",
+      "title": "File Exporter",
+      "api": "View.fileExporter(isPresented:document:contentType:defaultFilename:onCompletion:)",
+      "summary": "Presents the system save dialog to export a FileDocument/Transferable item to a chosen location.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "visionOS"
+      ],
+      "minOS": "iOS 14.0",
+      "summaryLong": "Saves a document conforming to FileDocument, or a Transferable item (iOS 17+ item overload). Lets the user pick a destination and filename. .fileExporterFilenameLabel customizes the filename field label.",
+      "properties": [
+        {
+          "name": "isPresented",
+          "swiftType": "Binding<Bool>",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Drives presentation of the save dialog."
+        },
+        {
+          "name": "contentType",
+          "swiftType": "UTType",
+          "control": "menu",
+          "options": [
+            ".pdf",
+            ".plainText",
+            ".json",
+            ".png",
+            ".commaSeparatedText"
+          ],
+          "defaultValue": ".plainText",
+          "notes": "The exported file's content type."
+        },
+        {
+          "name": "defaultFilename",
+          "swiftType": "String?",
+          "control": "text",
+          "defaultValue": "\"Export\"",
+          "notes": "Suggested filename prefilled in the dialog."
+        },
+        {
+          "name": "filenameLabel",
+          "swiftType": "String?",
+          "control": "text",
+          "defaultValue": "nil",
+          "notes": ".fileExporterFilenameLabel(_:) customizes the filename field's label. iOS 17+."
+        }
+      ],
+      "states": [
+        "default",
+        "error"
+      ],
+      "styles": [],
+      "higNotes": "Provide a meaningful defaultFilename. Match contentType to the document's real format. Handle the onCompletion failure case and report errors to the user.",
+      "codeTemplate": ".fileExporter(\n    isPresented: ${isPresented},\n    document: document,\n    contentType: ${contentType},\n    defaultFilename: ${defaultFilename}\n) { result in\n    if case .failure(let error) = result { handleError(error) }\n}\n.fileExporterFilenameLabel(${filenameLabel})"
+    },
+    {
+      "id": "file-mover",
+      "title": "File Mover",
+      "api": "View.fileMover(isPresented:file:onCompletion:)",
+      "summary": "Presents the document picker to move an existing file URL to a new location chosen by the user.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "visionOS"
+      ],
+      "minOS": "iOS 14.0",
+      "properties": [
+        {
+          "name": "isPresented",
+          "swiftType": "Binding<Bool>",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Drives presentation."
+        },
+        {
+          "name": "file",
+          "swiftType": "URL?",
+          "control": "menu",
+          "options": [
+            "sampleFileURL",
+            "nil"
+          ],
+          "defaultValue": "sampleFileURL",
+          "notes": "The existing file to move. A files-collection overload also exists."
+        }
+      ],
+      "states": [
+        "default",
+        "error"
+      ],
+      "styles": [],
+      "higNotes": "Use to let users relocate a file the app owns. Handle the resulting URL with security-scoped access and report failures.",
+      "codeTemplate": ".fileMover(isPresented: ${isPresented}, file: ${file}) { result in\n    switch result {\n    case .success(let url): handleMoved(url)\n    case .failure(let error): handleError(error)\n    }\n}"
+    },
+    {
+      "id": "photos-picker",
+      "title": "Photos Picker",
+      "api": "PhotosPicker",
+      "summary": "Presents the privacy-preserving system photo library picker, returning PhotosPickerItem values to load as Transferable.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "visionOS"
+      ],
+      "minOS": "iOS 16.0",
+      "summaryLong": "From the PhotosUI framework. A button that presents the system Photos picker out-of-process (no library permission prompt). Bind selection to PhotosPickerItem(s); filter by .images/.videos via matching; load data with loadTransferable. Configure photo library, max selection, and preferred encoding.",
+      "properties": [
+        {
+          "name": "selection",
+          "swiftType": "Binding<PhotosPickerItem?>",
+          "control": "toggle",
+          "defaultValue": "nil",
+          "notes": "Single-selection binding; a [PhotosPickerItem] overload supports multiple with maxSelectionCount."
+        },
+        {
+          "name": "maxSelectionCount",
+          "swiftType": "Int?",
+          "control": "stepper",
+          "options": [
+            "1",
+            "10"
+          ],
+          "defaultValue": "1",
+          "notes": "Multi-selection overload only. nil means unlimited."
+        },
+        {
+          "name": "matching",
+          "swiftType": "PHPickerFilter?",
+          "control": "menu",
+          "options": [
+            ".images",
+            ".videos",
+            ".livePhotos",
+            ".screenshots",
+            ".any(of:)",
+            "nil"
+          ],
+          "defaultValue": ".images",
+          "notes": "Restricts the asset types shown."
+        },
+        {
+          "name": "preferredItemEncoding",
+          "swiftType": "PhotosPickerItem.EncodingDisambiguationPolicy",
+          "control": "picker",
+          "options": [
+            "automatic",
+            "current",
+            "compatible"
+          ],
+          "defaultValue": "automatic",
+          "notes": "Controls transcoding of HEIC etc. on export."
+        },
+        {
+          "name": "photoLibrary",
+          "swiftType": "PHPhotoLibrary",
+          "control": "menu",
+          "options": [
+            ".shared()"
+          ],
+          "defaultValue": ".shared()",
+          "notes": "Use .shared() to enable extra features like search."
+        },
+        {
+          "name": "style",
+          "swiftType": "PhotosPickerStyle",
+          "control": "segmented",
+          "options": [
+            ".presentation",
+            ".inline",
+            ".compact"
+          ],
+          "defaultValue": ".presentation",
+          "notes": ".photosPickerStyle(_:). .inline/.compact embed the picker rather than presenting modally."
+        }
+      ],
+      "states": [
+        "default",
+        "selected",
+        "loading",
+        "empty"
+      ],
+      "styles": [
+        ".presentation",
+        ".inline",
+        ".compact"
+      ],
+      "higNotes": "Prefer PhotosPicker over a custom library UI: it runs out of process and needs no photo-library permission. Show a thumbnail/preview of the chosen asset. Load asynchronously via loadTransferable and show a loading state.",
+      "codeTemplate": "PhotosPicker(\n    selection: ${selection},\n    matching: ${matching},\n    preferredItemEncoding: ${preferredItemEncoding},\n    photoLibrary: ${photoLibrary}\n) {\n    Label(\"Select Photo\", systemImage: \"photo\")\n}\n.photosPickerStyle(${style})"
+    },
+    {
+      "id": "share-link",
+      "title": "Share Link",
+      "api": "ShareLink",
+      "summary": "Presents the system share sheet for one or more Transferable items via a standard share control.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS",
+        "visionOS"
+      ],
+      "minOS": "iOS 16.0",
+      "summaryLong": "A control that, when activated, presents the share sheet (UIActivityViewController-equivalent) for any Transferable payload - URLs, strings, images, custom types. Supports subject, message, and a SharePreview.",
+      "properties": [
+        {
+          "name": "item",
+          "swiftType": "Transferable",
+          "control": "menu",
+          "options": [
+            "URL",
+            "String",
+            "Image",
+            "custom Transferable"
+          ],
+          "defaultValue": "URL",
+          "notes": "The payload to share. An items-collection overload shares multiple."
+        },
+        {
+          "name": "subject",
+          "swiftType": "Text?",
+          "control": "text",
+          "defaultValue": "nil",
+          "notes": "Subject line used by destinations like Mail."
+        },
+        {
+          "name": "message",
+          "swiftType": "Text?",
+          "control": "text",
+          "defaultValue": "nil",
+          "notes": "Default message body where supported."
+        },
+        {
+          "name": "preview",
+          "swiftType": "SharePreview",
+          "control": "toggle",
+          "defaultValue": "auto",
+          "notes": "Required for non-self-previewing types; provides title and image."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled"
+      ],
+      "styles": [],
+      "higNotes": "Use the standard ShareLink so users get the familiar share sheet. Provide a SharePreview with a representative title and thumbnail for richer destinations. Don't rebuild a custom share UI.",
+      "codeTemplate": "ShareLink(\n    item: ${item},\n    subject: ${subject},\n    message: ${message},\n    preview: SharePreview(\"Title\", image: Image(\"thumb\"))\n) {\n    Label(\"Share\", systemImage: \"square.and.arrow.up\")\n}"
+    },
+    {
+      "id": "interactive-dismiss-disabled",
+      "title": "Interactive Dismiss Disabled",
+      "api": "View.interactiveDismissDisabled(_:)",
+      "summary": "Conditionally blocks swipe / interactive dismissal of the enclosing sheet or popover.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 15.0",
+      "properties": [
+        {
+          "name": "isDisabled",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "true prevents pull-to-dismiss; bind to a 'has unsaved changes' flag."
+        }
+      ],
+      "states": [
+        "default",
+        "disabled"
+      ],
+      "styles": [],
+      "higNotes": "Disable interactive dismissal only when discarding would lose data. Pair with a confirmationDialog (see dismissalConfirmationDialog) and always keep an explicit Cancel/Done so users are never trapped.",
+      "codeTemplate": "SheetContentView()\n    .interactiveDismissDisabled(${isDisabled})"
+    },
+    {
+      "id": "dismissal-confirmation-dialog",
+      "title": "Dismissal Confirmation Dialog",
+      "api": "View.dismissalConfirmationDialog(_:shouldPresent:actions:message:)",
+      "summary": "Shows a confirmation dialog when the user attempts to interactively dismiss a presentation with unsaved work.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "visionOS"
+      ],
+      "minOS": "iOS 18.0",
+      "properties": [
+        {
+          "name": "title",
+          "swiftType": "LocalizedStringKey",
+          "control": "text",
+          "defaultValue": "\"Discard changes?\"",
+          "notes": "Dialog title shown on dismissal attempt."
+        },
+        {
+          "name": "shouldPresent",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "true",
+          "notes": "When true, intercepts the dismissal gesture to confirm."
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Preferred over a bare interactiveDismissDisabled when you want to confirm rather than block. Offer a clear Discard (destructive) and Keep Editing (cancel) choice.",
+      "codeTemplate": "SheetContentView()\n    .dismissalConfirmationDialog(${title}, shouldPresent: ${shouldPresent}) {\n        Button(\"Discard\", role: .destructive) { dismiss() }\n    }"
+    },
+    {
+      "id": "dismiss-action",
+      "title": "Dismiss Action (Environment)",
+      "api": "EnvironmentValues.dismiss / DismissAction",
+      "summary": "Environment action a presented view calls to dismiss itself programmatically.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS",
+        "visionOS"
+      ],
+      "minOS": "iOS 15.0",
+      "summaryLong": "Read @Environment(\\.dismiss) inside any presented view (sheet, cover, popover, pushed stack view) and call dismiss() to remove the current presentation or pop the stack. Replaces the deprecated presentationMode.",
+      "properties": [
+        {
+          "name": "callSite",
+          "swiftType": "DismissAction",
+          "control": "toggle",
+          "defaultValue": "button",
+          "notes": "Showroom wires dismiss() to a Done button to demonstrate programmatic dismissal."
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Use the environment dismiss action rather than passing bindings down. It dismisses the nearest presentation or pops the current navigation stack view.",
+      "codeTemplate": "@Environment(\\.dismiss) private var dismiss\n\nvar body: some View {\n    Button(\"Done\") { dismiss() }\n}"
+    },
+    {
+      "id": "popover-tip",
+      "title": "Popover Tip (TipKit)",
+      "api": "View.popoverTip(_:arrowEdge:action:)",
+      "summary": "Presents a TipKit tip as a popover anchored to a control to teach a feature in context.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "watchOS",
+        "visionOS"
+      ],
+      "minOS": "iOS 17.0",
+      "summaryLong": "Attaches a TipKit Tip to a view, surfacing it as a popover when its display rules are satisfied. Pair with .tipViewStyle and an action handler for tip buttons.",
+      "properties": [
+        {
+          "name": "tip",
+          "swiftType": "(any Tip)?",
+          "control": "menu",
+          "options": [
+            "FeatureTip()",
+            "nil"
+          ],
+          "defaultValue": "FeatureTip()",
+          "notes": "The Tip whose rules govern when the popover appears."
+        },
+        {
+          "name": "arrowEdge",
+          "swiftType": "Edge?",
+          "control": "picker",
+          "options": [
+            "nil",
+            "top",
+            "bottom",
+            "leading",
+            "trailing"
+          ],
+          "defaultValue": "nil",
+          "notes": "Direction the popover arrow points."
+        }
+      ],
+      "states": [
+        "default",
+        "empty"
+      ],
+      "styles": [],
+      "higNotes": "Use tips sparingly for genuinely discoverable features. Let TipKit's frequency and display rules govern presentation; never spam. Provide a clear dismiss affordance.",
+      "codeTemplate": "SomeControl()\n    .popoverTip(${tip}, arrowEdge: ${arrowEdge}) { action in\n        // handle tip button actions\n    }"
+    },
+    {
+      "id": "presentation-detents",
+      "title": "Presentation Detents",
+      "api": "View.presentationDetents(_:selection:)",
+      "summary": "Defines the set of resizable heights a sheet can snap to, with optional programmatic selection.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "visionOS"
+      ],
+      "minOS": "iOS 16.0",
+      "summaryLong": "Applied inside a sheet's content. Built-in detents (.medium, .large), proportional (.fraction), fixed (.height), and CustomPresentationDetent for app-defined logic. Multiple detents enable the resize grabber.",
+      "properties": [
+        {
+          "name": "detents",
+          "swiftType": "Set<PresentationDetent>",
+          "control": "menu",
+          "options": [
+            ".medium",
+            ".large",
+            ".fraction(0.25)",
+            ".fraction(0.5)",
+            ".fraction(0.75)",
+            ".height(150)",
+            ".height(300)",
+            ".custom(MyDetent.self)"
+          ],
+          "defaultValue": "[.medium, .large]",
+          "notes": "Multi-select. Include two or more to allow user resizing."
+        },
+        {
+          "name": "selection",
+          "swiftType": "Binding<PresentationDetent>?",
+          "control": "picker",
+          "options": [
+            ".medium",
+            ".large"
+          ],
+          "defaultValue": "nil",
+          "notes": "Optional two-way binding to read/set the active detent."
+        }
+      ],
+      "states": [
+        "default",
+        "selected"
+      ],
+      "styles": [],
+      "higNotes": "Offer .medium plus .large for a flexible bottom sheet. Avoid more than three detents. Use .fraction/.height for content-driven sizing; CustomPresentationDetent when sizing depends on context.",
+      "codeTemplate": "SheetContentView()\n    .presentationDetents([${detents}], selection: ${selection})"
+    },
+    {
+      "id": "quick-look-preview",
+      "title": "Quick Look Preview",
+      "api": "View.quickLookPreview(_:)",
+      "summary": "Presents a system Quick Look preview of a file URL, dismissing automatically when the bound URL becomes nil.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS"
+      ],
+      "minOS": "iOS 14.0 / macOS 11.0",
+      "properties": [
+        {
+          "name": "item",
+          "swiftType": "Binding<URL?>",
+          "control": "menu",
+          "options": [
+            "nil",
+            "samplePDFURL",
+            "sampleImageURL"
+          ],
+          "defaultValue": "nil",
+          "notes": "Set to a non-nil URL to present; Quick Look resets it to nil on dismissal. A quickLookPreview(_:in:) overload previews one item within a collection."
+        }
+      ],
+      "states": [
+        "default",
+        "empty"
+      ],
+      "styles": [],
+      "higNotes": "Use Quick Look for read-only previews of documents, images, PDFs, and media the app already has on disk. It is system-driven and handles a wide range of file types; do not rebuild a custom previewer. Available on iOS and macOS only.",
+      "codeTemplate": "SomeView()\n    .quickLookPreview(${item})"
+    },
+    {
+      "id": "translation-presentation",
+      "title": "Translation Presentation",
+      "api": "View.translationPresentation(isPresented:text:attachmentAnchor:arrowEdge:replacementAction:)",
+      "summary": "Presents the system translation popover for a string, optionally offering a Replace with Translation action.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS"
+      ],
+      "minOS": "iOS 17.4 / macOS 14.4",
+      "summaryLong": "From the Translation framework integration in SwiftUI. Shows a system UI translation popover anchored to the view holding the text. Provide a replacementAction closure to surface a Replace with Translation button that returns the translated string.",
+      "properties": [
+        {
+          "name": "isPresented",
+          "swiftType": "Binding<Bool>",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "Drives presentation of the translation popover."
+        },
+        {
+          "name": "text",
+          "swiftType": "String",
+          "control": "text",
+          "defaultValue": "\"Hallo, Welt!\"",
+          "notes": "The text to translate. Changing it after presentation has no effect."
+        },
+        {
+          "name": "attachmentAnchor",
+          "swiftType": "PopoverAttachmentAnchor",
+          "control": "menu",
+          "options": [
+            ".rect(.bounds)",
+            ".point(.center)"
+          ],
+          "defaultValue": ".rect(.bounds)",
+          "notes": "Anchor point of the translation popover."
+        },
+        {
+          "name": "arrowEdge",
+          "swiftType": "Edge",
+          "control": "picker",
+          "options": [
+            "top",
+            "bottom",
+            "leading",
+            "trailing"
+          ],
+          "defaultValue": "top",
+          "notes": "macOS arrow direction. iOS ignores this parameter."
+        },
+        {
+          "name": "includesReplacement",
+          "swiftType": "Bool",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": "When true, wires a replacementAction so a Replace with Translation button appears returning the translated string."
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Use for in-context translation of short strings (a sentence or two). Provide replacementAction only when the surrounding text is editable so the user can substitute the translation. iOS and macOS only.",
+      "codeTemplate": "Text(${text})\n    .translationPresentation(\n        isPresented: ${isPresented},\n        text: ${text},\n        attachmentAnchor: ${attachmentAnchor},\n        arrowEdge: ${arrowEdge}\n    ) { translated in\n        // replace original text with translated\n    }"
+    },
+    {
+      "id": "dialog-configuration",
+      "title": "Dialog Configuration",
+      "api": "View.dialogIcon(_:) / dialogSeverity(_:) / dialogSuppressionToggle(_:isSuppressed:)",
+      "summary": "Customizes confirmation dialogs and alerts with a custom icon, severity styling, and a Do-not-ask-again suppression toggle.",
+      "platforms": [
+        "macOS",
+        "watchOS"
+      ],
+      "minOS": "macOS 12.0 (severity macOS 13.0 / watchOS 10.0)",
+      "summaryLong": "A family of modifiers that decorate alerts and confirmation dialogs. dialogIcon supplies a custom image; dialogSeverity sets .standard/.critical styling; dialogSuppressionToggle adds a 'Do not ask again' checkbox bound to a flag. Primarily macOS, with severity also on watchOS.",
+      "properties": [
+        {
+          "name": "icon",
+          "swiftType": "Image?",
+          "control": "menu",
+          "options": [
+            "nil",
+            "Image(systemName:)"
+          ],
+          "defaultValue": "nil",
+          "notes": ".dialogIcon(_:) sets a custom alert/dialog icon. macOS only."
+        },
+        {
+          "name": "severity",
+          "swiftType": "DialogSeverity",
+          "control": "segmented",
+          "options": [
+            "automatic",
+            "standard",
+            "critical"
+          ],
+          "defaultValue": "automatic",
+          "notes": ".dialogSeverity(_:). .critical adds a caution affordance. macOS 13 / watchOS 10."
+        },
+        {
+          "name": "isSuppressed",
+          "swiftType": "Binding<Bool>",
+          "control": "toggle",
+          "defaultValue": "false",
+          "notes": ".dialogSuppressionToggle(_:isSuppressed:) adds a 'Don't ask again' checkbox. macOS only."
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Reserve .critical severity for genuinely destructive or dangerous outcomes. Offer a suppression toggle only for repetitive confirmations the user can safely silence. These modifiers are macOS-centric.",
+      "codeTemplate": "SomeView()\n    .confirmationDialog(\"Title\", isPresented: $isPresented) {\n        Button(\"Delete\", role: .destructive) { }\n    }\n    .dialogIcon(${icon})\n    .dialogSeverity(${severity})\n    .dialogSuppressionToggle(isSuppressed: ${isSuppressed})"
+    },
+    {
+      "id": "file-dialog-configuration",
+      "title": "File Dialog Configuration",
+      "api": "View.fileDialogConfirmationLabel(_:) / fileDialogMessage(_:) / fileDialogDefaultDirectory(_:) / fileDialogBrowserOptions(_:)",
+      "summary": "Customizes the system file importer/exporter/mover dialogs: confirmation button label, prompt message, starting directory, and browser options.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS"
+      ],
+      "minOS": "iOS 17.0 / macOS 14.0",
+      "summaryLong": "A set of modifiers that decorate a fileImporter/fileExporter/fileMover presentation. fileDialogConfirmationLabel renames the action button; fileDialogMessage adds prompt text; fileDialogDefaultDirectory sets the initial folder; fileDialogBrowserOptions toggles options like .includeHiddenFiles or .enumeratePackages.",
+      "properties": [
+        {
+          "name": "confirmationLabel",
+          "swiftType": "Text?",
+          "control": "text",
+          "defaultValue": "nil",
+          "notes": ".fileDialogConfirmationLabel(_:) overrides the default Open/Save button text."
+        },
+        {
+          "name": "message",
+          "swiftType": "Text?",
+          "control": "text",
+          "defaultValue": "nil",
+          "notes": ".fileDialogMessage(_:) shows guidance text in the dialog."
+        },
+        {
+          "name": "defaultDirectory",
+          "swiftType": "URL?",
+          "control": "menu",
+          "options": [
+            "nil",
+            "Documents",
+            "Downloads"
+          ],
+          "defaultValue": "nil",
+          "notes": ".fileDialogDefaultDirectory(_:) sets the folder the picker opens in."
+        },
+        {
+          "name": "browserOptions",
+          "swiftType": "FileDialogBrowserOptions",
+          "control": "menu",
+          "options": [
+            "[]",
+            ".includeHiddenFiles",
+            ".enumeratePackages",
+            ".displayFileExtensions"
+          ],
+          "defaultValue": "[]",
+          "notes": ".fileDialogBrowserOptions(_:) toggles browser behaviors. Option set."
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Attach these modifiers to the same view carrying the fileImporter/fileExporter/fileMover. Use a meaningful confirmation label and message so the dialog's purpose is clear. iOS 17 / macOS 14.",
+      "codeTemplate": "SomeView()\n    .fileImporter(isPresented: $isPresented, allowedContentTypes: [.item]) { _ in }\n    .fileDialogConfirmationLabel(${confirmationLabel})\n    .fileDialogMessage(${message})\n    .fileDialogDefaultDirectory(${defaultDirectory})\n    .fileDialogBrowserOptions(${browserOptions})"
+    },
+    {
+      "id": "presentation-background-content",
+      "title": "Custom Presentation Background",
+      "api": "View.presentationBackground(alignment:content:)",
+      "summary": "Sets a fully custom view as the background of the enclosing sheet/popover, instead of a shape style.",
+      "platforms": [
+        "iOS",
+        "iPadOS",
+        "macOS",
+        "tvOS",
+        "visionOS",
+        "watchOS"
+      ],
+      "minOS": "iOS 16.4 / macOS 13.3",
+      "summaryLong": "Companion to presentationBackground(_:) that takes a @ViewBuilder so you can layer gradients, images, or custom decoration behind a presentation's content, aligned via the alignment parameter.",
+      "properties": [
+        {
+          "name": "alignment",
+          "swiftType": "Alignment",
+          "control": "menu",
+          "options": [
+            "center",
+            "top",
+            "bottom",
+            "leading",
+            "trailing"
+          ],
+          "defaultValue": "center",
+          "notes": "How the custom background content aligns within the presentation."
+        },
+        {
+          "name": "content",
+          "swiftType": "() -> View",
+          "control": "menu",
+          "options": [
+            "LinearGradient",
+            "Image",
+            "Color"
+          ],
+          "defaultValue": "LinearGradient",
+          "notes": "The view used as the presentation background."
+        }
+      ],
+      "states": [
+        "default"
+      ],
+      "styles": [],
+      "higNotes": "Provide an opaque fallback under Reduce Transparency. Keep the background subtle so it never competes with the sheet content. Prefer the shape-style overload presentationBackground(_:) for plain materials.",
+      "codeTemplate": "SheetContentView()\n    .presentationBackground(alignment: ${alignment}) {\n        ${content}\n    }"
+    }
+  ]
+}

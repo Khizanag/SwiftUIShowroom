@@ -44,7 +44,7 @@ vertical_whitespace:
 trailing_comma:
   mandatory_comma: true
 identifier_name:
-  excluded: [id, ok, no, on, off, x, y, z]
+  excluded: [id, ok, no, on, off, go, x, y, z]
 type_name:
   min_length: 3
 # DesignSystem deliberately nests tokens two deep (e.g. DesignSystem.Size.Icon).

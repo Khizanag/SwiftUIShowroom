@@ -1,0 +1,2482 @@
+[
+  {
+    "key": "text",
+    "folder": "Text",
+    "id": "text",
+    "struct": "TextShowcase",
+    "title": "Text",
+    "specFile": "docs/specs/by-category/text.json"
+  },
+  {
+    "key": "text",
+    "folder": "Text",
+    "id": "label",
+    "struct": "LabelShowcase",
+    "title": "Label",
+    "specFile": "docs/specs/by-category/text.json"
+  },
+  {
+    "key": "text",
+    "folder": "Text",
+    "id": "textfield",
+    "struct": "TextfieldShowcase",
+    "title": "TextField",
+    "specFile": "docs/specs/by-category/text.json"
+  },
+  {
+    "key": "text",
+    "folder": "Text",
+    "id": "securefield",
+    "struct": "SecurefieldShowcase",
+    "title": "SecureField",
+    "specFile": "docs/specs/by-category/text.json"
+  },
+  {
+    "key": "text",
+    "folder": "Text",
+    "id": "texteditor",
+    "struct": "TexteditorShowcase",
+    "title": "TextEditor",
+    "specFile": "docs/specs/by-category/text.json"
+  },
+  {
+    "key": "text",
+    "folder": "Text",
+    "id": "link",
+    "struct": "LinkShowcase",
+    "title": "Link",
+    "specFile": "docs/specs/by-category/text.json"
+  },
+  {
+    "key": "text",
+    "folder": "Text",
+    "id": "sharelink",
+    "struct": "SharelinkShowcase",
+    "title": "ShareLink",
+    "specFile": "docs/specs/by-category/text.json"
+  },
+  {
+    "key": "text",
+    "folder": "Text",
+    "id": "attributed-string",
+    "struct": "AttributedStringShowcase",
+    "title": "AttributedString (in Text)",
+    "specFile": "docs/specs/by-category/text.json"
+  },
+  {
+    "key": "buttons",
+    "folder": "Buttons",
+    "id": "button-role",
+    "struct": "ButtonRoleShowcase",
+    "title": "Button Role",
+    "specFile": "docs/specs/by-category/buttons.json"
+  },
+  {
+    "key": "buttons",
+    "folder": "Buttons",
+    "id": "menu",
+    "struct": "MenuShowcase",
+    "title": "Menu",
+    "specFile": "docs/specs/by-category/buttons.json"
+  },
+  {
+    "key": "buttons",
+    "folder": "Buttons",
+    "id": "stepper",
+    "struct": "StepperShowcase",
+    "title": "Stepper",
+    "specFile": "docs/specs/by-category/buttons.json"
+  },
+  {
+    "key": "buttons",
+    "folder": "Buttons",
+    "id": "edit-button",
+    "struct": "EditButtonShowcase",
+    "title": "EditButton",
+    "specFile": "docs/specs/by-category/buttons.json"
+  },
+  {
+    "key": "buttons",
+    "folder": "Buttons",
+    "id": "rename-button",
+    "struct": "RenameButtonShowcase",
+    "title": "RenameButton",
+    "specFile": "docs/specs/by-category/buttons.json"
+  },
+  {
+    "key": "buttons",
+    "folder": "Buttons",
+    "id": "paste-button",
+    "struct": "PasteButtonShowcase",
+    "title": "PasteButton",
+    "specFile": "docs/specs/by-category/buttons.json"
+  },
+  {
+    "key": "buttons",
+    "folder": "Buttons",
+    "id": "control-group",
+    "struct": "ControlGroupShowcase",
+    "title": "ControlGroup",
+    "specFile": "docs/specs/by-category/buttons.json"
+  },
+  {
+    "key": "buttons",
+    "folder": "Buttons",
+    "id": "help-link",
+    "struct": "HelpLinkShowcase",
+    "title": "HelpLink",
+    "specFile": "docs/specs/by-category/buttons.json"
+  },
+  {
+    "key": "buttons",
+    "folder": "Buttons",
+    "id": "text-field-link",
+    "struct": "TextFieldLinkShowcase",
+    "title": "TextFieldLink",
+    "specFile": "docs/specs/by-category/buttons.json"
+  },
+  {
+    "key": "buttons",
+    "folder": "Buttons",
+    "id": "new-document-button",
+    "struct": "NewDocumentButtonShowcase",
+    "title": "NewDocumentButton",
+    "specFile": "docs/specs/by-category/buttons.json"
+  },
+  {
+    "key": "selection",
+    "folder": "Selection",
+    "id": "datepicker",
+    "struct": "DatepickerShowcase",
+    "title": "DatePicker",
+    "specFile": "docs/specs/by-category/selection.json"
+  },
+  {
+    "key": "selection",
+    "folder": "Selection",
+    "id": "multidatepicker",
+    "struct": "MultidatepickerShowcase",
+    "title": "MultiDatePicker",
+    "specFile": "docs/specs/by-category/selection.json"
+  },
+  {
+    "key": "selection",
+    "folder": "Selection",
+    "id": "colorpicker",
+    "struct": "ColorpickerShowcase",
+    "title": "ColorPicker",
+    "specFile": "docs/specs/by-category/selection.json"
+  },
+  {
+    "key": "selection",
+    "folder": "Selection",
+    "id": "slider",
+    "struct": "SliderShowcase",
+    "title": "Slider",
+    "specFile": "docs/specs/by-category/selection.json"
+  },
+  {
+    "key": "selection",
+    "folder": "Selection",
+    "id": "gauge",
+    "struct": "GaugeShowcase",
+    "title": "Gauge",
+    "specFile": "docs/specs/by-category/selection.json"
+  },
+  {
+    "key": "selection",
+    "folder": "Selection",
+    "id": "progressview",
+    "struct": "ProgressviewShowcase",
+    "title": "ProgressView",
+    "specFile": "docs/specs/by-category/selection.json"
+  },
+  {
+    "key": "containers",
+    "folder": "Containers",
+    "id": "hstack",
+    "struct": "HstackShowcase",
+    "title": "HStack",
+    "specFile": "docs/specs/by-category/containers.json"
+  },
+  {
+    "key": "containers",
+    "folder": "Containers",
+    "id": "vstack",
+    "struct": "VstackShowcase",
+    "title": "VStack",
+    "specFile": "docs/specs/by-category/containers.json"
+  },
+  {
+    "key": "containers",
+    "folder": "Containers",
+    "id": "zstack",
+    "struct": "ZstackShowcase",
+    "title": "ZStack",
+    "specFile": "docs/specs/by-category/containers.json"
+  },
+  {
+    "key": "containers",
+    "folder": "Containers",
+    "id": "lazyvstack",
+    "struct": "LazyvstackShowcase",
+    "title": "LazyVStack",
+    "specFile": "docs/specs/by-category/containers.json"
+  },
+  {
+    "key": "containers",
+    "folder": "Containers",
+    "id": "lazyhstack",
+    "struct": "LazyhstackShowcase",
+    "title": "LazyHStack",
+    "specFile": "docs/specs/by-category/containers.json"
+  },
+  {
+    "key": "containers",
+    "folder": "Containers",
+    "id": "grid",
+    "struct": "GridShowcase",
+    "title": "Grid",
+    "specFile": "docs/specs/by-category/containers.json"
+  },
+  {
+    "key": "containers",
+    "folder": "Containers",
+    "id": "grid-row",
+    "struct": "GridRowShowcase",
+    "title": "GridRow",
+    "specFile": "docs/specs/by-category/containers.json"
+  },
+  {
+    "key": "containers",
+    "folder": "Containers",
+    "id": "lazyvgrid",
+    "struct": "LazyvgridShowcase",
+    "title": "LazyVGrid",
+    "specFile": "docs/specs/by-category/containers.json"
+  },
+  {
+    "key": "containers",
+    "folder": "Containers",
+    "id": "lazyhgrid",
+    "struct": "LazyhgridShowcase",
+    "title": "LazyHGrid",
+    "specFile": "docs/specs/by-category/containers.json"
+  },
+  {
+    "key": "containers",
+    "folder": "Containers",
+    "id": "grid-item",
+    "struct": "GridItemShowcase",
+    "title": "GridItem",
+    "specFile": "docs/specs/by-category/containers.json"
+  },
+  {
+    "key": "containers",
+    "folder": "Containers",
+    "id": "scrollview",
+    "struct": "ScrollviewShowcase",
+    "title": "ScrollView",
+    "specFile": "docs/specs/by-category/containers.json"
+  },
+  {
+    "key": "containers",
+    "folder": "Containers",
+    "id": "scrollview-reader",
+    "struct": "ScrollviewReaderShowcase",
+    "title": "ScrollViewReader",
+    "specFile": "docs/specs/by-category/containers.json"
+  },
+  {
+    "key": "containers",
+    "folder": "Containers",
+    "id": "list",
+    "struct": "ListShowcase",
+    "title": "List",
+    "specFile": "docs/specs/by-category/containers.json"
+  },
+  {
+    "key": "containers",
+    "folder": "Containers",
+    "id": "table",
+    "struct": "TableShowcase",
+    "title": "Table",
+    "specFile": "docs/specs/by-category/containers.json"
+  },
+  {
+    "key": "containers",
+    "folder": "Containers",
+    "id": "table-column",
+    "struct": "TableColumnShowcase",
+    "title": "TableColumn",
+    "specFile": "docs/specs/by-category/containers.json"
+  },
+  {
+    "key": "containers",
+    "folder": "Containers",
+    "id": "form",
+    "struct": "FormShowcase",
+    "title": "Form",
+    "specFile": "docs/specs/by-category/containers.json"
+  },
+  {
+    "key": "containers",
+    "folder": "Containers",
+    "id": "section",
+    "struct": "SectionShowcase",
+    "title": "Section",
+    "specFile": "docs/specs/by-category/containers.json"
+  },
+  {
+    "key": "containers",
+    "folder": "Containers",
+    "id": "groupbox",
+    "struct": "GroupboxShowcase",
+    "title": "GroupBox",
+    "specFile": "docs/specs/by-category/containers.json"
+  },
+  {
+    "key": "containers",
+    "folder": "Containers",
+    "id": "disclosure-group",
+    "struct": "DisclosureGroupShowcase",
+    "title": "DisclosureGroup",
+    "specFile": "docs/specs/by-category/containers.json"
+  },
+  {
+    "key": "containers",
+    "folder": "Containers",
+    "id": "group",
+    "struct": "GroupShowcase",
+    "title": "Group",
+    "specFile": "docs/specs/by-category/containers.json"
+  },
+  {
+    "key": "containers",
+    "folder": "Containers",
+    "id": "viewthatfits",
+    "struct": "ViewthatfitsShowcase",
+    "title": "ViewThatFits",
+    "specFile": "docs/specs/by-category/containers.json"
+  },
+  {
+    "key": "containers",
+    "folder": "Containers",
+    "id": "spacer",
+    "struct": "SpacerShowcase",
+    "title": "Spacer",
+    "specFile": "docs/specs/by-category/containers.json"
+  },
+  {
+    "key": "containers",
+    "folder": "Containers",
+    "id": "divider",
+    "struct": "DividerShowcase",
+    "title": "Divider",
+    "specFile": "docs/specs/by-category/containers.json"
+  },
+  {
+    "key": "containers",
+    "folder": "Containers",
+    "id": "labeled-content",
+    "struct": "LabeledContentShowcase",
+    "title": "LabeledContent",
+    "specFile": "docs/specs/by-category/containers.json"
+  },
+  {
+    "key": "containers",
+    "folder": "Containers",
+    "id": "geometry-reader",
+    "struct": "GeometryReaderShowcase",
+    "title": "GeometryReader",
+    "specFile": "docs/specs/by-category/containers.json"
+  },
+  {
+    "key": "containers",
+    "folder": "Containers",
+    "id": "layout",
+    "struct": "LayoutShowcase",
+    "title": "Layout (custom layout)",
+    "specFile": "docs/specs/by-category/containers.json"
+  },
+  {
+    "key": "containers",
+    "folder": "Containers",
+    "id": "outline-group",
+    "struct": "OutlineGroupShowcase",
+    "title": "OutlineGroup",
+    "specFile": "docs/specs/by-category/containers.json"
+  },
+  {
+    "key": "containers",
+    "folder": "Containers",
+    "id": "table-row",
+    "struct": "TableRowShowcase",
+    "title": "TableRow",
+    "specFile": "docs/specs/by-category/containers.json"
+  },
+  {
+    "key": "navigation",
+    "folder": "Navigation",
+    "id": "navigation-stack",
+    "struct": "NavigationStackShowcase",
+    "title": "NavigationStack",
+    "specFile": "docs/specs/by-category/navigation.json"
+  },
+  {
+    "key": "navigation",
+    "folder": "Navigation",
+    "id": "navigation-path",
+    "struct": "NavigationPathShowcase",
+    "title": "NavigationPath",
+    "specFile": "docs/specs/by-category/navigation.json"
+  },
+  {
+    "key": "navigation",
+    "folder": "Navigation",
+    "id": "navigation-destination",
+    "struct": "NavigationDestinationShowcase",
+    "title": "navigationDestination",
+    "specFile": "docs/specs/by-category/navigation.json"
+  },
+  {
+    "key": "navigation",
+    "folder": "Navigation",
+    "id": "navigation-link",
+    "struct": "NavigationLinkShowcase",
+    "title": "NavigationLink",
+    "specFile": "docs/specs/by-category/navigation.json"
+  },
+  {
+    "key": "navigation",
+    "folder": "Navigation",
+    "id": "navigation-split-view",
+    "struct": "NavigationSplitViewShowcase",
+    "title": "NavigationSplitView",
+    "specFile": "docs/specs/by-category/navigation.json"
+  },
+  {
+    "key": "navigation",
+    "folder": "Navigation",
+    "id": "navigation-split-view-three-column",
+    "struct": "NavigationSplitViewThreeColumnShowcase",
+    "title": "NavigationSplitView (three-column)",
+    "specFile": "docs/specs/by-category/navigation.json"
+  },
+  {
+    "key": "navigation",
+    "folder": "Navigation",
+    "id": "tab-view",
+    "struct": "TabViewShowcase",
+    "title": "TabView",
+    "specFile": "docs/specs/by-category/navigation.json"
+  },
+  {
+    "key": "navigation",
+    "folder": "Navigation",
+    "id": "tab",
+    "struct": "TabShowcase",
+    "title": "Tab",
+    "specFile": "docs/specs/by-category/navigation.json"
+  },
+  {
+    "key": "navigation",
+    "folder": "Navigation",
+    "id": "tab-section",
+    "struct": "TabSectionShowcase",
+    "title": "TabSection",
+    "specFile": "docs/specs/by-category/navigation.json"
+  },
+  {
+    "key": "navigation",
+    "folder": "Navigation",
+    "id": "tab-view-bottom-accessory",
+    "struct": "TabViewBottomAccessoryShowcase",
+    "title": "TabView bottom accessory",
+    "specFile": "docs/specs/by-category/navigation.json"
+  },
+  {
+    "key": "navigation",
+    "folder": "Navigation",
+    "id": "toolbar",
+    "struct": "ToolbarShowcase",
+    "title": "Toolbar",
+    "specFile": "docs/specs/by-category/navigation.json"
+  },
+  {
+    "key": "navigation",
+    "folder": "Navigation",
+    "id": "toolbar-item",
+    "struct": "ToolbarItemShowcase",
+    "title": "ToolbarItem",
+    "specFile": "docs/specs/by-category/navigation.json"
+  },
+  {
+    "key": "navigation",
+    "folder": "Navigation",
+    "id": "toolbar-item-group",
+    "struct": "ToolbarItemGroupShowcase",
+    "title": "ToolbarItemGroup",
+    "specFile": "docs/specs/by-category/navigation.json"
+  },
+  {
+    "key": "navigation",
+    "folder": "Navigation",
+    "id": "toolbar-spacer",
+    "struct": "ToolbarSpacerShowcase",
+    "title": "ToolbarSpacer",
+    "specFile": "docs/specs/by-category/navigation.json"
+  },
+  {
+    "key": "navigation",
+    "folder": "Navigation",
+    "id": "navigation-title",
+    "struct": "NavigationTitleShowcase",
+    "title": "Navigation title",
+    "specFile": "docs/specs/by-category/navigation.json"
+  },
+  {
+    "key": "navigation",
+    "folder": "Navigation",
+    "id": "searchable",
+    "struct": "SearchableShowcase",
+    "title": "searchable",
+    "specFile": "docs/specs/by-category/navigation.json"
+  },
+  {
+    "key": "navigation",
+    "folder": "Navigation",
+    "id": "search-token",
+    "struct": "SearchTokenShowcase",
+    "title": "Search tokens",
+    "specFile": "docs/specs/by-category/navigation.json"
+  },
+  {
+    "key": "navigation",
+    "folder": "Navigation",
+    "id": "navigation-transition-zoom",
+    "struct": "NavigationTransitionZoomShowcase",
+    "title": "Zoom navigation transition",
+    "specFile": "docs/specs/by-category/navigation.json"
+  },
+  {
+    "key": "navigation",
+    "folder": "Navigation",
+    "id": "navigation-bar-back-button",
+    "struct": "NavigationBarBackButtonShowcase",
+    "title": "Navigation back button & bar items",
+    "specFile": "docs/specs/by-category/navigation.json"
+  },
+  {
+    "key": "navigation",
+    "folder": "Navigation",
+    "id": "tab-view-page-style",
+    "struct": "TabViewPageStyleShowcase",
+    "title": "TabView (page style)",
+    "specFile": "docs/specs/by-category/navigation.json"
+  },
+  {
+    "key": "navigation",
+    "folder": "Navigation",
+    "id": "toolbar-removing",
+    "struct": "ToolbarRemovingShowcase",
+    "title": "Toolbar removing default item",
+    "specFile": "docs/specs/by-category/navigation.json"
+  },
+  {
+    "key": "navigation",
+    "folder": "Navigation",
+    "id": "toolbar-title-menu",
+    "struct": "ToolbarTitleMenuShowcase",
+    "title": "Toolbar title menu",
+    "specFile": "docs/specs/by-category/navigation.json"
+  },
+  {
+    "key": "navigation",
+    "folder": "Navigation",
+    "id": "toolbar-customizable",
+    "struct": "ToolbarCustomizableShowcase",
+    "title": "Customizable toolbar",
+    "specFile": "docs/specs/by-category/navigation.json"
+  },
+  {
+    "key": "navigation",
+    "folder": "Navigation",
+    "id": "navigation-subtitle",
+    "struct": "NavigationSubtitleShowcase",
+    "title": "Navigation subtitle",
+    "specFile": "docs/specs/by-category/navigation.json"
+  },
+  {
+    "key": "navigation",
+    "folder": "Navigation",
+    "id": "tab-view-sidebar-adaptable",
+    "struct": "TabViewSidebarAdaptableShowcase",
+    "title": "TabView (sidebar adaptable)",
+    "specFile": "docs/specs/by-category/navigation.json"
+  },
+  {
+    "key": "navigation",
+    "folder": "Navigation",
+    "id": "navigation-view",
+    "struct": "NavigationViewShowcase",
+    "title": "NavigationView (deprecated)",
+    "specFile": "docs/specs/by-category/navigation.json"
+  },
+  {
+    "key": "presentation",
+    "folder": "Presentation",
+    "id": "sheet",
+    "struct": "SheetShowcase",
+    "title": "Sheet",
+    "specFile": "docs/specs/by-category/presentation.json"
+  },
+  {
+    "key": "presentation",
+    "folder": "Presentation",
+    "id": "sheet-item",
+    "struct": "SheetItemShowcase",
+    "title": "Sheet (Item-driven)",
+    "specFile": "docs/specs/by-category/presentation.json"
+  },
+  {
+    "key": "presentation",
+    "folder": "Presentation",
+    "id": "full-screen-cover",
+    "struct": "FullScreenCoverShowcase",
+    "title": "Full Screen Cover",
+    "specFile": "docs/specs/by-category/presentation.json"
+  },
+  {
+    "key": "presentation",
+    "folder": "Presentation",
+    "id": "popover",
+    "struct": "PopoverShowcase",
+    "title": "Popover",
+    "specFile": "docs/specs/by-category/presentation.json"
+  },
+  {
+    "key": "presentation",
+    "folder": "Presentation",
+    "id": "alert",
+    "struct": "AlertShowcase",
+    "title": "Alert",
+    "specFile": "docs/specs/by-category/presentation.json"
+  },
+  {
+    "key": "presentation",
+    "folder": "Presentation",
+    "id": "confirmation-dialog",
+    "struct": "ConfirmationDialogShowcase",
+    "title": "Confirmation Dialog",
+    "specFile": "docs/specs/by-category/presentation.json"
+  },
+  {
+    "key": "presentation",
+    "folder": "Presentation",
+    "id": "inspector",
+    "struct": "InspectorShowcase",
+    "title": "Inspector",
+    "specFile": "docs/specs/by-category/presentation.json"
+  },
+  {
+    "key": "presentation",
+    "folder": "Presentation",
+    "id": "file-importer",
+    "struct": "FileImporterShowcase",
+    "title": "File Importer",
+    "specFile": "docs/specs/by-category/presentation.json"
+  },
+  {
+    "key": "presentation",
+    "folder": "Presentation",
+    "id": "file-exporter",
+    "struct": "FileExporterShowcase",
+    "title": "File Exporter",
+    "specFile": "docs/specs/by-category/presentation.json"
+  },
+  {
+    "key": "presentation",
+    "folder": "Presentation",
+    "id": "file-mover",
+    "struct": "FileMoverShowcase",
+    "title": "File Mover",
+    "specFile": "docs/specs/by-category/presentation.json"
+  },
+  {
+    "key": "presentation",
+    "folder": "Presentation",
+    "id": "photos-picker",
+    "struct": "PhotosPickerShowcase",
+    "title": "Photos Picker",
+    "specFile": "docs/specs/by-category/presentation.json"
+  },
+  {
+    "key": "presentation",
+    "folder": "Presentation",
+    "id": "interactive-dismiss-disabled",
+    "struct": "InteractiveDismissDisabledShowcase",
+    "title": "Interactive Dismiss Disabled",
+    "specFile": "docs/specs/by-category/presentation.json"
+  },
+  {
+    "key": "presentation",
+    "folder": "Presentation",
+    "id": "dismissal-confirmation-dialog",
+    "struct": "DismissalConfirmationDialogShowcase",
+    "title": "Dismissal Confirmation Dialog",
+    "specFile": "docs/specs/by-category/presentation.json"
+  },
+  {
+    "key": "presentation",
+    "folder": "Presentation",
+    "id": "dismiss-action",
+    "struct": "DismissActionShowcase",
+    "title": "Dismiss Action (Environment)",
+    "specFile": "docs/specs/by-category/presentation.json"
+  },
+  {
+    "key": "presentation",
+    "folder": "Presentation",
+    "id": "popover-tip",
+    "struct": "PopoverTipShowcase",
+    "title": "Popover Tip (TipKit)",
+    "specFile": "docs/specs/by-category/presentation.json"
+  },
+  {
+    "key": "presentation",
+    "folder": "Presentation",
+    "id": "presentation-detents",
+    "struct": "PresentationDetentsShowcase",
+    "title": "Presentation Detents",
+    "specFile": "docs/specs/by-category/presentation.json"
+  },
+  {
+    "key": "presentation",
+    "folder": "Presentation",
+    "id": "quick-look-preview",
+    "struct": "QuickLookPreviewShowcase",
+    "title": "Quick Look Preview",
+    "specFile": "docs/specs/by-category/presentation.json"
+  },
+  {
+    "key": "presentation",
+    "folder": "Presentation",
+    "id": "translation-presentation",
+    "struct": "TranslationPresentationShowcase",
+    "title": "Translation Presentation",
+    "specFile": "docs/specs/by-category/presentation.json"
+  },
+  {
+    "key": "presentation",
+    "folder": "Presentation",
+    "id": "dialog-configuration",
+    "struct": "DialogConfigurationShowcase",
+    "title": "Dialog Configuration",
+    "specFile": "docs/specs/by-category/presentation.json"
+  },
+  {
+    "key": "presentation",
+    "folder": "Presentation",
+    "id": "file-dialog-configuration",
+    "struct": "FileDialogConfigurationShowcase",
+    "title": "File Dialog Configuration",
+    "specFile": "docs/specs/by-category/presentation.json"
+  },
+  {
+    "key": "presentation",
+    "folder": "Presentation",
+    "id": "presentation-background-content",
+    "struct": "PresentationBackgroundContentShowcase",
+    "title": "Custom Presentation Background",
+    "specFile": "docs/specs/by-category/presentation.json"
+  },
+  {
+    "key": "media",
+    "folder": "Media",
+    "id": "image",
+    "struct": "ImageShowcase",
+    "title": "Image",
+    "specFile": "docs/specs/by-category/media.json"
+  },
+  {
+    "key": "media",
+    "folder": "Media",
+    "id": "sf-symbol",
+    "struct": "SfSymbolShowcase",
+    "title": "SF Symbol Image",
+    "specFile": "docs/specs/by-category/media.json"
+  },
+  {
+    "key": "media",
+    "folder": "Media",
+    "id": "symbol-effect",
+    "struct": "SymbolEffectShowcase",
+    "title": "Symbol Effect",
+    "specFile": "docs/specs/by-category/media.json"
+  },
+  {
+    "key": "media",
+    "folder": "Media",
+    "id": "async-image",
+    "struct": "AsyncImageShowcase",
+    "title": "AsyncImage",
+    "specFile": "docs/specs/by-category/media.json"
+  },
+  {
+    "key": "media",
+    "folder": "Media",
+    "id": "rectangle",
+    "struct": "RectangleShowcase",
+    "title": "Rectangle",
+    "specFile": "docs/specs/by-category/media.json"
+  },
+  {
+    "key": "media",
+    "folder": "Media",
+    "id": "rounded-rectangle",
+    "struct": "RoundedRectangleShowcase",
+    "title": "RoundedRectangle",
+    "specFile": "docs/specs/by-category/media.json"
+  },
+  {
+    "key": "media",
+    "folder": "Media",
+    "id": "unevenrounded-rectangle",
+    "struct": "UnevenroundedRectangleShowcase",
+    "title": "UnevenRoundedRectangle",
+    "specFile": "docs/specs/by-category/media.json"
+  },
+  {
+    "key": "media",
+    "folder": "Media",
+    "id": "capsule",
+    "struct": "CapsuleShowcase",
+    "title": "Capsule",
+    "specFile": "docs/specs/by-category/media.json"
+  },
+  {
+    "key": "media",
+    "folder": "Media",
+    "id": "circle",
+    "struct": "CircleShowcase",
+    "title": "Circle",
+    "specFile": "docs/specs/by-category/media.json"
+  },
+  {
+    "key": "media",
+    "folder": "Media",
+    "id": "ellipse",
+    "struct": "EllipseShowcase",
+    "title": "Ellipse",
+    "specFile": "docs/specs/by-category/media.json"
+  },
+  {
+    "key": "media",
+    "folder": "Media",
+    "id": "path",
+    "struct": "PathShowcase",
+    "title": "Path",
+    "specFile": "docs/specs/by-category/media.json"
+  },
+  {
+    "key": "media",
+    "folder": "Media",
+    "id": "canvas",
+    "struct": "CanvasShowcase",
+    "title": "Canvas",
+    "specFile": "docs/specs/by-category/media.json"
+  },
+  {
+    "key": "media",
+    "folder": "Media",
+    "id": "linear-gradient",
+    "struct": "LinearGradientShowcase",
+    "title": "LinearGradient",
+    "specFile": "docs/specs/by-category/media.json"
+  },
+  {
+    "key": "media",
+    "folder": "Media",
+    "id": "radial-gradient",
+    "struct": "RadialGradientShowcase",
+    "title": "RadialGradient",
+    "specFile": "docs/specs/by-category/media.json"
+  },
+  {
+    "key": "media",
+    "folder": "Media",
+    "id": "angular-gradient",
+    "struct": "AngularGradientShowcase",
+    "title": "AngularGradient",
+    "specFile": "docs/specs/by-category/media.json"
+  },
+  {
+    "key": "media",
+    "folder": "Media",
+    "id": "elliptical-gradient",
+    "struct": "EllipticalGradientShowcase",
+    "title": "EllipticalGradient",
+    "specFile": "docs/specs/by-category/media.json"
+  },
+  {
+    "key": "media",
+    "folder": "Media",
+    "id": "mesh-gradient",
+    "struct": "MeshGradientShowcase",
+    "title": "MeshGradient",
+    "specFile": "docs/specs/by-category/media.json"
+  },
+  {
+    "key": "media",
+    "folder": "Media",
+    "id": "material",
+    "struct": "MaterialShowcase",
+    "title": "Material (Blur)",
+    "specFile": "docs/specs/by-category/media.json"
+  },
+  {
+    "key": "media",
+    "folder": "Media",
+    "id": "container-relative-shape",
+    "struct": "ContainerRelativeShapeShowcase",
+    "title": "ContainerRelativeShape",
+    "specFile": "docs/specs/by-category/media.json"
+  },
+  {
+    "key": "media",
+    "folder": "Media",
+    "id": "video-player",
+    "struct": "VideoPlayerShowcase",
+    "title": "VideoPlayer",
+    "specFile": "docs/specs/by-category/media.json"
+  },
+  {
+    "key": "media",
+    "folder": "Media",
+    "id": "color-view",
+    "struct": "ColorViewShowcase",
+    "title": "Color (as View)",
+    "specFile": "docs/specs/by-category/media.json"
+  },
+  {
+    "key": "indicators",
+    "folder": "Indicators",
+    "id": "content-unavailable-view",
+    "struct": "ContentUnavailableViewShowcase",
+    "title": "Content Unavailable View",
+    "specFile": "docs/specs/by-category/indicators.json"
+  },
+  {
+    "key": "indicators",
+    "folder": "Indicators",
+    "id": "redaction-placeholder",
+    "struct": "RedactionPlaceholderShowcase",
+    "title": "Redaction (Placeholder / Skeleton)",
+    "specFile": "docs/specs/by-category/indicators.json"
+  },
+  {
+    "key": "indicators",
+    "folder": "Indicators",
+    "id": "privacy-sensitive",
+    "struct": "PrivacySensitiveShowcase",
+    "title": "Privacy Sensitive",
+    "specFile": "docs/specs/by-category/indicators.json"
+  },
+  {
+    "key": "indicators",
+    "folder": "Indicators",
+    "id": "sensory-feedback",
+    "struct": "SensoryFeedbackShowcase",
+    "title": "Sensory Feedback (Haptics)",
+    "specFile": "docs/specs/by-category/indicators.json"
+  },
+  {
+    "key": "indicators",
+    "folder": "Indicators",
+    "id": "badge",
+    "struct": "BadgeShowcase",
+    "title": "Badge",
+    "specFile": "docs/specs/by-category/indicators.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "frame-fixed",
+    "struct": "FrameFixedShowcase",
+    "title": "Frame (Fixed Size)",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "frame-flexible",
+    "struct": "FrameFlexibleShowcase",
+    "title": "Frame (Flexible / Min-Ideal-Max)",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "padding",
+    "struct": "PaddingShowcase",
+    "title": "Padding",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "offset",
+    "struct": "OffsetShowcase",
+    "title": "Offset",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "position",
+    "struct": "PositionShowcase",
+    "title": "Position",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "fixed-size",
+    "struct": "FixedSizeShowcase",
+    "title": "Fixed Size",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "layout-priority",
+    "struct": "LayoutPriorityShowcase",
+    "title": "Layout Priority",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "alignment-guide",
+    "struct": "AlignmentGuideShowcase",
+    "title": "Alignment Guide",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "safe-area-inset",
+    "struct": "SafeAreaInsetShowcase",
+    "title": "Safe Area Inset",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "safe-area-padding",
+    "struct": "SafeAreaPaddingShowcase",
+    "title": "Safe Area Padding",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "container-relative-frame",
+    "struct": "ContainerRelativeFrameShowcase",
+    "title": "Container Relative Frame",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "ignores-safe-area",
+    "struct": "IgnoresSafeAreaShowcase",
+    "title": "Ignores Safe Area",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "foreground-style",
+    "struct": "ForegroundStyleShowcase",
+    "title": "Foreground Style",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "background",
+    "struct": "BackgroundShowcase",
+    "title": "Background",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "overlay",
+    "struct": "OverlayShowcase",
+    "title": "Overlay",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "border",
+    "struct": "BorderShowcase",
+    "title": "Border",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "clip-shape",
+    "struct": "ClipShapeShowcase",
+    "title": "Clip Shape",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "clipped",
+    "struct": "ClippedShowcase",
+    "title": "Clipped",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "corner-radius",
+    "struct": "CornerRadiusShowcase",
+    "title": "Corner Radius (Deprecated)",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "mask",
+    "struct": "MaskShowcase",
+    "title": "Mask",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "shadow",
+    "struct": "ShadowShowcase",
+    "title": "Shadow",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "opacity",
+    "struct": "OpacityShowcase",
+    "title": "Opacity",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "tint",
+    "struct": "TintShowcase",
+    "title": "Tint",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "rotation-effect",
+    "struct": "RotationEffectShowcase",
+    "title": "Rotation Effect (2D)",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "scale-effect",
+    "struct": "ScaleEffectShowcase",
+    "title": "Scale Effect",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "rotation-3d-effect",
+    "struct": "Rotation3dEffectShowcase",
+    "title": "Rotation 3D Effect",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "projection-effect",
+    "struct": "ProjectionEffectShowcase",
+    "title": "Projection Effect",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "transform-effect",
+    "struct": "TransformEffectShowcase",
+    "title": "Transform Effect (2D Affine)",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "blur",
+    "struct": "BlurShowcase",
+    "title": "Blur",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "brightness",
+    "struct": "BrightnessShowcase",
+    "title": "Brightness",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "contrast",
+    "struct": "ContrastShowcase",
+    "title": "Contrast",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "saturation",
+    "struct": "SaturationShowcase",
+    "title": "Saturation",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "grayscale",
+    "struct": "GrayscaleShowcase",
+    "title": "Grayscale",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "color-invert",
+    "struct": "ColorInvertShowcase",
+    "title": "Color Invert",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "color-multiply",
+    "struct": "ColorMultiplyShowcase",
+    "title": "Color Multiply",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "hue-rotation",
+    "struct": "HueRotationShowcase",
+    "title": "Hue Rotation",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "blend-mode",
+    "struct": "BlendModeShowcase",
+    "title": "Blend Mode",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "compositing-group",
+    "struct": "CompositingGroupShowcase",
+    "title": "Compositing Group",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "drawing-group",
+    "struct": "DrawingGroupShowcase",
+    "title": "Drawing Group (Metal)",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "disabled",
+    "struct": "DisabledShowcase",
+    "title": "Disabled",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "allows-hit-testing",
+    "struct": "AllowsHitTestingShowcase",
+    "title": "Allows Hit Testing",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "content-shape",
+    "struct": "ContentShapeShowcase",
+    "title": "Content Shape",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "z-index",
+    "struct": "ZIndexShowcase",
+    "title": "Z-Index",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "aspect-ratio",
+    "struct": "AspectRatioShowcase",
+    "title": "Aspect Ratio",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "scaled-to-fit-fill",
+    "struct": "ScaledToFitFillShowcase",
+    "title": "Scaled To Fit / Fill",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "redacted",
+    "struct": "RedactedShowcase",
+    "title": "Redacted",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "modifiers",
+    "folder": "Modifiers",
+    "id": "hidden",
+    "struct": "HiddenShowcase",
+    "title": "Hidden",
+    "specFile": "docs/specs/by-category/modifiers.json"
+  },
+  {
+    "key": "effects",
+    "folder": "Effects",
+    "id": "glass-effect",
+    "struct": "GlassEffectShowcase",
+    "title": "Glass Effect",
+    "specFile": "docs/specs/by-category/effects.json"
+  },
+  {
+    "key": "effects",
+    "folder": "Effects",
+    "id": "glass-effect-container",
+    "struct": "GlassEffectContainerShowcase",
+    "title": "Glass Effect Container",
+    "specFile": "docs/specs/by-category/effects.json"
+  },
+  {
+    "key": "effects",
+    "folder": "Effects",
+    "id": "glass-effect-id-morph",
+    "struct": "GlassEffectIdMorphShowcase",
+    "title": "Glass Effect ID (Morph)",
+    "specFile": "docs/specs/by-category/effects.json"
+  },
+  {
+    "key": "effects",
+    "folder": "Effects",
+    "id": "glass-effect-union",
+    "struct": "GlassEffectUnionShowcase",
+    "title": "Glass Effect Union",
+    "specFile": "docs/specs/by-category/effects.json"
+  },
+  {
+    "key": "effects",
+    "folder": "Effects",
+    "id": "glass-effect-transition",
+    "struct": "GlassEffectTransitionShowcase",
+    "title": "Glass Effect Transition",
+    "specFile": "docs/specs/by-category/effects.json"
+  },
+  {
+    "key": "effects",
+    "folder": "Effects",
+    "id": "glass-button-style",
+    "struct": "GlassButtonStyleShowcase",
+    "title": "Glass Button Style",
+    "specFile": "docs/specs/by-category/effects.json"
+  },
+  {
+    "key": "effects",
+    "folder": "Effects",
+    "id": "scroll-edge-effect-style",
+    "struct": "ScrollEdgeEffectStyleShowcase",
+    "title": "Scroll Edge Effect Style",
+    "specFile": "docs/specs/by-category/effects.json"
+  },
+  {
+    "key": "effects",
+    "folder": "Effects",
+    "id": "scroll-edge-effect-hidden",
+    "struct": "ScrollEdgeEffectHiddenShowcase",
+    "title": "Scroll Edge Effect Hidden",
+    "specFile": "docs/specs/by-category/effects.json"
+  },
+  {
+    "key": "effects",
+    "folder": "Effects",
+    "id": "background-extension-effect",
+    "struct": "BackgroundExtensionEffectShowcase",
+    "title": "Background Extension Effect",
+    "specFile": "docs/specs/by-category/effects.json"
+  },
+  {
+    "key": "effects",
+    "folder": "Effects",
+    "id": "implicit-animation",
+    "struct": "ImplicitAnimationShowcase",
+    "title": "Implicit Animation (animation:value:)",
+    "specFile": "docs/specs/by-category/effects.json"
+  },
+  {
+    "key": "effects",
+    "folder": "Effects",
+    "id": "with-animation",
+    "struct": "WithAnimationShowcase",
+    "title": "withAnimation",
+    "specFile": "docs/specs/by-category/effects.json"
+  },
+  {
+    "key": "effects",
+    "folder": "Effects",
+    "id": "spring-bouncy-smooth-snappy",
+    "struct": "SpringBouncySmoothSnappyShowcase",
+    "title": "Spring Animations (bouncy/smooth/snappy)",
+    "specFile": "docs/specs/by-category/effects.json"
+  },
+  {
+    "key": "effects",
+    "folder": "Effects",
+    "id": "phase-animator",
+    "struct": "PhaseAnimatorShowcase",
+    "title": "Phase Animator",
+    "specFile": "docs/specs/by-category/effects.json"
+  },
+  {
+    "key": "effects",
+    "folder": "Effects",
+    "id": "keyframe-animator",
+    "struct": "KeyframeAnimatorShowcase",
+    "title": "Keyframe Animator",
+    "specFile": "docs/specs/by-category/effects.json"
+  },
+  {
+    "key": "effects",
+    "folder": "Effects",
+    "id": "transition",
+    "struct": "TransitionShowcase",
+    "title": "Transition",
+    "specFile": "docs/specs/by-category/effects.json"
+  },
+  {
+    "key": "effects",
+    "folder": "Effects",
+    "id": "asymmetric-transition",
+    "struct": "AsymmetricTransitionShowcase",
+    "title": "Asymmetric Transition",
+    "specFile": "docs/specs/by-category/effects.json"
+  },
+  {
+    "key": "effects",
+    "folder": "Effects",
+    "id": "matched-geometry-effect",
+    "struct": "MatchedGeometryEffectShowcase",
+    "title": "Matched Geometry Effect",
+    "specFile": "docs/specs/by-category/effects.json"
+  },
+  {
+    "key": "effects",
+    "folder": "Effects",
+    "id": "custom-transition",
+    "struct": "CustomTransitionShowcase",
+    "title": "Custom Transition",
+    "specFile": "docs/specs/by-category/effects.json"
+  },
+  {
+    "key": "effects",
+    "folder": "Effects",
+    "id": "symbol-effects-removed",
+    "struct": "SymbolEffectsRemovedShowcase",
+    "title": "Symbol Effects Removed",
+    "specFile": "docs/specs/by-category/effects.json"
+  },
+  {
+    "key": "effects",
+    "folder": "Effects",
+    "id": "content-transition",
+    "struct": "ContentTransitionShowcase",
+    "title": "Content Transition",
+    "specFile": "docs/specs/by-category/effects.json"
+  },
+  {
+    "key": "effects",
+    "folder": "Effects",
+    "id": "material-background",
+    "struct": "MaterialBackgroundShowcase",
+    "title": "Material Background",
+    "specFile": "docs/specs/by-category/effects.json"
+  },
+  {
+    "key": "effects",
+    "folder": "Effects",
+    "id": "color-filter-effects",
+    "struct": "ColorFilterEffectsShowcase",
+    "title": "Color Filter Effects",
+    "specFile": "docs/specs/by-category/effects.json"
+  },
+  {
+    "key": "effects",
+    "folder": "Effects",
+    "id": "shader-effect",
+    "struct": "ShaderEffectShowcase",
+    "title": "Metal Shader Effect",
+    "specFile": "docs/specs/by-category/effects.json"
+  },
+  {
+    "key": "effects",
+    "folder": "Effects",
+    "id": "scroll-transition",
+    "struct": "ScrollTransitionShowcase",
+    "title": "Scroll Transition",
+    "specFile": "docs/specs/by-category/effects.json"
+  },
+  {
+    "key": "effects",
+    "folder": "Effects",
+    "id": "geometry-visual-effect",
+    "struct": "GeometryVisualEffectShowcase",
+    "title": "Geometry-Driven Visual Effect",
+    "specFile": "docs/specs/by-category/effects.json"
+  },
+  {
+    "key": "effects",
+    "folder": "Effects",
+    "id": "safe-area-bar",
+    "struct": "SafeAreaBarShowcase",
+    "title": "Safe Area Bar",
+    "specFile": "docs/specs/by-category/effects.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "accessibility-label",
+    "struct": "AccessibilityLabelShowcase",
+    "title": "Accessibility Label",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "accessibility-value",
+    "struct": "AccessibilityValueShowcase",
+    "title": "Accessibility Value",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "accessibility-hint",
+    "struct": "AccessibilityHintShowcase",
+    "title": "Accessibility Hint",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "accessibility-traits",
+    "struct": "AccessibilityTraitsShowcase",
+    "title": "Accessibility Traits",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "accessibility-input-labels",
+    "struct": "AccessibilityInputLabelsShowcase",
+    "title": "Accessibility Input Labels",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "accessibility-hidden",
+    "struct": "AccessibilityHiddenShowcase",
+    "title": "Accessibility Hidden",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "accessibility-element-children",
+    "struct": "AccessibilityElementChildrenShowcase",
+    "title": "Accessibility Element (Children Behavior)",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "accessibility-children-synthetic",
+    "struct": "AccessibilityChildrenSyntheticShowcase",
+    "title": "Accessibility Children (Synthetic)",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "accessibility-representation",
+    "struct": "AccessibilityRepresentationShowcase",
+    "title": "Accessibility Representation",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "dynamic-type-size",
+    "struct": "DynamicTypeSizeShowcase",
+    "title": "Dynamic Type Size",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "scaled-metric",
+    "struct": "ScaledMetricShowcase",
+    "title": "ScaledMetric",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "accessibility-action",
+    "struct": "AccessibilityActionShowcase",
+    "title": "Accessibility Action",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "accessibility-adjustable-action",
+    "struct": "AccessibilityAdjustableActionShowcase",
+    "title": "Accessibility Adjustable Action",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "accessibility-scroll-action",
+    "struct": "AccessibilityScrollActionShowcase",
+    "title": "Accessibility Scroll Action",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "accessibility-rotor",
+    "struct": "AccessibilityRotorShowcase",
+    "title": "Accessibility Rotor",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "accessibility-focused",
+    "struct": "AccessibilityFocusedShowcase",
+    "title": "Accessibility Focus State",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "accessibility-custom-content",
+    "struct": "AccessibilityCustomContentShowcase",
+    "title": "Accessibility Custom Content",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "accessibility-heading",
+    "struct": "AccessibilityHeadingShowcase",
+    "title": "Accessibility Heading",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "accessibility-text-content-type",
+    "struct": "AccessibilityTextContentTypeShowcase",
+    "title": "Accessibility Text Content Type",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "accessibility-reduce-motion",
+    "struct": "AccessibilityReduceMotionShowcase",
+    "title": "Reduce Motion",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "accessibility-reduce-transparency",
+    "struct": "AccessibilityReduceTransparencyShowcase",
+    "title": "Reduce Transparency",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "accessibility-differentiate-without-color",
+    "struct": "AccessibilityDifferentiateWithoutColorShowcase",
+    "title": "Differentiate Without Color",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "accessibility-increase-contrast",
+    "struct": "AccessibilityIncreaseContrastShowcase",
+    "title": "Increase / Differentiate Contrast",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "accessibility-invert-colors",
+    "struct": "AccessibilityInvertColorsShowcase",
+    "title": "Invert Colors Handling",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "accessibility-show-button-shapes",
+    "struct": "AccessibilityShowButtonShapesShowcase",
+    "title": "Button Shapes / On-Off Labels",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "accessibility-large-content-viewer",
+    "struct": "AccessibilityLargeContentViewerShowcase",
+    "title": "Large Content Viewer",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "accessibility-sort-priority",
+    "struct": "AccessibilitySortPriorityShowcase",
+    "title": "Accessibility Sort Priority",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "accessibility-activation-point",
+    "struct": "AccessibilityActivationPointShowcase",
+    "title": "Accessibility Activation Point",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "accessibility-direct-touch",
+    "struct": "AccessibilityDirectTouchShowcase",
+    "title": "Accessibility Direct Touch",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "accessibility-zoom-action",
+    "struct": "AccessibilityZoomActionShowcase",
+    "title": "Accessibility Zoom Action",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "accessibility-drag-drop-point",
+    "struct": "AccessibilityDragDropPointShowcase",
+    "title": "Accessibility Drag & Drop Points",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "accessibility-quick-action",
+    "struct": "AccessibilityQuickActionShowcase",
+    "title": "Accessibility Quick Action",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "accessibility-identifier",
+    "struct": "AccessibilityIdentifierShowcase",
+    "title": "Accessibility Identifier",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "accessibility-responds-to-user-interaction",
+    "struct": "AccessibilityRespondsToUserInteractionShowcase",
+    "title": "Responds To User Interaction",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "accessibility-speech-options",
+    "struct": "AccessibilitySpeechOptionsShowcase",
+    "title": "Speech Options",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "accessibility-chart-descriptor",
+    "struct": "AccessibilityChartDescriptorShowcase",
+    "title": "Accessibility Chart Descriptor",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "accessibility-labeled-pair",
+    "struct": "AccessibilityLabeledPairShowcase",
+    "title": "Accessibility Labeled Pair",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "accessibility-rotor-entry",
+    "struct": "AccessibilityRotorEntryShowcase",
+    "title": "Accessibility Rotor Entry",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "accessibility-linked-group",
+    "struct": "AccessibilityLinkedGroupShowcase",
+    "title": "Accessibility Linked Group",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "accessibility",
+    "folder": "Accessibility",
+    "id": "accessibility-label-content",
+    "struct": "AccessibilityLabelContentShowcase",
+    "title": "Accessibility Label (View Builder)",
+    "specFile": "docs/specs/by-category/accessibility.json"
+  },
+  {
+    "key": "charts",
+    "folder": "Charts",
+    "id": "chart-container",
+    "struct": "ChartContainerShowcase",
+    "title": "Chart",
+    "specFile": "docs/specs/by-category/charts.json"
+  },
+  {
+    "key": "charts",
+    "folder": "Charts",
+    "id": "bar-mark",
+    "struct": "BarMarkShowcase",
+    "title": "BarMark",
+    "specFile": "docs/specs/by-category/charts.json"
+  },
+  {
+    "key": "charts",
+    "folder": "Charts",
+    "id": "line-mark",
+    "struct": "LineMarkShowcase",
+    "title": "LineMark",
+    "specFile": "docs/specs/by-category/charts.json"
+  },
+  {
+    "key": "charts",
+    "folder": "Charts",
+    "id": "area-mark",
+    "struct": "AreaMarkShowcase",
+    "title": "AreaMark",
+    "specFile": "docs/specs/by-category/charts.json"
+  },
+  {
+    "key": "charts",
+    "folder": "Charts",
+    "id": "point-mark",
+    "struct": "PointMarkShowcase",
+    "title": "PointMark",
+    "specFile": "docs/specs/by-category/charts.json"
+  },
+  {
+    "key": "charts",
+    "folder": "Charts",
+    "id": "rule-mark",
+    "struct": "RuleMarkShowcase",
+    "title": "RuleMark",
+    "specFile": "docs/specs/by-category/charts.json"
+  },
+  {
+    "key": "charts",
+    "folder": "Charts",
+    "id": "rectangle-mark",
+    "struct": "RectangleMarkShowcase",
+    "title": "RectangleMark",
+    "specFile": "docs/specs/by-category/charts.json"
+  },
+  {
+    "key": "charts",
+    "folder": "Charts",
+    "id": "sector-mark",
+    "struct": "SectorMarkShowcase",
+    "title": "SectorMark",
+    "specFile": "docs/specs/by-category/charts.json"
+  },
+  {
+    "key": "charts",
+    "folder": "Charts",
+    "id": "bar-plot",
+    "struct": "BarPlotShowcase",
+    "title": "BarPlot (vectorized)",
+    "specFile": "docs/specs/by-category/charts.json"
+  },
+  {
+    "key": "charts",
+    "folder": "Charts",
+    "id": "line-plot",
+    "struct": "LinePlotShowcase",
+    "title": "LinePlot (vectorized / function)",
+    "specFile": "docs/specs/by-category/charts.json"
+  },
+  {
+    "key": "charts",
+    "folder": "Charts",
+    "id": "area-plot",
+    "struct": "AreaPlotShowcase",
+    "title": "AreaPlot (vectorized / function)",
+    "specFile": "docs/specs/by-category/charts.json"
+  },
+  {
+    "key": "charts",
+    "folder": "Charts",
+    "id": "point-plot",
+    "struct": "PointPlotShowcase",
+    "title": "PointPlot (vectorized)",
+    "specFile": "docs/specs/by-category/charts.json"
+  },
+  {
+    "key": "charts",
+    "folder": "Charts",
+    "id": "sector-plot",
+    "struct": "SectorPlotShowcase",
+    "title": "SectorPlot (vectorized)",
+    "specFile": "docs/specs/by-category/charts.json"
+  },
+  {
+    "key": "charts",
+    "folder": "Charts",
+    "id": "rule-rectangle-plot",
+    "struct": "RuleRectanglePlotShowcase",
+    "title": "RulePlot & RectanglePlot (vectorized)",
+    "specFile": "docs/specs/by-category/charts.json"
+  },
+  {
+    "key": "charts",
+    "folder": "Charts",
+    "id": "chart3d",
+    "struct": "Chart3dShowcase",
+    "title": "Chart3D",
+    "specFile": "docs/specs/by-category/charts.json"
+  },
+  {
+    "key": "charts",
+    "folder": "Charts",
+    "id": "chart-axis-customization",
+    "struct": "ChartAxisCustomizationShowcase",
+    "title": "Axis Customization",
+    "specFile": "docs/specs/by-category/charts.json"
+  },
+  {
+    "key": "charts",
+    "folder": "Charts",
+    "id": "chart-scales",
+    "struct": "ChartScalesShowcase",
+    "title": "Scales & Domains",
+    "specFile": "docs/specs/by-category/charts.json"
+  },
+  {
+    "key": "charts",
+    "folder": "Charts",
+    "id": "chart-foreground-style-scale",
+    "struct": "ChartForegroundStyleScaleShowcase",
+    "title": "Foreground Style Scale & Legend Grouping",
+    "specFile": "docs/specs/by-category/charts.json"
+  },
+  {
+    "key": "charts",
+    "folder": "Charts",
+    "id": "chart-selection",
+    "struct": "ChartSelectionShowcase",
+    "title": "Chart Selection & Scrolling Annotations",
+    "specFile": "docs/specs/by-category/charts.json"
+  },
+  {
+    "key": "charts",
+    "folder": "Charts",
+    "id": "surface-plot",
+    "struct": "SurfacePlotShowcase",
+    "title": "SurfacePlot (3D surface)",
+    "specFile": "docs/specs/by-category/charts.json"
+  },
+  {
+    "key": "charts",
+    "folder": "Charts",
+    "id": "chart-overlay-background",
+    "struct": "ChartOverlayBackgroundShowcase",
+    "title": "Chart Overlay & Background (ChartProxy)",
+    "specFile": "docs/specs/by-category/charts.json"
+  },
+  {
+    "key": "gestures",
+    "folder": "Gestures",
+    "id": "tap-gesture",
+    "struct": "TapGestureShowcase",
+    "title": "Tap Gesture",
+    "specFile": "docs/specs/by-category/gestures.json"
+  },
+  {
+    "key": "gestures",
+    "folder": "Gestures",
+    "id": "spatial-tap-gesture",
+    "struct": "SpatialTapGestureShowcase",
+    "title": "Spatial Tap Gesture",
+    "specFile": "docs/specs/by-category/gestures.json"
+  },
+  {
+    "key": "gestures",
+    "folder": "Gestures",
+    "id": "long-press-gesture",
+    "struct": "LongPressGestureShowcase",
+    "title": "Long Press Gesture",
+    "specFile": "docs/specs/by-category/gestures.json"
+  },
+  {
+    "key": "gestures",
+    "folder": "Gestures",
+    "id": "drag-gesture",
+    "struct": "DragGestureShowcase",
+    "title": "Drag Gesture",
+    "specFile": "docs/specs/by-category/gestures.json"
+  },
+  {
+    "key": "gestures",
+    "folder": "Gestures",
+    "id": "magnify-gesture",
+    "struct": "MagnifyGestureShowcase",
+    "title": "Magnify Gesture",
+    "specFile": "docs/specs/by-category/gestures.json"
+  },
+  {
+    "key": "gestures",
+    "folder": "Gestures",
+    "id": "rotate-gesture",
+    "struct": "RotateGestureShowcase",
+    "title": "Rotate Gesture",
+    "specFile": "docs/specs/by-category/gestures.json"
+  },
+  {
+    "key": "gestures",
+    "folder": "Gestures",
+    "id": "rotate-gesture-3d",
+    "struct": "RotateGesture3dShowcase",
+    "title": "Rotate Gesture 3D",
+    "specFile": "docs/specs/by-category/gestures.json"
+  },
+  {
+    "key": "gestures",
+    "folder": "Gestures",
+    "id": "spatial-event-gesture",
+    "struct": "SpatialEventGestureShowcase",
+    "title": "Spatial Event Gesture",
+    "specFile": "docs/specs/by-category/gestures.json"
+  },
+  {
+    "key": "gestures",
+    "folder": "Gestures",
+    "id": "simultaneous-gesture",
+    "struct": "SimultaneousGestureShowcase",
+    "title": "Simultaneous Gesture Composition",
+    "specFile": "docs/specs/by-category/gestures.json"
+  },
+  {
+    "key": "gestures",
+    "folder": "Gestures",
+    "id": "sequenced-gesture",
+    "struct": "SequencedGestureShowcase",
+    "title": "Sequenced Gesture Composition",
+    "specFile": "docs/specs/by-category/gestures.json"
+  },
+  {
+    "key": "gestures",
+    "folder": "Gestures",
+    "id": "exclusive-gesture",
+    "struct": "ExclusiveGestureShowcase",
+    "title": "Exclusive Gesture Composition",
+    "specFile": "docs/specs/by-category/gestures.json"
+  },
+  {
+    "key": "gestures",
+    "folder": "Gestures",
+    "id": "gesture-state",
+    "struct": "GestureStateShowcase",
+    "title": "Gesture State (@GestureState + updating)",
+    "specFile": "docs/specs/by-category/gestures.json"
+  },
+  {
+    "key": "gestures",
+    "folder": "Gestures",
+    "id": "gesture-modifier",
+    "struct": "GestureModifierShowcase",
+    "title": "Gesture Attach Modifiers (.gesture / .highPriorityGesture / .simultaneousGesture)",
+    "specFile": "docs/specs/by-category/gestures.json"
+  },
+  {
+    "key": "gestures",
+    "folder": "Gestures",
+    "id": "defers-system-gestures",
+    "struct": "DefersSystemGesturesShowcase",
+    "title": "Defers System Gestures",
+    "specFile": "docs/specs/by-category/gestures.json"
+  },
+  {
+    "key": "gestures",
+    "folder": "Gestures",
+    "id": "window-drag-gesture",
+    "struct": "WindowDragGestureShowcase",
+    "title": "Window Drag Gesture",
+    "specFile": "docs/specs/by-category/gestures.json"
+  },
+  {
+    "key": "gestures",
+    "folder": "Gestures",
+    "id": "pencil-gesture",
+    "struct": "PencilGestureShowcase",
+    "title": "Apple Pencil Gestures (double-tap & squeeze)",
+    "specFile": "docs/specs/by-category/gestures.json"
+  },
+  {
+    "key": "gestures",
+    "folder": "Gestures",
+    "id": "long-touch-gesture",
+    "struct": "LongTouchGestureShowcase",
+    "title": "Long Touch Gesture (tvOS)",
+    "specFile": "docs/specs/by-category/gestures.json"
+  },
+  {
+    "key": "gestures",
+    "folder": "Gestures",
+    "id": "hand-gesture-shortcut",
+    "struct": "HandGestureShortcutShowcase",
+    "title": "Hand Gesture Shortcut",
+    "specFile": "docs/specs/by-category/gestures.json"
+  },
+  {
+    "key": "dataFlow",
+    "folder": "DataFlow",
+    "id": "state",
+    "struct": "StateShowcase",
+    "title": "@State",
+    "specFile": "docs/specs/by-category/dataFlow.json"
+  },
+  {
+    "key": "dataFlow",
+    "folder": "DataFlow",
+    "id": "binding",
+    "struct": "BindingShowcase",
+    "title": "@Binding",
+    "specFile": "docs/specs/by-category/dataFlow.json"
+  },
+  {
+    "key": "dataFlow",
+    "folder": "DataFlow",
+    "id": "observable-macro",
+    "struct": "ObservableMacroShowcase",
+    "title": "@Observable (Observation macro)",
+    "specFile": "docs/specs/by-category/dataFlow.json"
+  },
+  {
+    "key": "dataFlow",
+    "folder": "DataFlow",
+    "id": "bindable",
+    "struct": "BindableShowcase",
+    "title": "@Bindable",
+    "specFile": "docs/specs/by-category/dataFlow.json"
+  },
+  {
+    "key": "dataFlow",
+    "folder": "DataFlow",
+    "id": "environment-value",
+    "struct": "EnvironmentValueShowcase",
+    "title": "@Environment (key path)",
+    "specFile": "docs/specs/by-category/dataFlow.json"
+  },
+  {
+    "key": "dataFlow",
+    "folder": "DataFlow",
+    "id": "environment-values",
+    "struct": "EnvironmentValuesShowcase",
+    "title": "EnvironmentValues",
+    "specFile": "docs/specs/by-category/dataFlow.json"
+  },
+  {
+    "key": "dataFlow",
+    "folder": "DataFlow",
+    "id": "environment-modifier-keypath",
+    "struct": "EnvironmentModifierKeypathShowcase",
+    "title": ".environment(_:_:) (key path writer)",
+    "specFile": "docs/specs/by-category/dataFlow.json"
+  },
+  {
+    "key": "dataFlow",
+    "folder": "DataFlow",
+    "id": "environment-modifier-observable",
+    "struct": "EnvironmentModifierObservableShowcase",
+    "title": ".environment(_:) (Observable injector)",
+    "specFile": "docs/specs/by-category/dataFlow.json"
+  },
+  {
+    "key": "dataFlow",
+    "folder": "DataFlow",
+    "id": "transform-environment",
+    "struct": "TransformEnvironmentShowcase",
+    "title": ".transformEnvironment(_:transform:)",
+    "specFile": "docs/specs/by-category/dataFlow.json"
+  },
+  {
+    "key": "dataFlow",
+    "folder": "DataFlow",
+    "id": "environment-key",
+    "struct": "EnvironmentKeyShowcase",
+    "title": "EnvironmentKey",
+    "specFile": "docs/specs/by-category/dataFlow.json"
+  },
+  {
+    "key": "dataFlow",
+    "folder": "DataFlow",
+    "id": "entry-macro",
+    "struct": "EntryMacroShowcase",
+    "title": "@Entry",
+    "specFile": "docs/specs/by-category/dataFlow.json"
+  },
+  {
+    "key": "dataFlow",
+    "folder": "DataFlow",
+    "id": "appstorage",
+    "struct": "AppstorageShowcase",
+    "title": "@AppStorage",
+    "specFile": "docs/specs/by-category/dataFlow.json"
+  },
+  {
+    "key": "dataFlow",
+    "folder": "DataFlow",
+    "id": "default-app-storage",
+    "struct": "DefaultAppStorageShowcase",
+    "title": ".defaultAppStorage(_:)",
+    "specFile": "docs/specs/by-category/dataFlow.json"
+  },
+  {
+    "key": "dataFlow",
+    "folder": "DataFlow",
+    "id": "scenestorage",
+    "struct": "ScenestorageShowcase",
+    "title": "@SceneStorage",
+    "specFile": "docs/specs/by-category/dataFlow.json"
+  },
+  {
+    "key": "dataFlow",
+    "folder": "DataFlow",
+    "id": "focus-state",
+    "struct": "FocusStateShowcase",
+    "title": "@FocusState",
+    "specFile": "docs/specs/by-category/dataFlow.json"
+  },
+  {
+    "key": "dataFlow",
+    "folder": "DataFlow",
+    "id": "focused-modifier",
+    "struct": "FocusedModifierShowcase",
+    "title": ".focused(_:) / .focused(_:equals:)",
+    "specFile": "docs/specs/by-category/dataFlow.json"
+  },
+  {
+    "key": "dataFlow",
+    "folder": "DataFlow",
+    "id": "is-focused-environment",
+    "struct": "IsFocusedEnvironmentShowcase",
+    "title": "\\.isFocused (Environment)",
+    "specFile": "docs/specs/by-category/dataFlow.json"
+  },
+  {
+    "key": "dataFlow",
+    "folder": "DataFlow",
+    "id": "focused-value",
+    "struct": "FocusedValueShowcase",
+    "title": "@FocusedValue",
+    "specFile": "docs/specs/by-category/dataFlow.json"
+  },
+  {
+    "key": "dataFlow",
+    "folder": "DataFlow",
+    "id": "focused-binding",
+    "struct": "FocusedBindingShowcase",
+    "title": "@FocusedBinding",
+    "specFile": "docs/specs/by-category/dataFlow.json"
+  },
+  {
+    "key": "dataFlow",
+    "folder": "DataFlow",
+    "id": "focused-scene-value-modifier",
+    "struct": "FocusedSceneValueModifierShowcase",
+    "title": ".focusedValue / .focusedSceneValue",
+    "specFile": "docs/specs/by-category/dataFlow.json"
+  },
+  {
+    "key": "dataFlow",
+    "folder": "DataFlow",
+    "id": "preference-key",
+    "struct": "PreferenceKeyShowcase",
+    "title": "PreferenceKey",
+    "specFile": "docs/specs/by-category/dataFlow.json"
+  },
+  {
+    "key": "dataFlow",
+    "folder": "DataFlow",
+    "id": "preference-modifier",
+    "struct": "PreferenceModifierShowcase",
+    "title": ".preference(key:value:)",
+    "specFile": "docs/specs/by-category/dataFlow.json"
+  },
+  {
+    "key": "dataFlow",
+    "folder": "DataFlow",
+    "id": "on-preference-change",
+    "struct": "OnPreferenceChangeShowcase",
+    "title": ".onPreferenceChange(_:perform:)",
+    "specFile": "docs/specs/by-category/dataFlow.json"
+  },
+  {
+    "key": "dataFlow",
+    "folder": "DataFlow",
+    "id": "transform-preference",
+    "struct": "TransformPreferenceShowcase",
+    "title": ".transformPreference(_:_:)",
+    "specFile": "docs/specs/by-category/dataFlow.json"
+  },
+  {
+    "key": "dataFlow",
+    "folder": "DataFlow",
+    "id": "anchor-preference",
+    "struct": "AnchorPreferenceShowcase",
+    "title": ".anchorPreference(key:value:transform:)",
+    "specFile": "docs/specs/by-category/dataFlow.json"
+  },
+  {
+    "key": "dataFlow",
+    "folder": "DataFlow",
+    "id": "overlay-preference-value",
+    "struct": "OverlayPreferenceValueShowcase",
+    "title": ".overlayPreferenceValue / .backgroundPreferenceValue",
+    "specFile": "docs/specs/by-category/dataFlow.json"
+  },
+  {
+    "key": "dataFlow",
+    "folder": "DataFlow",
+    "id": "on-change",
+    "struct": "OnChangeShowcase",
+    "title": ".onChange(of:initial:_:)",
+    "specFile": "docs/specs/by-category/dataFlow.json"
+  },
+  {
+    "key": "dataFlow",
+    "folder": "DataFlow",
+    "id": "on-receive",
+    "struct": "OnReceiveShowcase",
+    "title": ".onReceive(_:perform:)",
+    "specFile": "docs/specs/by-category/dataFlow.json"
+  },
+  {
+    "key": "dataFlow",
+    "folder": "DataFlow",
+    "id": "state-object",
+    "struct": "StateObjectShowcase",
+    "title": "@StateObject (legacy)",
+    "specFile": "docs/specs/by-category/dataFlow.json"
+  },
+  {
+    "key": "dataFlow",
+    "folder": "DataFlow",
+    "id": "observed-object",
+    "struct": "ObservedObjectShowcase",
+    "title": "@ObservedObject (legacy)",
+    "specFile": "docs/specs/by-category/dataFlow.json"
+  },
+  {
+    "key": "dataFlow",
+    "folder": "DataFlow",
+    "id": "environment-object",
+    "struct": "EnvironmentObjectShowcase",
+    "title": "@EnvironmentObject / .environmentObject(_:) (legacy)",
+    "specFile": "docs/specs/by-category/dataFlow.json"
+  },
+  {
+    "key": "dataFlow",
+    "folder": "DataFlow",
+    "id": "namespace",
+    "struct": "NamespaceShowcase",
+    "title": "@Namespace",
+    "specFile": "docs/specs/by-category/dataFlow.json"
+  },
+  {
+    "key": "dataFlow",
+    "folder": "DataFlow",
+    "id": "focused-object",
+    "struct": "FocusedObjectShowcase",
+    "title": "@FocusedObject (legacy)",
+    "specFile": "docs/specs/by-category/dataFlow.json"
+  }
+]
