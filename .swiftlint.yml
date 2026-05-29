@@ -44,12 +44,20 @@ vertical_whitespace:
 trailing_comma:
   mandatory_comma: true
 identifier_name:
-  excluded: [id, ok, no, on, off, go, x, y, z]
+  excluded: [id, ok, no, on, off, go, up, x, y, z]
 type_name:
   min_length: 3
 # DesignSystem deliberately nests tokens two deep (e.g. DesignSystem.Size.Icon).
 nesting:
   type_level: 2
+# Showcase code uses (x, y, color)-style point/color tuples.
+large_tuple:
+  warning: 3
+  error: 4
+# House guidance: files 200-400 typical, 800 max.
+file_length:
+  warning: 500
+  error: 800
 
 # === Custom rules synced from gigai ===
 custom_rules:
