@@ -144,6 +144,7 @@
 			ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 			CODE_SIGN_STYLE = Automatic;
 			CURRENT_PROJECT_VERSION = 1;
+			DEVELOPMENT_TEAM = 92WH2S2Z85;
 			ENABLE_PREVIEWS = YES;
 			GENERATE_INFOPLIST_FILE = YES;
 			INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
@@ -157,7 +158,7 @@
 			"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = ("$(inherited)", "@executable_path/../Frameworks", );
 			MACOSX_DEPLOYMENT_TARGET = 26.0;
 			MARKETING_VERSION = 1.0;
-			PRODUCT_BUNDLE_IDENTIFIER = com.khizanag.swiftuishowroom;
+			PRODUCT_BUNDLE_IDENTIFIER = com.khizanag.swiftuishowroom.dev;
 			PRODUCT_NAME = "$(TARGET_NAME)";
 			SDKROOT = auto;
 			SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx appletvos appletvsimulator";
@@ -171,6 +172,7 @@
 			ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 			CODE_SIGN_STYLE = Automatic;
 			CURRENT_PROJECT_VERSION = 1;
+			DEVELOPMENT_TEAM = 92WH2S2Z85;
 			ENABLE_PREVIEWS = YES;
 			GENERATE_INFOPLIST_FILE = YES;
 			INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
@@ -184,7 +186,7 @@
 			"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = ("$(inherited)", "@executable_path/../Frameworks", );
 			MACOSX_DEPLOYMENT_TARGET = 26.0;
 			MARKETING_VERSION = 1.0;
-			PRODUCT_BUNDLE_IDENTIFIER = com.khizanag.swiftuishowroom;
+			PRODUCT_BUNDLE_IDENTIFIER = com.khizanag.swiftuishowroom.dev;
 			PRODUCT_NAME = "$(TARGET_NAME)";
 			SDKROOT = auto;
 			SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx appletvos appletvsimulator";
