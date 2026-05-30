@@ -4,6 +4,30 @@ The full coverage map. Every box is a planned showcase; checked boxes are built.
 
 Legend: `[ ]` planned · `[~]` in progress · `[x]` shipped.
 
+## Shipped coverage
+
+**307 showcases across all 14 categories**, each with a live preview, full configuration panel, state gallery, and generated code. Builds warning-free for iOS / iPadOS / macOS / tvOS (deployment target 26).
+
+| Category | Showcases |
+|---|---|
+| Text & Labels | 8 |
+| Buttons & Actions | 12 |
+| Selection & Input | 7 |
+| Containers & Layout | 28 |
+| Navigation | 24 |
+| Presentation | 17 |
+| Media & Shapes | 21 |
+| Indicators & Feedback | 5 |
+| Modifiers | 47 |
+| Effects & Styling | 26 |
+| Accessibility | 40 |
+| Charts | 21 |
+| Gestures | 18 |
+| Environment & Data Flow | 33 |
+| **Total** | **307** |
+
+A handful of niche, framework-dependent items remain (TipKit popover tips, the Translation presentation, document-based dialog configurations, deprecated `NavigationView`). The checklist below tracks the original plan.
+
 ## 1. Text and labels
 
 - [ ] Text — weight, design, style, color, line limit, truncation, multiline alignment, markdown

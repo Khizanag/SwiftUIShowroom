@@ -4,7 +4,7 @@ An interactive, multiplatform reference for **every native SwiftUI component** â
 
 Built for everyone who touches a SwiftUI interface: iOS and macOS developers, QA and test engineers, designers, product owners, and the merely curious. Browse a component, flip every property it has, watch it update in real time, see how it behaves in every state, and copy the exact code.
 
-> Status: early development. The foundation and the first showcases are landing now; coverage expands category by category. See [docs/COMPONENT-CATALOG.md](docs/COMPONENT-CATALOG.md) for the live coverage checklist.
+> Status: **307 showcases shipped across all 14 categories** â€” Text, Buttons, Selection, Containers, Navigation, Presentation, Media, Indicators, Modifiers, Effects, Accessibility, Charts, Gestures, and Data Flow. Builds warning-free for iOS / iPadOS / macOS / tvOS. See [docs/COMPONENT-CATALOG.md](docs/COMPONENT-CATALOG.md) for the coverage map.
 
 ## Why this exists
 
