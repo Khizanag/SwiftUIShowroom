@@ -47,7 +47,7 @@ private extension CircleShowcase {
 
 // MARK: - Circle builder
 private extension CircleShowcase {
-    fileprivate struct CircleConfig {
+    struct CircleConfig {
         var renderStyle: RenderStyleOption
         var fillColor: Color
         var lineWidth: Double

@@ -153,7 +153,7 @@ extension AsymmetricTransitionShowcase {
 
         var codeLabel: String { label }
 
-        var anyTransition: AnyTransition {
+        @MainActor var anyTransition: AnyTransition {
             switch self {
             case .opacity: .opacity
             case .slide: .slide
@@ -182,7 +182,7 @@ extension AsymmetricTransitionShowcase {
             }
         }
 
-        var insertion: AnyTransition {
+        @MainActor var insertion: AnyTransition {
             switch self {
             case .slideInFadeOut: .slide
             case .moveInScaleOut: .move(edge: .bottom)

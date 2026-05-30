@@ -139,7 +139,7 @@ private extension ScrollTransitionShowcase {
             }
     }
 
-    func rowOpacity(kind: EffectKind, isIdentity: Bool) -> Double {
+    nonisolated func rowOpacity(kind: EffectKind, isIdentity: Bool) -> Double {
         guard !isIdentity else { return 1 }
         switch kind {
         case .opacity: return 0
@@ -149,7 +149,7 @@ private extension ScrollTransitionShowcase {
         }
     }
 
-    func rowScale(kind: EffectKind, isIdentity: Bool, scaleFactor: Double) -> Double {
+    nonisolated func rowScale(kind: EffectKind, isIdentity: Bool, scaleFactor: Double) -> Double {
         guard !isIdentity else { return 1 }
         switch kind {
         case .opacity: return 1
@@ -159,7 +159,7 @@ private extension ScrollTransitionShowcase {
         }
     }
 
-    func rowBlur(kind: EffectKind, isIdentity: Bool) -> CGFloat {
+    nonisolated func rowBlur(kind: EffectKind, isIdentity: Bool) -> CGFloat {
         guard !isIdentity, kind == .blur else { return 0 }
         return 8
     }
@@ -249,7 +249,7 @@ private struct TransitionStateCell: View {
             }
     }
 
-    func cellOpacity(kind: ScrollTransitionShowcase.TransitionState, isIdentity: Bool) -> Double {
+    nonisolated func cellOpacity(kind: ScrollTransitionShowcase.TransitionState, isIdentity: Bool) -> Double {
         guard !isIdentity else { return 1 }
         switch kind {
         case .opacityEffect: return 0
@@ -259,7 +259,7 @@ private struct TransitionStateCell: View {
         }
     }
 
-    func cellScale(kind: ScrollTransitionShowcase.TransitionState, isIdentity: Bool) -> Double {
+    nonisolated func cellScale(kind: ScrollTransitionShowcase.TransitionState, isIdentity: Bool) -> Double {
         guard !isIdentity else { return 1 }
         switch kind {
         case .opacityEffect: return 1
@@ -269,7 +269,7 @@ private struct TransitionStateCell: View {
         }
     }
 
-    func cellBlur(kind: ScrollTransitionShowcase.TransitionState, isIdentity: Bool) -> CGFloat {
+    nonisolated func cellBlur(kind: ScrollTransitionShowcase.TransitionState, isIdentity: Bool) -> CGFloat {
         guard !isIdentity, kind == .blurEffect else { return 0 }
         return 8
     }

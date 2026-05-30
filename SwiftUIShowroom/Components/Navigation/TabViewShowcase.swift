@@ -184,11 +184,7 @@ private extension TabDemoView {
             #endif
         case .sidebarAdaptable:
             #if os(iOS) || os(macOS)
-            if #available(iOS 18, macOS 15, *) {
-                tabView.tabViewStyle(.sidebarAdaptable)
-            } else {
-                tabView.tabViewStyle(.automatic)
-            }
+            tabView.tabViewStyle(.sidebarAdaptable)
             #else
             tabView.tabViewStyle(.automatic)
             #endif

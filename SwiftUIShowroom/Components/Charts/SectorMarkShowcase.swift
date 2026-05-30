@@ -151,7 +151,7 @@ private extension SectorMarkShowcase {
             }
         }
 
-        var data: [SliceData] {
+        @MainActor var data: [SliceData] {
             switch self {
             case .default: SectorMarkShowcase.defaultData
             case .selected: SectorMarkShowcase.selectedData

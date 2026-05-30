@@ -103,7 +103,7 @@ private extension HstackShowcase {
 
 // MARK: - Supporting types
 private extension HstackShowcase {
-    fileprivate enum AlignmentOption: ShowcasePickable {
+    enum AlignmentOption: ShowcasePickable {
         case top
         case center
         case bottom
@@ -131,7 +131,7 @@ private extension HstackShowcase {
         }
     }
 
-    fileprivate enum HstackState: ShowcaseState {
+    enum HstackState: ShowcaseState {
         case `default`
         case longContent
 

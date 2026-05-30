@@ -171,7 +171,7 @@ private extension GeometryVisualEffectShowcase {
             .hueRotation(.degrees(hueDeg))
     }
 
-    func buildStateEffect(
+    nonisolated func buildStateEffect(
         _ base: EmptyVisualEffect,
         frame: CGRect,
         state: EffectState,

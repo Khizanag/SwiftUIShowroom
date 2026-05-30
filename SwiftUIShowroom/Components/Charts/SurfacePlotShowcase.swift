@@ -187,6 +187,7 @@ extension SurfacePlotShowcase {
 // MARK: - State gallery charts
 #if !os(tvOS)
 @available(iOS 26.0, macOS 26.0, *)
+@MainActor
 private extension SurfacePlotShowcase.SurfaceState {
     @ViewBuilder var chart: some View {
         switch self {

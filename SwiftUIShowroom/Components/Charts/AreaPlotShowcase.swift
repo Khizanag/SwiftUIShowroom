@@ -132,6 +132,7 @@ private extension AreaPlotShowcase {
 
 // MARK: - State gallery views
 @available(iOS 18.0, macOS 15.0, tvOS 18.0, *)
+@MainActor
 private extension AreaPlotShowcase.AreaPlotState {
     @ViewBuilder var chart: some View {
         switch self {

@@ -130,7 +130,7 @@ extension TransitionShowcase {
             self == .move || self == .push
         }
 
-        func makeTransition(edge: EdgeOption, anchor: AnchorOption) -> AnyTransition {
+        @MainActor func makeTransition(edge: EdgeOption, anchor: AnchorOption) -> AnyTransition {
             switch self {
             case .opacity: return .opacity
             case .slide: return .slide
@@ -232,7 +232,7 @@ extension TransitionShowcase {
             }
         }
 
-        var transition: AnyTransition {
+        @MainActor var transition: AnyTransition {
             switch self {
             case .opacity: return .opacity
             case .slide: return .slide

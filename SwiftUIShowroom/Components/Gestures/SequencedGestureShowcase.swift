@@ -167,7 +167,7 @@ extension SequencedGestureShowcase {
 // MARK: - Code generation
 private extension SequencedGestureShowcase {
     var generatedCode: String {
-        var lines: [String] = [
+        let lines: [String] = [
             "struct SequencedDemo: View {",
             "    @GestureState private var isActive = false",
             "    @State private var offset: CGSize = .zero",

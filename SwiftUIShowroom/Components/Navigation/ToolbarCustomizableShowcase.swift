@@ -147,8 +147,7 @@ private extension ToolbarCustomizableShowcase {
         isDisabled: Bool,
     ) -> some CustomizableToolbarContent {
         let itemDefs = itemDefinitions()
-        let count = min(itemCount, itemDefs.count)
-//        ForEach(0..<count, id: \.self) { index in
+//        ForEach(0..<min(itemCount, itemDefs.count), id: \.self) { index in
             let def = itemDefs[0]
             ToolbarItem(id: def.identifier, placement: toolbarPlacement) {
                 Button {
