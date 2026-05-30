@@ -47,15 +47,24 @@ def keywords_for(cid, api, title):
     return sorted(tokens)[:8]
 
 
+def keywords_line(keywords):
+    inline = ", ".join(f'"{k}"' for k in keywords)
+    if len(f"            keywords: [{inline}],") <= 118:
+        return [f"            keywords: [{inline}],"]
+    lines = ["            keywords: ["]
+    lines += [f'                "{k}",' for k in keywords]
+    lines.append("            ],")
+    return lines
+
+
 def entry_swift(key, item):
-    kw = ", ".join(f'"{k}"' for k in item["keywords"])
     return "\n".join([
         "        ShowcaseEntry(",
         f'            id: "{item["id"]}",',
         f'            title: "{item["title"]}",',
         f"            category: .{key},",
         f'            subtitle: "{item["subtitle"]}",',
-        f"            keywords: [{kw}],",
+        *keywords_line(item["keywords"]),
         "        ) {",
         f'            {item["struct"]}()',
         "        },",
