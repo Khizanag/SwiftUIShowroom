@@ -1,7 +1,8 @@
 import SwiftUI
 
-/// A labelled enum picker for a configuration panel. Defaults to a menu style so it
-/// stays compact regardless of the number of options.
+/// A labelled enum picker for a configuration panel. The property name sits on the
+/// leading edge and the menu picker (showing the selected value) on the trailing edge,
+/// so it stays readable even outside a `Form`.
 struct ShowcasePicker<Value: ShowcasePickable>: View {
     let title: LocalizedStringKey
     @Binding var selection: Value
@@ -12,11 +13,17 @@ struct ShowcasePicker<Value: ShowcasePickable>: View {
     }
 
     var body: some View {
-        Picker(title, selection: $selection) {
-            ForEach(Array(Value.allCases)) { option in
-                Text(option.label).tag(option)
+        HStack {
+            Text(title)
+                .font(DesignSystem.Font.body)
+            Spacer(minLength: DesignSystem.Spacing.medium)
+            Picker(title, selection: $selection) {
+                ForEach(Array(Value.allCases)) { option in
+                    Text(option.label).tag(option)
+                }
             }
+            .labelsHidden()
+            .pickerStyle(.menu)
         }
-        .font(DesignSystem.Font.body)
     }
 }
