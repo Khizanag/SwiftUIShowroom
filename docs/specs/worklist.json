@@ -2172,7 +2172,7 @@
     "folder": "Gestures",
     "id": "gesture-modifier",
     "struct": "GestureModifierShowcase",
-    "title": "Gesture Attach Modifiers (.gesture / .highPriorityGesture / .simultaneousGesture)",
+    "title": "Gesture Attach Modifiers (.gesture / .highPriori",
     "specFile": "docs/specs/by-category/gestures.json"
   },
   {
@@ -2348,7 +2348,7 @@
     "folder": "DataFlow",
     "id": "is-focused-environment",
     "struct": "IsFocusedEnvironmentShowcase",
-    "title": "\\.isFocused (Environment)",
+    "title": ".isFocused (Environment)",
     "specFile": "docs/specs/by-category/dataFlow.json"
   },
   {
@@ -2420,7 +2420,7 @@
     "folder": "DataFlow",
     "id": "overlay-preference-value",
     "struct": "OverlayPreferenceValueShowcase",
-    "title": ".overlayPreferenceValue / .backgroundPreferenceValue",
+    "title": ".overlayPreferenceValue / .backgroundPreferenceV",
     "specFile": "docs/specs/by-category/dataFlow.json"
   },
   {
@@ -2460,7 +2460,7 @@
     "folder": "DataFlow",
     "id": "environment-object",
     "struct": "EnvironmentObjectShowcase",
-    "title": "@EnvironmentObject / .environmentObject(_:) (legacy)",
+    "title": "@EnvironmentObject / .environmentObject(_:) (leg",
     "specFile": "docs/specs/by-category/dataFlow.json"
   },
   {
